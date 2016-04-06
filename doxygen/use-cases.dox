@@ -1,0 +1,166 @@
+/*!
+@page use-cases Use-cases examples
+@tableofcontents
+
+@section uses-covered Use-cases covered by this document
+
+- Programmatic definition of structured data
+    - Defining a strucure programmaticaly
+    - Instanciate a structured value programmatically
+- Serialization
+    - Structure definition de/serialization
+    - Value de/serialization
+- Custom import/export
+    - Binary un/packing
+    - Human-friendly export
+- Merging
+
+The examples in the document are <b>pseudocode</b> and are intended to serve as a description of how
+libstructure will be used
+
+@section prog-def Programmatic definition of a structure
+
+@verbatim
+import builtin-types (Block, Integer, String, ...)
+
+define a custom type "UnsignedInteger8" as an Integer with traits:
+    - Unsigned
+    - Size=8
+
+define a String field called "my_string" with max length: 5
+define an UnsingedInteger8 field called "my_int" with max value: 100
+define a Block called "my_block" containing:
+    - a "my_string"
+    - a "my_int"
+
+define a Structure called "root" containing:
+    - a "my_string"
+    - a "my_block"
+@endverbatim
+
+At this point, "root" has the following leaves:
+
+@verbatim
+/my_string1
+/my_block/my_string1
+/my_block/my_int
+@endverbatim
+
+@section prog-inst Programmatic instanciation of a structured value
+
+Knowing the types:
+
+@verbatim
+reuse the definition of "root"
+# reminder: this structure looks like this:
+# - String field called "my_string"
+# - Block called "my_block"
+#     - String field called "my_string"
+#     - Integer field called "my_int"
+set "root" to this value:
+    - "foo"
+        - "bar"
+        - 42
+
+# Won't compile because it doesn't match the type definition of "root":
+# - 123
+# - "spam"
+@endverbatim
+
+Not knowing the types:
+
+@verbatim
+import "root" (from a file, database, ...)
+define a structured value with the weakest possible typing (string representations):
+    - "foo"
+        - "bar"
+        - "42"
+set "root" to the value defined above
+# will raise an error if the structure or the types or the ranges are incorrect
+@endverbatim
+
+@section interactive-inst Interactive instanciation of a structured value
+
+@verbatim
+import a structure (from a file, database, ...)
+traverse the structure and instantiate a corresponding value:
+    when ecountering a block:
+        create a value block
+        recurse
+    when encountering a leaf:
+        prompt the user to enter a value for the leaf
+@endverbatim
+
+@section serialize-struct Serializing and deserializing a structure definition
+
+Serializing
+
+@verbatim
+define or import a structure
+import a serializer
+have the serializer write to an output stream (e.g. the standard output)
+@endverbatim
+
+Deserializing
+
+@verbatim
+import a deserializer
+have the deserialize read from an input stream (e.g. the standard input)
+get the deserialized structure from the deserializer
+@endverbatim
+
+@section serialize-inst Serializing and deserializing instances
+
+Serializing
+
+@verbatim
+define or import a structured value
+import a serializer
+have the serializer write to an output stream (e.g. the standard output)
+@endverbatim
+
+Deserializing
+
+@verbatim
+import a deserializer
+have the deserialize read from an input stream (e.g. the standard input)
+get the deserialized value from the deserializer
+@endverbatim
+
+@section binary-packing Binary packet/unpacking
+
+Packing
+
+@verbatim
+define or import a structured value
+import the binary packer
+have the packer write to an output stream
+@endverbatim
+
+Unpacking
+
+@verbatim
+define or import a structure
+import the binary unpacker and feed it the structure
+have the unpacker read from an input stream
+get the structured value from the unpacker
+@endverbatim
+
+@section human-export Human-friendly or custom export
+
+@verbatim
+define or import a structure or value
+import a custom writer
+have the custom writer export to an output stream
+@endverbatim
+
+For instance, the output could look like this:
+
+@verbatim
+/my_string: String "foo"
+/my_block: Block
+/my_block/my_string: String "bar"
+/my_block/my_int: Int 42
+@endverbatim
+
+*/

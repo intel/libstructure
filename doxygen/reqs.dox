@@ -1,0 +1,348 @@
+/*!
+@page reqs Requirements
+@tableofcontents
+
+@section intro Introduction and motivation
+
+Describing structured data is very common. This simple C code:
+
+@code
+struct {
+    int a;
+    char b[20];
+    struct {
+        float c[5]; //< Some comment
+        enum my_enum d;
+    } my_sub;
+};
+@endcode
+
+defines a structure with 3 members, one of them being a structure as well, containing 2 members.
+This description has several characteristics, all of which may or may not be of importance according
+to how it is used:
+
+- <b>The name of the members</b> is useful for all use-cases that involve the developer: he wants to
+know how to address them.
+- <b>The type of the members</b> matters to the compiler and the developer: the compilation success
+and output depends on them.
+    - Type-checking uses the types
+    - The characteristics of these types also matter on their own, in particular their storage
+    length, for serialization purposes and compilation output.
+- <b>The order of the members</b> in the structure also matter with regard to memory alignment
+    - for serialization purposes
+    - because the compilation output depend on it
+- <b>The name of the structures or absence thereof</b> is relevant for the developer and the
+compiler as well as the fact that they are defined in-line within another structure or standalone.
+- <b>The comments attached to a member or a structure</b> can be used by tools like Doxygen or IDEs.
+
+One of the major limitation in the above example is that <b>C does not allow defining ranges or set
+of allowed values for variables.</b> The classical way to fix this is to wrap variables in getters
+and setters. Without the help of the compiler or an external parser, it is also impossible to give
+any other information about the structure or its members. For instance, Doxygen lets you document
+them.
+
+Saving and restoring data that are pure C variables is not practical because <b>C does not offer any
+introspection.</b> Using only the capabilities of the C language, business code must be written to
+save and restore these data. This is a very common need, though, and using one of the numerous
+serialization library will help.
+
+<b>Saving and restoring the structure of this data has its uses too.</b> Anytime someone serializes
+some data and someone else deserializes it, you need some way to share that structure.
+
+Naïve de/serialization can easily be done purely with C capabilities by compiling against the same
+description on both ends. This is not risk-free (no versioning, memory alignment may not be the same
+on both ends, …). Also, sharing compile-time information only work when you do know it at
+compile-time. As a result, direct memory-mapping is not the solution <b>if this structure is decided
+dynamically</b>, or if both ends are not compiled at the same time, or if the other part is not
+using the same language as you.
+
+For more discussion regarding the state of the art, please see the dedicated annex.
+
+<b>We devise a component for describing structured and strongly-typed data</b> of which both the
+value and the definition can be transferred between actors. This component oughts to be extensible
+(to custom typing and custom transmission means) and to be both 1) easy enough to use and 2) generic
+enough to be used in unforeseen use-cases involving structured data.
+
+@section req-structured-data-description Structured data description
+
+@subsection req-describe-name-type-param Describe name and typed fields
+
+Example of a named and typed field:
+
+@code
+An integer named foobar.
+@endcode
+
+- Built-in types to be defined
+- Make it possible for a third party to define custom types
+
+@subsection req-define-allowed-values Define the set of allowed values for fields
+
+Example of a range definition:
+
+@code
+foobar can range from 0 to 100.
+@endcode
+
+@subsection req-param-ordered-blocks Gather fields in ordered blocks
+
+Recursively, so that they can be represented as a tree.
+
+Only leaves are fields and fields are only leaves. They are marked with an asterisk in the
+example below and later examples:
+
+@code
+my_block
+    foo* : integer ranging from 0 to 32
+    bar
+        baz* : string
+    spam* : float
+    egg* : integer
+@endcode
+
+@subsection req-describe-array Describe an array of repeating data
+
+With identical properties, set aside the name.
+
+Example of an array of an integer array:
+
+@code
+my_field_array
+    1* : integer ranging from 0 to 100
+    2* : integer ranging from 0 to 100
+    3* : integer ranging from 0 to 100
+    4* : integer ranging from 0 to 100
+@endcode
+
+Example of an array of a block
+
+@code
+my_block_array
+    1
+        foo* : integer ranging from 0 to 32
+        bar* : string
+    2
+        foo* : integer ranging from 0 to 32
+        bar* : string
+    3
+        foo* : integer ranging from 0 to 32
+        bar* : string
+@endcode
+
+@subsection req-dynamic-length-data TODO: Dynamic-length data
+
+- TLV
+- TV (with length implicitly defined by the type)
+- LV (with type implicitly defined by the place in the structure)
+- pointers
+
+@subsection req-aliases Describe a map of aliases to values
+
+For any given field (of any type).
+
+Example of a string aliases to integer fields:
+
+@code
+"8kHz" -> 1
+"16kHz" -> 2
+"44.1kHz" -> 3
+@endcode
+
+@subsection req-programaticaly All of this must be possible programmatically
+
+There must be an API that allows a developer to statically define a structure.
+
+@section req-saving-restoring-structs Saving and restoring structures
+
+@subsection req-export-struct Export a structure
+
+Described as in @ref req-structured-data-description "this section".
+
+- Several formats must be possible, at least one must be human-friendly and equivalent to the data
+being exported. (Also called a serialization format - see the “non-requirements” section)
+- Built-in set of export formats to be defined
+- Make it possible for a 3rd party to write an exporter
+
+@subsection req-import-struct Import a structure
+
+That was exported as described above.
+
+- At least one format must be:
+    - read/writeable by a human;
+    - tolerant to whitespace changes: non-significant spaces/newlines added or removed;
+    - a serialization format.
+- All export formats should also be importable.
+- Make it possible for a 3rd party to write a importer
+
+@subsection req-merge-struct Merging type/structure information
+
+Different parts of the structure’s information may have different lifecycles. It must be possible to
+export and import them separately and, upon import, merge them.
+
+See the section on metadata for more insight on this requirement.
+
+@subsection req-versioning Versioning
+
+An import/export format may be versioned and the resulting output may contain a reference to that
+version.
+
+@section req-applying-values Applying values to structures
+
+@subsection req-param-creation-value Upon creation, a field has no value
+
+There is no “default value” mechanism. Any such mechanism would need to make assumptions that may
+not suit the client. As a result, a field can’t be created without an explicit value. See next
+item for requirements on the initial value.
+
+@subsection req-set-param Set a field
+
+It must be possible to set a field given that the value satisfies the field’s definition
+(see the associated requirements).
+
+@subsection req-get-param Get a field
+
+It must be possible to get a field’s value if it has one.
+
+@subsection req-transitivity-req Transitivity of requirements
+
+What is possible for a single field must also be possible for blocks of fields.
+
+For instance, it is possible to set/get values of a block (the type of a block is the sum of types
+of its children).
+
+@section req-saving-restoring-values Saving and restoring structured values
+
+A structured value is simply a structure which was attributed a value. All requirements related to
+saving a restoring structures also apply to structured values.
+
+@section req-metadata Matadata managment
+
+<b>Introductory thoughts:</b>
+
+- “Metadata” refers to any key/value pair attribute of a node in the structure tree that goes beyond
+  the scope of data type and structure definition/description as covered by this requirements
+  documentation.
+
+  Examples of such metadata are:
+
+  - additional information pertaining to the actual embodiment of the data;
+  - additional typing;
+  - any business information that may be used by a 3rd party interface.
+
+- Resulting from the previous point, metadata is an information owned by the client.
+
+- Metadata’s lifecycle may be different than that of data types and structure.
+
+- Different import/export format adress different needs and a given piece of metadata may only make
+sense for a given importer/exporter.
+
+@subsection req-metadata-facility Metadata facility
+
+Provide a facility for the client and importers/exporters to manipulate arbitrary metadata.
+
+@section annex Annexes
+
+@subsection non-reqs Non-requirements
+
+@subsubsection non-bijective Non-bijective export/imports are allowed
+
+An exporter is not required to export all the properties of the data it exports. In other terms, the
+following is allowed:
+
+@code
+import(export(data)) != data
+@endcode
+
+This enables, for instance:
+
+- reducing the type information of a structure (an Integer field ranging from 0 to 100 could be
+exported as a generic Integer) flattening the structure of a structured value (e.g. exporting a
+binary the binary equivalent of a structure composed of integers with specific sizes and
+signed-ness or null-terminated char buffers, etc
+- A couple of two function, (f, g) may be called a de/serializer couple only if
+
+@code
+f(g(data)) == data
+@endcode
+
+@subsubsection not-all-feature-mandatory Not all type features are mandatory
+
+A field may have less typing than the full list of type restrictions. For instance, when
+exchanging structured data, the sender may be supposed to have taken care of the range-checking
+already and the recipient doesn’t need to check it again.
+
+Thus, in this examples, the recipient may discard the range of the fields when reading the
+structure.
+
+@subsection proposed-format Proposed formats
+
+@subsubsection format-structure Structure
+
+- XML for the “human read/writable, equivalent” format, would look like:
+
+@code
+<Integer Name="foobar" Size="8" Signed="true" />
+<Block Name="spam">
+    <String Name="egg" Length="20"/>
+    <Integer Name="sausage" Size="8" Signed="false">
+        <AuthorizedValues>
+            <Value>0</Value>
+            <Value>2</Value>
+            <Value>2</Value>
+        </AuthorizedValues>
+    </Integer>
+</Block>
+@endcode
+
+- Json
+
+@subsubsection format-values Structured Values
+
+- XML for the “human read/writeable, equivalent” format.
+- Json
+- CSV (columns would be 1:Name and 2:Value)
+- flat binary representation
+
+@subsection state-of-the-art State of the art
+
+Work In Progress
+
+- Parameter Framework: https://github.com/01org/parameter-framework
+    - Addresses the type-description requirements
+    - Only covers part of the import/export requirements: only one format is available and it is not
+    versioned
+    - Only a fixed set of metadata is available in this format
+    - The parts relevant to our requirements are too tightly integrated with the rest of the
+    Parameter Framework to be reusable as-is.
+- XMI: https://en.wikipedia.org/wiki/XML_Metadata_Interchange
+    - Mainly used to encode UML but could be used to describe any Level 2 Meta-Object Facility (MOF)
+    language.
+    - As such, it is a way of transmitting both data-description languages and data description
+      written in such a language.
+    - It also allows transmitting differences between those.
+    - It is too broad for our uses but could be used to describe a versioned interchange format to
+    be used with our component.
+- protobuf: https://developers.google.com/protocol-buffers/
+    - Generates code for serializing/deserializing data for transmission over a wire.
+    - Supports a fixed set of types.
+    - Supports generating code for several languages.
+- enlightenment’s “Eet/Eina”: https://docs.enlightenment.org/efl/1.15.0/eet_main.html
+    - Mainly targets serialization needs.
+    - C libraries.
+- .NET’s Data Contract: https://msdn.microsoft.com/en-us/library/ms733127%28v=vs.110%29.aspx
+    - Used for IPC but serves at describing data.
+    - Need static class and attributes definition (it doesn’t seem possible to dynamically define a
+    data - contract).
+    - Can only be used in the .NET framework and require source code instrumentation.
+- DFDL: https://en.wikipedia.org/wiki/Data_Format_Description_Language
+    - Uses a subset of XSD to describe any textual or binary data format
+    - Data stored in such a format can then be parsed and rendered as XML (the user does not control
+    how the rendering is done) - or the other way around.
+    - If we want it to parse XML, we’d need to describe XML using DFDL…
+    - There seems to be only one DFDL opensourceimplementation and it is written in Java.
+- Boost.PropertyTree: http://www.boost.org/doc/libs/1_59_0/doc/html/property_tree.html
+    - Implements a tree containing a configurable but single type of values
+    - Non-leaves can have values too
+    - Provides reader/writers for some formats; it seems possible to add more
+
+*/
