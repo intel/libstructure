@@ -1,0 +1,24 @@
+/*!
+@page hld HLD
+@tableofcontents
+
+@section stage1 Stage 1
+
+-	Create fields -> define the top-level “field” class interface
+-	Create blocks -> design field tree
+-	Typing framework ? -> choose a set of stock field types; allow users to defined their own types based – or not – on the stock ones.
+-	Add attributes to fields -> describe generic attribute; choose a set of “stock” attributes for the stock types.
+-	Get/Set fields -> base of the serialization framework
+-	How we handle the “default value” concept?
+
+@section stage2 Stage 2
+
+-	Export -> describe structure export 1st
+-	Import -> describe value import 1st
+-	Binary format
+-	XML pfw format
+-	Canonical format
+
+
+
+*/
