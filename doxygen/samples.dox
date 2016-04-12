@@ -1,0 +1,176 @@
+/*!
+@page samples Code samples
+@tableofcontents
+
+-Some samples might be outdated-
+
+@section struct-to-settings-int Structure to settings interactive
+
+@code
+#include <structure/Structure.hpp>
+#include <structure/Field.hpp>
+#include <structure/readers/Xml.hpp>
+
+int main(int argc, char **argv)
+{
+    // Read the structure from a structure-only file in "StructureXml" format
+    structure::Structure root;
+    structure::readers::StructureXml reader(root);
+    reader.read(std::ifstream(argv[1]));
+
+    // Create an uninitialized structured value from the structure parsed above
+    structure::Value value{root};
+
+    // Browse each field of the structure...
+    for (structure::Field &field : fields(value)) {
+        // ...and ask the user for a value to assign it to
+        cout << "Set '" << field.name() << " (kind: " << field.kind() << " to:";
+
+        std::string userValue;
+        cin >> userValue;
+
+        // May throw value::exceptions::unparseable or value::exceptions::out_of_range
+        field.set(userValue);
+    }
+
+    // Write the resulting structured value to the standard output
+    structure::writers::ValueXml writer(cout);
+    writer.write(value);
+
+    return 0;
+}
+@endcode
+
+@section struct-to-settings-prog Structure to settings programaticaly
+
+@code
+#include <structure/Structure.hpp>
+#include <structure/Types.hpp>
+#include <structure/writers/Json.hpp>
+
+using namespace structure::types; // UnsignedInteger8, String, ...
+
+int main(void)
+{
+    structure::Structure root;
+    structure::readers::MyReader reader(root);
+    reader.read(cin);
+
+    UnsignedInteger8 myInt("my_int", min=0, max=100);
+    // myInt.set(1.2); // does not compile
+    // myInt.set("zoeijf"); // throws value::exceptions::unparseable
+    // myInt.set(102); // throws::value::exceptions::out_of_range
+
+    root.add(myInt);
+    auto myIntV = myInt.with(99);
+
+    String myString1("my_string1", maxLength=30);
+    String myString2("my_string2", maxLength=20);
+    myString1.set("foo");
+
+    structure::Block b("my_block");
+    b.add({myString1, myString2}); // adds both myString1 and myString2. equivalent to:
+                                   // b.add(myString1); b.add(myString2);
+
+    // settings::writers::Json writer(root); // throws, because myString2 has no value
+                                             // (or maybe it should throw when writing ?)
+
+    myString2.set("bar");
+    settings::writers::Json writer(root);
+    writer.write(cout);
+    /*
+     * output:
+     * { 'my_int' : '99',
+     *   'myBlock' : {
+     *      'my_string1' : 'foo',
+     *      'my_string2' : 'bar'
+     *   }
+     * }
+     */
+
+    return 0;
+}
+@endcode
+
+@section struct-to-xml Structure to XML
+
+@code
+#include <structure/Structure.hpp>
+#include <structure/Types.hpp>
+#include <structure/writers/Xml.hpp>
+
+using namespace structure::types; // Integer, String, ...
+
+using UnsignedInteger8 = Integer<traits::Unsigned, 8>;
+
+int main(void)
+{
+    // This declares a structure without any name (i.e. a root)
+    structure::Structure root;
+
+    // There are different ways to add an element to a structure:
+
+    // 1: define it and add it
+    String myString1("my_string1", maxLength=30);
+    b.add(myString1);
+
+    // 2: add it with an inline definition
+    root.add(UnsignedInteger8{"my_int", min=0, max=100});
+
+
+    // It is possible to group elements in blocks in a composite pattern
+    structure::Block b("my_block");
+    b.add(myString1);
+    b.add(String{"my_string2", maxLength=20});
+    root.add(b);
+
+    // At this point, "root" has the following leaves:
+    // /my_int
+    // /my_string1
+    // /my_block/my_string1
+    // /my_block/my_string2
+
+    structure::writers::Xml writer(cout);
+    writer.write(root);
+
+    return 0;
+}
+@endcode
+
+@section to-binary To binary
+
+@code
+#include <structure/Structure.hpp>
+#include <structure/readers/Xml.hpp>
+#include <structure/writers/Binary.hpp>
+
+Buffer toBinary(string settings, string structure)
+{
+    structure::readers::ValueXml settingsReader(settings);
+    structure::readers::StructureXml structureReader(structure);
+
+    // Parsing
+    structure::Value rawValue = settingsReader.read();
+    structure::Root root = structureReader.read();
+
+    // Validation/type coercion
+    structure::Value structured = root.with(rawValue);
+
+    // export
+    structure::writers::BinaryValue writer(structured);
+    return writer.write();
+}
+@endcode
+
+
+
+
+
+
+
+
+
+
+
+
+*/
