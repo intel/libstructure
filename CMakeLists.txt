@@ -34,3 +34,5 @@ include(CMakeDependentOption)
 option(DOXYGEN "Enable doxygen generation" ON)
 
 add_subdirectory(doxygen)
+
+add_subdirectory(structure)
