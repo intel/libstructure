@@ -12,7 +12,7 @@ public:
     Visitor() {}
     virtual ~Visitor(){};
 
-    virtual void visit(Block *block) = 0;
-    virtual void visit(GenericField *field) = 0;
+    virtual void visit(Block &block) = 0;
+    virtual void visit(GenericField &field) = 0;
 };
 }

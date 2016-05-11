@@ -2,6 +2,7 @@
 
 #include <initializer_list>
 #include <string>
+#include <map>
 
 namespace structure
 {
@@ -14,12 +15,15 @@ public:
     Structure(std::string name);
     virtual ~Structure(){};
 
-    // virtual void with(std::initializer_list<std::string> values) = 0;
-    virtual void accept(Visitor *visitor) = 0;
+    virtual void accept(Visitor &visitor) = 0;
 
-    virtual std::string name();
+    std::string name();
+
+    void setAttribute(std::string key, std::string value = "");
+    std::map<std::string, std::string> const &getAttributes();
 
 private:
     std::string mName;
+    std::map<std::string, std::string> mAttributes;
 };
 }

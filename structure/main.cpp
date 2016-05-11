@@ -3,26 +3,29 @@
 #include "functions.hpp"
 
 #include <iostream>
+#include <exception>
 
 int main(int argc, char **argv)
 {
-    structure::Block root("root",
-                          {new structure::Field<float>{"a"}, new structure::Field<float>{"b"},
-                           new structure::Block("c", {new structure::Field<float>{"d"},
-                                                      new structure::Field<float>{"f"}})});
 
-    structure::display(&root);
+    auto root = structure::makeBlock(
+        "a", structure::makeFloat("b"),
+        structure::makeBlock("c", structure::makeInteger("e"), structure::makeBlock("f")));
+
+    structure::display(root);
+
+    root->setAttribute("toto", "true");
+
+    try {
+        structure::getChildren(structure::getChild(root, "c"));
+    } catch (std::exception const &e) {
+        std::cerr << e.what() << std::endl;
+    }
+
+    for (auto &a : root->getAttributes())
+        std::cout << a.first << " : " << a.second << std::endl;
 
     std::cout << std::endl;
-
-    auto c = structure::getChild(&root, "c");
-    if (c)
-        for (auto child : structure::getChildren(c))
-            structure::display(child);
-
-    std::cout << std::endl;
-
-    structure::display(structure::getChild(&root, "/c/f"));
 
     return 0;
 }

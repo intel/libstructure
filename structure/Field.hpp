@@ -14,8 +14,10 @@ public:
     Field(std::string name);
     ~Field() override;
 
-    void accept(Visitor *visitor) override;
-    std::string getName() { return name(); }
+    void accept(Visitor &visitor) override;
+
+    std::string fieldName() { return name(); }
+    std::string fieldType();
 
 private:
 };
