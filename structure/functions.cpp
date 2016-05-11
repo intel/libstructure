@@ -1,8 +1,8 @@
 #include "functions.hpp"
 #include "Block.hpp"
 #include "Field.hpp"
-#include <iostream>
 #include "Exception.hpp"
+#include <iostream>
 
 namespace structure
 {
@@ -58,45 +58,25 @@ void display(std::unique_ptr<Structure> &structure)
     };
 
     auto onEnterBlock = [&](auto &b) {
-        std::cout << tab() << "Block : " << b.name() << " {" << std::endl;
+        std::cout << tab() << "Block : " << b.getName() << " {" << std::endl;
         level++;
     };
 
-    auto onExitBlock = [&](auto &b) {
+    auto onExitBlock = [&](auto &) {
         level--;
         std::cout << tab() << "}" << std::endl;
     };
 
-    auto onEnterField = [&](auto &f) {
-        std::cout << tab() << f.fieldType() << " : " << f.fieldName() << std::endl;
-    };
+    auto onEnterField = [&](auto &f) { std::cout << tab() << f.getName() << std::endl; };
 
     apply(structure, onEnterBlock, onExitBlock, onEnterField, true);
 }
 
-std::list<std::unique_ptr<Structure>> &getChildren(std::unique_ptr<Structure> &structure)
+void addField(std::unique_ptr<Structure> &parent, std::unique_ptr<Structure> child)
 {
-    std::list<std::unique_ptr<Structure>> *result = nullptr;
-
-    auto onEnterBlock = [&](auto &b) { result = &(b.getFields()); };
-
-    auto onEnterField = [&](auto &f) {
-        throw StructureException(ExceptionType::NotABlock, "getChildren()");
-    };
-
-    apply(structure, onEnterBlock, DefaultBlockFunction, onEnterField, false);
-
-    return *result;
-}
-
-void addField(std::unique_ptr<Structure> &parent, std::unique_ptr<Structure> &child)
-{
-
     auto onEnterBlock = [&](auto &b) { b.addField(std::move(child)); };
 
-    auto onEnterField = [&](auto &f) {
-        throw StructureException(ExceptionType::NotABlock, "addField()");
-    };
+    auto onEnterField = [&](auto &) { throw NotABlock(parent->getName()); };
 
     apply(parent, onEnterBlock, DefaultBlockFunction, onEnterField, false);
 }
@@ -104,11 +84,7 @@ void addField(std::unique_ptr<Structure> &parent, std::unique_ptr<Structure> &ch
 class GetChildVisitor : public Visitor
 {
 public:
-    GetChildVisitor(std::string _path)
-    {
-        path = _path;
-        result = nullptr;
-    }
+    GetChildVisitor(std::string path) : path(path) {}
 
     void visit(Block &block) override
     {
@@ -118,7 +94,7 @@ public:
         if (path[0] == '/')
             path.erase(0, 1);
 
-        int idx = path.find_first_of("/");
+        auto idx = path.find_first_of("/");
         std::string name;
 
         if (idx != std::string::npos) {
@@ -130,7 +106,7 @@ public:
         }
 
         for (auto &field : block.getFields()) {
-            if (field->name() == name) {
+            if (field->getName() == name) {
                 if (path.empty()) {
                     result = &field;
                     return;
@@ -141,21 +117,21 @@ public:
         }
     }
 
-    void visit(GenericField &field) override { result = nullptr; }
+    void visit(GenericField &) override { result = nullptr; }
 
     std::string path;
-    std::unique_ptr<Structure> *result;
+    const std::unique_ptr<Structure> *result;
 };
 
-std::unique_ptr<Structure> &getChild(std::unique_ptr<Structure> &structure, std::string path)
+const std::unique_ptr<Structure> &getChild(std::unique_ptr<Structure> &structure, std::string path)
 {
     GetChildVisitor visitor(path);
     structure.get()->accept(visitor);
 
-    if (visitor.result)
+    if (visitor.result) {
         return *(visitor.result);
-    else
-        throw StructureException(ExceptionType::ChildNotFound, path);
+    }
+    throw ChildNotFound(structure->getName(), path);
 }
 
 // Builders
@@ -178,7 +154,7 @@ std::unique_ptr<Structure> makeInteger(std::string name)
 std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure> f1)
 {
     auto b = makeBlock(name);
-    addField(b, f1);
+    addField(b, std::move(f1));
     return b;
 }
 
@@ -186,8 +162,8 @@ std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure
                                      std::unique_ptr<Structure> f2)
 {
     auto b = makeBlock(name);
-    addField(b, f1);
-    addField(b, f2);
+    addField(b, std::move(f1));
+    addField(b, std::move(f2));
     return b;
 }
 
@@ -195,9 +171,9 @@ std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure
                                      std::unique_ptr<Structure> f2, std::unique_ptr<Structure> f3)
 {
     auto b = makeBlock(name);
-    addField(b, f1);
-    addField(b, f2);
-    addField(b, f3);
+    addField(b, std::move(f1));
+    addField(b, std::move(f2));
+    addField(b, std::move(f3));
     return b;
 }
 
@@ -206,10 +182,10 @@ std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure
                                      std::unique_ptr<Structure> f4)
 {
     auto b = makeBlock(name);
-    addField(b, f1);
-    addField(b, f2);
-    addField(b, f3);
-    addField(b, f4);
+    addField(b, std::move(f1));
+    addField(b, std::move(f2));
+    addField(b, std::move(f3));
+    addField(b, std::move(f4));
     return b;
 }
 }

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <exception>
 
-int main(int argc, char **argv)
+int main(void)
 {
 
     auto root = structure::makeBlock(
@@ -15,12 +15,6 @@ int main(int argc, char **argv)
     structure::display(root);
 
     root->setAttribute("toto", "true");
-
-    try {
-        structure::getChildren(structure::getChild(root, "c"));
-    } catch (std::exception const &e) {
-        std::cerr << e.what() << std::endl;
-    }
 
     for (auto &a : root->getAttributes())
         std::cout << a.first << " : " << a.second << std::endl;

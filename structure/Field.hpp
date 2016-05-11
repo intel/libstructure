@@ -1,26 +1,17 @@
 #pragma once
 
-#include "Structure.hpp"
 #include "GenericField.hpp"
+#include "Visitor.hpp"
 
 namespace structure
 {
 
 template <typename T>
-class Field : public Structure, public GenericField
+class Field : public GenericField
 {
-
 public:
-    Field(std::string name);
-    ~Field() override;
+    Field(std::string name) : GenericField(name) {}
 
-    void accept(Visitor &visitor) override;
-
-    std::string fieldName() { return name(); }
-    std::string fieldType();
-
-private:
+    void accept(Visitor &visitor) override { visitor.visit(*this); }
 };
 }
-
-#include "field.tpp"

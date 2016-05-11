@@ -1,15 +1,14 @@
 #pragma once
 
-#include <string>
-#include <list>
-#include <memory>
-#include <cstdarg>
-#include <functional>
-
 #include "Structure.hpp"
 #include "Block.hpp"
 #include "GenericField.hpp"
 #include "Visitor.hpp"
+
+#include <string>
+#include <list>
+#include <memory>
+#include <functional>
 
 namespace structure
 {
@@ -25,11 +24,9 @@ void apply(std::unique_ptr<Structure> &structure, BlockFunction onEnterBlock,
 
 void display(std::unique_ptr<Structure> &structure);
 
-std::unique_ptr<Structure> &getChild(std::unique_ptr<Structure> &structure, std::string path);
+const std::unique_ptr<Structure> &getChild(std::unique_ptr<Structure> &structure, std::string path);
 
-std::list<std::unique_ptr<Structure>> &getChildren(std::unique_ptr<Structure> &structure);
-
-void addField(std::unique_ptr<Structure> &parent, std::unique_ptr<Structure> &child);
+void addField(std::unique_ptr<Structure> &parent, std::unique_ptr<Structure> child);
 
 // Builders
 

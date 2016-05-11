@@ -1,15 +1,14 @@
 #pragma once
 
+#include "Structure.hpp"
+
 namespace structure
 {
 
-class GenericField
+class GenericField : public Structure
 {
 public:
-    GenericField(){};
-    virtual ~GenericField(){};
-
-    virtual std::string fieldName() = 0;
-    virtual std::string fieldType() = 0;
+    GenericField(std::string name) : Structure(name){};
+    virtual ~GenericField() = default;
 };
 }

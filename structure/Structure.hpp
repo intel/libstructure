@@ -13,14 +13,14 @@ class Structure
 {
 public:
     Structure(std::string name);
-    virtual ~Structure(){};
+    virtual ~Structure() = default;
 
     virtual void accept(Visitor &visitor) = 0;
 
-    std::string name();
+    std::string getName();
 
     void setAttribute(std::string key, std::string value = "");
-    std::map<std::string, std::string> const &getAttributes();
+    const std::map<std::string, std::string> &getAttributes();
 
 private:
     std::string mName;

@@ -6,25 +6,32 @@
 namespace structure
 {
 
-enum class ExceptionType
-{
-    ChildNotFound,
-    NotABlock,
-};
-
 class StructureException : public std::exception
 {
+};
+
+class ChildNotFound : public StructureException
+{
 public:
-    StructureException(ExceptionType type, const std::string &error) throw();
+    ChildNotFound(const std::string &self, const std::string &child)
+        : mError("'" + self + "': no such child: '" + child + "'.")
+    {
+    }
 
-    virtual const char *what() const throw();
-
-    ExceptionType getType() const;
-
-    virtual ~StructureException() throw() {}
+    const char *what() const noexcept override { return mError.c_str(); }
 
 private:
     std::string mError;
-    ExceptionType mType;
+};
+
+class NotABlock : public StructureException
+{
+public:
+    NotABlock(const std::string &self) : mError("'" + self + "' is not a Block.") {}
+
+    const char *what() const noexcept override { return mError.c_str(); }
+
+private:
+    std::string mError;
 };
 }

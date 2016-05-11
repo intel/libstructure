@@ -9,8 +9,7 @@ namespace structure
 class Visitor
 {
 public:
-    Visitor() {}
-    virtual ~Visitor(){};
+    virtual ~Visitor() = default;
 
     virtual void visit(Block &block) = 0;
     virtual void visit(GenericField &field) = 0;
