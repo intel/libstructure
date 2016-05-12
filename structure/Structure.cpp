@@ -7,7 +7,7 @@ Structure::Structure(std::string name) : mName(name)
 {
 }
 
-std::string Structure::getName()
+std::string Structure::getName() const
 {
     return mName;
 }

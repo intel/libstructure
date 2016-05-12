@@ -17,18 +17,18 @@ public:
     {
     }
 
-    void visit(Block &block) override
+    void visit(const Block &block) override
     {
         onEnterBlock(block);
 
         if (recursive)
-            for (auto &field : block.getFields())
+            for (const auto &field : block.getFields())
                 field->accept(*this);
 
         onExitBlock(block);
     }
 
-    void visit(GenericField &field) override { onEnterField(field); }
+    void visit(const GenericField &field) override { onEnterField(field); }
 
 private:
     bool recursive;
@@ -37,16 +37,16 @@ private:
     FieldFunction onEnterField;
 };
 
-void apply(std::unique_ptr<Structure> &structure, BlockFunction onEnterBlock,
-           BlockFunction onExitBlock, FieldFunction onEnterField, bool recursive)
+void apply(const Structure &structure, BlockFunction onEnterBlock, BlockFunction onExitBlock,
+           FieldFunction onEnterField, bool recursive)
 {
     ApplyVisitor visitor(recursive, onEnterBlock, onExitBlock, onEnterField);
-    structure.get()->accept(visitor);
+    structure.accept(visitor);
 }
 
 // Functions
 
-void display(std::unique_ptr<Structure> &structure)
+void display(const Structure &structure)
 {
     int level = 0;
 
@@ -67,18 +67,11 @@ void display(std::unique_ptr<Structure> &structure)
         std::cout << tab() << "}" << std::endl;
     };
 
-    auto onEnterField = [&](auto &f) { std::cout << tab() << f.getName() << std::endl; };
+    auto onEnterField = [&](auto &f) {
+        std::cout << tab() << "Field : " << f.getName() << std::endl;
+    };
 
     apply(structure, onEnterBlock, onExitBlock, onEnterField, true);
-}
-
-void addField(std::unique_ptr<Structure> &parent, std::unique_ptr<Structure> child)
-{
-    auto onEnterBlock = [&](auto &b) { b.addField(std::move(child)); };
-
-    auto onEnterField = [&](auto &) { throw NotABlock(parent->getName()); };
-
-    apply(parent, onEnterBlock, DefaultBlockFunction, onEnterField, false);
 }
 
 class GetChildVisitor : public Visitor
@@ -86,7 +79,7 @@ class GetChildVisitor : public Visitor
 public:
     GetChildVisitor(std::string path) : path(path) {}
 
-    void visit(Block &block) override
+    void visit(const Block &block) override
     {
         if (!path.length())
             return;
@@ -117,75 +110,36 @@ public:
         }
     }
 
-    void visit(GenericField &) override { result = nullptr; }
+    void visit(const GenericField &) override { result = nullptr; }
 
     std::string path;
-    const std::unique_ptr<Structure> *result;
+    std::unique_ptr<Structure> const *result;
 };
 
-const std::unique_ptr<Structure> &getChild(std::unique_ptr<Structure> &structure, std::string path)
+Structure &getChild(const Structure &structure, std::string path)
 {
     GetChildVisitor visitor(path);
-    structure.get()->accept(visitor);
+    structure.accept(visitor);
 
     if (visitor.result) {
-        return *(visitor.result);
+        return *(visitor.result->get());
     }
-    throw ChildNotFound(structure->getName(), path);
+    throw ChildNotFound(structure.getName(), path);
 }
 
 // Builders
 
-std::unique_ptr<Structure> makeBlock(std::string name)
-{
-    return std::make_unique<Block>(name);
-}
-
-std::unique_ptr<Structure> makeFloat(std::string name)
+std::unique_ptr<Field<float>> makeFloat(std::string name)
 {
     return std::make_unique<Field<float>>(name);
 }
 
-std::unique_ptr<Structure> makeInteger(std::string name)
+std::unique_ptr<Field<int>> makeInteger(std::string name)
 {
     return std::make_unique<Field<int>>(name);
 }
 
-std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure> f1)
+void addFields(Block &parent)
 {
-    auto b = makeBlock(name);
-    addField(b, std::move(f1));
-    return b;
-}
-
-std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure> f1,
-                                     std::unique_ptr<Structure> f2)
-{
-    auto b = makeBlock(name);
-    addField(b, std::move(f1));
-    addField(b, std::move(f2));
-    return b;
-}
-
-std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure> f1,
-                                     std::unique_ptr<Structure> f2, std::unique_ptr<Structure> f3)
-{
-    auto b = makeBlock(name);
-    addField(b, std::move(f1));
-    addField(b, std::move(f2));
-    addField(b, std::move(f3));
-    return b;
-}
-
-std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure> f1,
-                                     std::unique_ptr<Structure> f2, std::unique_ptr<Structure> f3,
-                                     std::unique_ptr<Structure> f4)
-{
-    auto b = makeBlock(name);
-    addField(b, std::move(f1));
-    addField(b, std::move(f2));
-    addField(b, std::move(f3));
-    addField(b, std::move(f4));
-    return b;
 }
 }

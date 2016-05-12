@@ -12,6 +12,6 @@ class Field : public GenericField
 public:
     Field(std::string name) : GenericField(name) {}
 
-    void accept(Visitor &visitor) override { visitor.visit(*this); }
+    void accept(Visitor &visitor) const override { visitor.visit(*this); }
 };
 }

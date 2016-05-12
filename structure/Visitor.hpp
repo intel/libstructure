@@ -11,7 +11,7 @@ class Visitor
 public:
     virtual ~Visitor() = default;
 
-    virtual void visit(Block &block) = 0;
-    virtual void visit(GenericField &field) = 0;
+    virtual void visit(const Block &block) = 0;
+    virtual void visit(const GenericField &field) = 0;
 };
 }

@@ -4,6 +4,7 @@
 #include "Block.hpp"
 #include "GenericField.hpp"
 #include "Visitor.hpp"
+#include "Field.hpp"
 
 #include <string>
 #include <list>
@@ -13,33 +14,38 @@
 namespace structure
 {
 
-using BlockFunction = std::function<void(Block &)>;
-const BlockFunction DefaultBlockFunction = [](Block &) {};
+using BlockFunction = std::function<void(const Block &)>;
+const BlockFunction DefaultBlockFunction = [](const Block &) {};
 
-using FieldFunction = std::function<void(GenericField &)>;
-const FieldFunction DefaultFieldFunction = [](GenericField &) {};
+using FieldFunction = std::function<void(const GenericField &)>;
+const FieldFunction DefaultFieldFunction = [](const GenericField &) {};
 
-void apply(std::unique_ptr<Structure> &structure, BlockFunction onEnterBlock,
-           BlockFunction onExitBlock, FieldFunction onEnterField, bool recursive);
+void apply(const Structure &structure, BlockFunction onEnterBlock, BlockFunction onExitBlock,
+           FieldFunction onEnterField, bool recursive);
 
-void display(std::unique_ptr<Structure> &structure);
+void display(const Structure &structure);
 
-const std::unique_ptr<Structure> &getChild(std::unique_ptr<Structure> &structure, std::string path);
-
-void addField(std::unique_ptr<Structure> &parent, std::unique_ptr<Structure> child);
+Structure &getChild(const Structure &structure, std::string path);
 
 // Builders
 
-std::unique_ptr<Structure> makeBlock(std::string name);
-std::unique_ptr<Structure> makeFloat(std::string name);
-std::unique_ptr<Structure> makeInteger(std::string name);
+std::unique_ptr<Field<float>> makeFloat(std::string name);
+std::unique_ptr<Field<int>> makeInteger(std::string name);
 
-std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure> f1);
-std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure> f1,
-                                     std::unique_ptr<Structure> f2);
-std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure> f1,
-                                     std::unique_ptr<Structure> f2, std::unique_ptr<Structure> f3);
-std::unique_ptr<Structure> makeBlock(std::string name, std::unique_ptr<Structure> f1,
-                                     std::unique_ptr<Structure> f2, std::unique_ptr<Structure> f3,
-                                     std::unique_ptr<Structure> f4);
+void addFields(Block &parent);
+
+template <typename T, typename... Fields>
+void addFields(Block &parent, T first, Fields... fields)
+{
+    parent.addField(std::move(first));
+    addFields(parent, std::move(fields)...);
+}
+
+template <typename... Fields>
+std::unique_ptr<Block> makeBlock(std::string name, Fields... fields)
+{
+    auto b = std::make_unique<Block>(name);
+    addFields(*b, std::move(fields)...);
+    return b;
+}
 }

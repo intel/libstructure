@@ -12,7 +12,7 @@ int main(void)
         "a", structure::makeFloat("b"),
         structure::makeBlock("c", structure::makeInteger("e"), structure::makeBlock("f")));
 
-    structure::display(root);
+    structure::display(*root);
 
     root->setAttribute("toto", "true");
 
