@@ -1,17 +1,19 @@
 #include "functions.hpp"
 #include "Block.hpp"
 #include "Field.hpp"
+#include "FieldValue.hpp"
+#include "BlockValue.hpp"
 #include "Exception.hpp"
 #include <iostream>
 
 namespace structure
 {
 
-class ApplyVisitor : public Visitor
+class ApplyStructureVisitor : public StructureVisitor
 {
 public:
-    ApplyVisitor(bool _recursive, BlockFunction _onEnterBlock, BlockFunction _onExitBlock,
-                 FieldFunction _onEnterField)
+    ApplyStructureVisitor(bool _recursive, BlockFunction _onEnterBlock, BlockFunction _onExitBlock,
+                          FieldFunction _onEnterField)
         : recursive(_recursive), onEnterBlock(_onEnterBlock), onExitBlock(_onExitBlock),
           onEnterField(_onEnterField)
     {
@@ -40,7 +42,44 @@ private:
 void apply(const Structure &structure, BlockFunction onEnterBlock, BlockFunction onExitBlock,
            FieldFunction onEnterField, bool recursive)
 {
-    ApplyVisitor visitor(recursive, onEnterBlock, onExitBlock, onEnterField);
+    ApplyStructureVisitor visitor(recursive, onEnterBlock, onExitBlock, onEnterField);
+    structure.accept(visitor);
+}
+
+class ApplyValueVisitor : public ValueVisitor
+{
+public:
+    ApplyValueVisitor(bool _recursive, BlockValueFunction _onEnterBlock,
+                      BlockValueFunction _onExitBlock, FieldValueFunction _onEnterField)
+        : recursive(_recursive), onEnterBlock(_onEnterBlock), onExitBlock(_onExitBlock),
+          onEnterField(_onEnterField)
+    {
+    }
+
+    void visit(const BlockValue &block) override
+    {
+        onEnterBlock(block);
+
+        if (recursive)
+            for (const auto &field : block.getFields())
+                field->accept(*this);
+
+        onExitBlock(block);
+    }
+
+    void visit(const GenericFieldValue &field) override { onEnterField(field); }
+
+private:
+    bool recursive;
+    BlockValueFunction onEnterBlock;
+    BlockValueFunction onExitBlock;
+    FieldValueFunction onEnterField;
+};
+
+void apply(const StructureValue &structure, BlockValueFunction onEnterBlock,
+           BlockValueFunction onExitBlock, FieldValueFunction onEnterField, bool recursive)
+{
+    ApplyValueVisitor visitor(recursive, onEnterBlock, onExitBlock, onEnterField);
     structure.accept(visitor);
 }
 
@@ -74,7 +113,35 @@ void display(const Structure &structure)
     apply(structure, onEnterBlock, onExitBlock, onEnterField, true);
 }
 
-class GetChildVisitor : public Visitor
+void display(const StructureValue &value)
+{
+    int level = 0;
+
+    auto tab = [&]() {
+        std::string tab;
+        for (int i = 0; i < level; ++i)
+            tab += "    ";
+        return tab;
+    };
+
+    auto onEnterBlock = [&](auto &b) {
+        std::cout << tab() << "BlockValue : " << b.getName() << " {" << std::endl;
+        level++;
+    };
+
+    auto onExitBlock = [&](auto &) {
+        level--;
+        std::cout << tab() << "}" << std::endl;
+    };
+
+    auto onEnterField = [&](auto &f) {
+        std::cout << tab() << "FieldValue : " << f.getName() << " = " << f.getValue() << std::endl;
+    };
+
+    apply(value, onEnterBlock, onExitBlock, onEnterField, true);
+}
+
+class GetChildVisitor : public StructureVisitor
 {
 public:
     GetChildVisitor(std::string path) : path(path) {}
@@ -127,6 +194,11 @@ Structure &getChild(const Structure &structure, std::string path)
     throw ChildNotFound(structure.getName(), path);
 }
 
+std::unique_ptr<StructureValue> with(Structure &structure, ValueBuilder builder)
+{
+    return structure.with(builder);
+}
+
 // Builders
 
 std::unique_ptr<Field<float>> makeFloat(std::string name)
@@ -137,9 +209,5 @@ std::unique_ptr<Field<float>> makeFloat(std::string name)
 std::unique_ptr<Field<int>> makeInteger(std::string name)
 {
     return std::make_unique<Field<int>>(name);
-}
-
-void addFields(Block &parent)
-{
 }
 }

@@ -34,4 +34,18 @@ public:
 private:
     std::string mError;
 };
+
+class ValueStructureMismatch : public StructureException
+{
+public:
+    ValueStructureMismatch(const std::string &self)
+        : mError("Instanciation values do not match with the Structure '" + self + "'")
+    {
+    }
+
+    const char *what() const noexcept override { return mError.c_str(); }
+
+private:
+    std::string mError;
+};
 }

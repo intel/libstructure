@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Structure.hpp"
+#include "StructureValue.hpp"
+#include "ValueBuilder.hpp"
 
 #include <list>
 #include <memory>
@@ -11,14 +13,29 @@ namespace structure
 class Block : public Structure
 {
 public:
-    Block(std::string name);
+    template <typename... Fields>
+    Block(std::string name, Fields... fields) : Structure(name)
+    {
+        addFields(std::move(fields)...);
+    }
 
-    void accept(Visitor &visitor) const override;
+    void accept(StructureVisitor &visitor) const override;
 
-    void addField(std::unique_ptr<Structure> child);
     const std::list<std::unique_ptr<Structure>> &getFields() const;
+
+    std::unique_ptr<StructureValue> with(ValueBuilder builder) const override;
 
 private:
     std::list<std::unique_ptr<Structure>> mFields;
+
+    void addField(std::unique_ptr<Structure> child);
+
+    template <typename T, typename... Fields>
+    void addFields(T first, Fields... fields)
+    {
+        addField(std::move(first));
+        addFields(std::move(fields)...);
+    }
+    void addFields(){};
 };
 }
