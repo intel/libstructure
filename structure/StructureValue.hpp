@@ -20,7 +20,6 @@ public:
     std::string getName() const;
 
     const Structure &getStructure() const;
-    virtual const std::string getValue() const = 0;
 
 private:
     const Structure &mStructure;

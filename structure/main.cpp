@@ -1,5 +1,3 @@
-#include "Block.hpp"
-#include "Field.hpp"
 #include "functions.hpp"
 #include "ValueBuilder.hpp"
 
@@ -15,15 +13,17 @@ int main(void)
         "root", strc::makeBlock("complex", strc::makeFloat("re"), strc::makeFloat("im")),
         strc::makeInteger("count"));
 
-    strc::display(*root);
+    strc::display(root);
 
     std::cout << std::endl;
 
-    auto r = strc::with(*root, {{"1.2", "3.4"}, "2"});
+    auto r = strc::with(root, {{"1.2", "3.4"}, "2"});
 
-    strc::display(*r);
+    strc::display(r);
 
     std::cout << std::endl;
+
+    std::cout << strc::getValue(strc::getChild(r, "complex")) << std::endl;
 
     return 0;
 }

@@ -15,8 +15,6 @@ class BlockValue : public StructureValue
 public:
     BlockValue(const Block &structure) : StructureValue(structure) {}
 
-    const std::string getValue() const override { return "block value"; }
-
     void addValue(std::unique_ptr<StructureValue> child) { mValues.push_back(std::move(child)); }
 
     const std::list<std::unique_ptr<StructureValue>> &getFields() const { return mValues; }

@@ -113,6 +113,11 @@ void display(const Structure &structure)
     apply(structure, onEnterBlock, onExitBlock, onEnterField, true);
 }
 
+void display(const std::unique_ptr<Block> &structure)
+{
+    display(*structure);
+}
+
 void display(const StructureValue &value)
 {
     int level = 0;
@@ -141,10 +146,47 @@ void display(const StructureValue &value)
     apply(value, onEnterBlock, onExitBlock, onEnterField, true);
 }
 
-class GetChildVisitor : public StructureVisitor
+void display(const std::unique_ptr<StructureValue> &value)
+{
+    display(*value);
+}
+
+std::string getValue(const StructureValue &value)
+{
+    std::string result;
+
+    auto onEnterBlock = [&](auto &b) {
+        result += "{";
+        auto it = b.getFields().begin();
+        while (it != b.getFields().end()) {
+            result += getValue(*it);
+            it++;
+            if (it != b.getFields().end())
+                result += ", ";
+        }
+        result += "}";
+    };
+
+    auto onExitBlock = [&](auto &) {
+
+    };
+
+    auto onEnterField = [&](auto &f) { result = f.getValue(); };
+
+    apply(value, onEnterBlock, onExitBlock, onEnterField, false);
+
+    return result;
+}
+
+std::string getValue(const std::unique_ptr<StructureValue> &value)
+{
+    return getValue(*value);
+}
+
+class GetChildStructureVisitor : public StructureVisitor
 {
 public:
-    GetChildVisitor(std::string path) : path(path) {}
+    GetChildStructureVisitor(std::string path) : path(path) {}
 
     void visit(const Block &block) override
     {
@@ -185,7 +227,7 @@ public:
 
 Structure &getChild(const Structure &structure, std::string path)
 {
-    GetChildVisitor visitor(path);
+    GetChildStructureVisitor visitor(path);
     structure.accept(visitor);
 
     if (visitor.result) {
@@ -194,9 +236,77 @@ Structure &getChild(const Structure &structure, std::string path)
     throw ChildNotFound(structure.getName(), path);
 }
 
-std::unique_ptr<StructureValue> with(Structure &structure, ValueBuilder builder)
+Structure &getChild(const std::unique_ptr<Block> &structure, std::string path)
+{
+    return getChild(*structure, path);
+}
+
+class GetChildValueVisitor : public ValueVisitor
+{
+public:
+    GetChildValueVisitor(std::string path) : path(path) {}
+
+    void visit(const BlockValue &block) override
+    {
+        if (!path.length())
+            return;
+
+        if (path[0] == '/')
+            path.erase(0, 1);
+
+        auto idx = path.find_first_of("/");
+        std::string name;
+
+        if (idx != std::string::npos) {
+            name = path.substr(0, idx);
+            path = path.substr(idx + 1);
+        } else {
+            name = path;
+            path = "";
+        }
+
+        for (auto &field : block.getFields()) {
+            if (field->getName() == name) {
+                if (path.empty()) {
+                    result = &field;
+                    return;
+                } else {
+                    field->accept(*this);
+                }
+            }
+        }
+    }
+
+    void visit(const GenericFieldValue &) override { result = nullptr; }
+
+    std::string path;
+    std::unique_ptr<StructureValue> const *result;
+};
+
+StructureValue &getChild(const StructureValue &value, std::string path)
+{
+    GetChildValueVisitor visitor(path);
+    value.accept(visitor);
+
+    if (visitor.result) {
+        return *(visitor.result->get());
+    }
+    throw ChildNotFound(value.getName(), path);
+}
+
+StructureValue &getChild(const std::unique_ptr<StructureValue> &value, std::string path)
+{
+    return getChild(*value, path);
+}
+
+std::unique_ptr<StructureValue> with(const Structure &structure, ValueBuilder builder)
 {
     return structure.with(builder);
+}
+
+std::unique_ptr<StructureValue> with(const std::unique_ptr<Block> &structure, ValueBuilder builder)
+{
+    return with(*structure, builder);
 }
 
 // Builders

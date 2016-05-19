@@ -39,15 +39,41 @@ void apply(const StructureValue &structure, BlockValueFunction onEnterBlock,
 
 void display(const Structure &structure);
 void display(const StructureValue &value);
+void display(const std::unique_ptr<StructureValue> &value);
+void display(const std::unique_ptr<Block> &structure);
+template <typename T>
+void display(const std::unique_ptr<Field<T>> &structure)
+{
+    display(*structure);
+}
+
+std::string getValue(const StructureValue &value);
+std::string getValue(const std::unique_ptr<StructureValue> &value);
 
 Structure &getChild(const Structure &structure, std::string path);
+StructureValue &getChild(const StructureValue &value, std::string path);
+StructureValue &getChild(const std::unique_ptr<StructureValue> &value, std::string path);
+Structure &getChild(const std::unique_ptr<Block> &structure, std::string path);
+template <typename T>
+Structure &getChild(const std::unique_ptr<Field<T>> &structure, std::string path)
+{
+    return getChild(*structure, path);
+}
 
-std::unique_ptr<StructureValue> with(Structure &structure, ValueBuilder builder);
+std::unique_ptr<StructureValue> with(const Structure &structure, ValueBuilder builder);
+std::unique_ptr<StructureValue> with(const std::unique_ptr<Block> &structure, ValueBuilder builder);
+template <typename T>
+std::unique_ptr<StructureValue> with(const std::unique_ptr<Field<T>> &structure,
+                                     ValueBuilder builder)
+{
+    return with(*structure, builder);
+}
 
 // Builders
 
 std::unique_ptr<Field<float>> makeFloat(std::string name);
 std::unique_ptr<Field<int>> makeInteger(std::string name);
+std::unique_ptr<Field<std::string>> makeString(std::string name);
 
 template <typename... Fields>
 std::unique_ptr<Block> makeBlock(std::string name, Fields... fields)
