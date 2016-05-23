@@ -32,6 +32,10 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if (UNIX)
+    add_compile_options(-Wall -Wextra -Werror)
+endif()
+
 project(libstructure)
 
 include(CMakeDependentOption)
