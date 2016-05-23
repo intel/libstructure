@@ -41,6 +41,6 @@ std::unique_ptr<StructureValue> Block::with(ValueBuilder builder) const
         b->addValue(std::move(v));
     }
 
-    return b;
+    return std::move(b);
 }
 }
