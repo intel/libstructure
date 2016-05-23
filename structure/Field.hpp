@@ -20,6 +20,7 @@ public:
 };
 }
 
+#include "StockTypes.hpp"
 #include "FieldValue.hpp"
 
 namespace structure
