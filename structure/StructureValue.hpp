@@ -12,7 +12,7 @@ class ValueVisitor;
 class StructureValue
 {
 public:
-    StructureValue(const Structure &structure) : mStructure(structure) {}
+    explicit StructureValue(const Structure &structure) : mStructure(structure) {}
 
     virtual ~StructureValue() = default;
     virtual void accept(ValueVisitor &visitor) const = 0;
