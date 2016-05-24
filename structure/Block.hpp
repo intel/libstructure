@@ -24,6 +24,7 @@ public:
     const std::list<std::unique_ptr<Structure>> &getFields() const;
 
     std::unique_ptr<StructureValue> with(ValueBuilder builder) const override;
+    std::string getTypeName() const override { return "Block"; }
 
 private:
     std::list<std::unique_ptr<Structure>> mFields;

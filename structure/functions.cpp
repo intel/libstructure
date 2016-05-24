@@ -107,7 +107,7 @@ void display(const Structure &structure)
     };
 
     auto onEnterField = [&](auto &f) {
-        std::cout << tab() << "Field : " << f.getName() << std::endl;
+        std::cout << tab() << f.getTypeName() << " : " << f.getName() << std::endl;
     };
 
     apply(structure, onEnterBlock, onExitBlock, onEnterField, true);
@@ -140,7 +140,8 @@ void display(const StructureValue &value)
     };
 
     auto onEnterField = [&](auto &f) {
-        std::cout << tab() << "FieldValue : " << f.getName() << " = " << f.getValue() << std::endl;
+        std::cout << tab() << f.getStructure().getTypeName() << " : " << f.getName() << " = "
+                  << f.getValue() << std::endl;
     };
 
     apply(value, onEnterBlock, onExitBlock, onEnterField, true);
