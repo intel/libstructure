@@ -309,16 +309,4 @@ std::unique_ptr<StructureValue> with(const std::unique_ptr<Block> &structure, Va
 {
     return with(*structure, builder);
 }
-
-// Builders
-
-std::unique_ptr<Float> makeFloat(std::string name)
-{
-    return std::make_unique<Float>(name);
-}
-
-std::unique_ptr<Integer> makeInteger(std::string name)
-{
-    return std::make_unique<Integer>(name);
-}
 }

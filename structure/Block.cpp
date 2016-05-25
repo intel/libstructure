@@ -11,11 +11,6 @@ void Block::accept(StructureVisitor &visitor) const
     visitor.visit(*this);
 }
 
-void Block::addField(std::unique_ptr<Structure> child)
-{
-    mFields.push_back(std::move(child));
-}
-
 const std::list<std::unique_ptr<Structure>> &Block::getFields() const
 {
     return mFields;

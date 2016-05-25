@@ -19,6 +19,9 @@ public:
         addFields(std::move(fields)...);
     }
 
+    Block(Block &&other) = default;
+    Block &operator=(Block &&other) = default;
+
     void accept(StructureVisitor &visitor) const override;
 
     const std::list<std::unique_ptr<Structure>> &getFields() const;
@@ -29,7 +32,11 @@ public:
 private:
     std::list<std::unique_ptr<Structure>> mFields;
 
-    void addField(std::unique_ptr<Structure> child);
+    template <class T>
+    void addField(T child)
+    {
+        mFields.emplace_back(new T(std::move(child)));
+    }
 
     template <typename T, typename... Fields>
     void addFields(T first, Fields... fields)

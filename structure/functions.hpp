@@ -68,17 +68,4 @@ std::unique_ptr<StructureValue> with(const std::unique_ptr<Field<T>> &structure,
 {
     return with(*structure, builder);
 }
-
-// Builders
-
-std::unique_ptr<Float> makeFloat(std::string name);
-std::unique_ptr<Integer> makeInteger(std::string name);
-std::unique_ptr<String> makeString(std::string name);
-
-template <typename... Fields>
-std::unique_ptr<Block> makeBlock(std::string name, Fields... fields)
-{
-    auto b = std::make_unique<Block>(name, std::move(fields)...);
-    return b;
-}
 }
