@@ -1,4 +1,5 @@
 #include "functions.hpp"
+#include "StockTypes.hpp"
 #include "ValueBuilder.hpp"
 
 #include <iostream>

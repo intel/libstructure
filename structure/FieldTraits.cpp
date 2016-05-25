@@ -1,4 +1,4 @@
-#include "Field.hpp"
+#include "StockTypes.hpp"
 #include "FieldTraits.hpp"
 
 namespace structure

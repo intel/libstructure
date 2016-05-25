@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Visitor.hpp"
 #include "GenericFieldValue.hpp"
-#include "Field.hpp"
+#include "Visitor.hpp"
 
 #include <initializer_list>
 #include <string>
+
+#include "Field.fw.hpp"
 
 namespace structure
 {
