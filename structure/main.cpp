@@ -1,6 +1,7 @@
 #include "functions.hpp"
 #include "StockTypes.hpp"
 #include "ValueBuilder.hpp"
+#include "export.hpp"
 
 #include <iostream>
 #include <exception>
@@ -10,8 +11,9 @@ namespace strc = structure;
 int main(void)
 {
 
-    auto root = strc::Block("root", strc::Block("complex", strc::Float("re"), strc::Float("im")),
-                            strc::Integer("count"));
+    auto root =
+        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
+                    strc::Integer("Counter"));
 
     strc::display(root);
 
@@ -23,7 +25,7 @@ int main(void)
 
     std::cout << std::endl;
 
-    std::cout << strc::getValue(strc::getChild(r, "complex")) << std::endl;
+    std::cout << strc::exportStructure(root) << std::endl;
 
     return 0;
 }

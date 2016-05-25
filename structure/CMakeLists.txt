@@ -8,6 +8,7 @@ set(
     Block.cpp
     StructureValue.cpp
     FieldTraits.cpp
+    export.cpp
 )
 
 add_executable (demo ${SRCS})
