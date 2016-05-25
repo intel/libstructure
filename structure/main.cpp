@@ -9,9 +9,8 @@ namespace strc = structure;
 int main(void)
 {
 
-    auto root = strc::Block(
-        "root", strc::Block("complex", strc::Float("re"), strc::Float("im")),
-        strc::Integer("count"));
+    auto root = strc::Block("root", strc::Block("complex", strc::Float("re"), strc::Float("im")),
+                            strc::Integer("count"));
 
     strc::display(root);
 

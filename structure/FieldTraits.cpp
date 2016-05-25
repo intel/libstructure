@@ -3,8 +3,8 @@
 
 namespace structure
 {
-template<>
+template <>
 const std::string FieldTraits<Float>::name{"Float"};
-template<>
+template <>
 const std::string FieldTraits<Integer>::name{"Integer"};
 }
