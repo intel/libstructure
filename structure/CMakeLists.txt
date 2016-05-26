@@ -3,5 +3,6 @@ add_library(structure SHARED
     Structure.cpp
     Block.cpp
     StructureValue.cpp
-    FieldTraits.cpp)
+    FieldTraits.cpp
+    Visitor.cpp)
 target_include_directories(structure PUBLIC include PRIVATE .)
