@@ -12,9 +12,7 @@ namespace structure
 std::string exportStructure(const Structure &structure, std::list<std::string> &components,
                             int level = 1)
 {
-    auto tab = [&](int level) {
-        return std::string(4 * level, ' ');
-    };
+    auto tab = [&](int level) { return std::string(4 * level, ' '); };
 
     std::string instance;
 
