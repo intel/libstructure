@@ -27,9 +27,10 @@ public:
     void setAttribute(std::string key, std::string value = "");
     const std::map<std::string, std::string> &getAttributes();
 
-    virtual std::unique_ptr<StructureValue> with(ValueBuilder builder) const = 0;
+    std::unique_ptr<StructureValue> with(ValueBuilder builder) const;
 
 private:
+    virtual std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const = 0;
     std::string mName;
     std::map<std::string, std::string> mAttributes;
 };

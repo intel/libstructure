@@ -1,4 +1,5 @@
 #include "Structure.hpp"
+#include "StructureValue.hpp"
 
 namespace structure
 {
@@ -21,4 +22,8 @@ const std::map<std::string, std::string> &Structure::getAttributes()
 {
     return mAttributes;
 }
+std::unique_ptr<StructureValue> Structure::with(ValueBuilder builder) const
+{
+    return genericWith(builder);
+};
 }

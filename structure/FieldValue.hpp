@@ -15,12 +15,14 @@ template <typename T>
 class FieldValue : public GenericFieldValue
 {
 public:
-    FieldValue(const Field<T> &structure, std::string value)
-        : GenericFieldValue(structure), mValue(fromString(value))
+    FieldValue(const Field<T> &field, std::string value)
+        : mStructure(field), mValue(fromString(value))
     {
     }
 
     const std::string getValue() const override { return toString(mValue); }
+    const Field<T> &getField() const { return mStructure; }
+    const Structure &getStructure() const override { return getField(); }
 
     virtual void accept(ValueVisitor &visitor) const override { visitor.visit(*this); }
 
@@ -28,6 +30,7 @@ private:
     static T fromString(std::string value);
     static std::string toString(T value);
 
+    const Field<T> &mStructure;
     T mValue;
 };
 

@@ -1,6 +1,5 @@
 #include "Block.hpp"
 #include "Visitor.hpp"
-#include "BlockValue.hpp"
 #include "Exception.hpp"
 
 namespace structure
@@ -16,7 +15,7 @@ const std::list<std::unique_ptr<Structure>> &Block::getFields() const
     return mFields;
 }
 
-std::unique_ptr<StructureValue> Block::with(ValueBuilder builder) const
+BlockValue Block::with(ValueBuilder builder) const
 {
 
     if (builder.atom)
@@ -25,7 +24,7 @@ std::unique_ptr<StructureValue> Block::with(ValueBuilder builder) const
     if (builder.listValue.size() != mFields.size())
         throw ValueStructureMismatch(getName());
 
-    auto b = std::make_unique<BlockValue>(*this);
+    BlockValue b(*this);
 
     auto it = builder.listValue.begin();
     for (auto &f : mFields) {
@@ -33,9 +32,14 @@ std::unique_ptr<StructureValue> Block::with(ValueBuilder builder) const
             throw ValueStructureMismatch(getName());
 
         auto v = f->with(*(it++));
-        b->addValue(std::move(v));
+        b.addValue(std::move(v));
     }
 
-    return std::move(b);
+    return b;
+}
+
+std::unique_ptr<StructureValue> Block::genericWith(ValueBuilder builder) const
+{
+    return std::make_unique<BlockValue>(with(builder));
 }
 }

@@ -20,13 +20,19 @@ public:
 
     void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
 
-    std::unique_ptr<StructureValue> with(ValueBuilder builder) const override
+    FieldValue<T> with(ValueBuilder builder) const
     {
         if (!builder.atom)
             throw ValueStructureMismatch(getName());
 
-        return std::make_unique<FieldValue<T>>(*this, builder.atomicValue);
+        return FieldValue<T>(*this, builder.atomicValue);
     }
     std::string getTypeName() const override { return FieldTraits<Field<T>>::name; }
+
+private:
+    std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override
+    {
+        return std::make_unique<FieldValue<T>>(with(builder));
+    }
 };
 }

@@ -300,13 +300,8 @@ StructureValue &getChild(const std::unique_ptr<StructureValue> &value, std::stri
     return getChild(*value, path);
 }
 
-std::unique_ptr<StructureValue> with(const Structure &structure, ValueBuilder builder)
+BlockValue with(const Block &block, ValueBuilder builder)
 {
-    return structure.with(builder);
-}
-
-std::unique_ptr<StructureValue> with(const std::unique_ptr<Block> &structure, ValueBuilder builder)
-{
-    return with(*structure, builder);
+    return block.with(builder);
 }
 }

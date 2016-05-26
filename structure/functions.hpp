@@ -60,12 +60,10 @@ Structure &getChild(const std::unique_ptr<Field<T>> &structure, std::string path
     return getChild(*structure, path);
 }
 
-std::unique_ptr<StructureValue> with(const Structure &structure, ValueBuilder builder);
-std::unique_ptr<StructureValue> with(const std::unique_ptr<Block> &structure, ValueBuilder builder);
+BlockValue with(const Block &block, ValueBuilder builder);
 template <typename T>
-std::unique_ptr<StructureValue> with(const std::unique_ptr<Field<T>> &structure,
-                                     ValueBuilder builder)
+FieldValue<T> with(const Field<T> &field, ValueBuilder builder)
 {
-    return with(*structure, builder);
+    return field.with(builder);
 }
 }

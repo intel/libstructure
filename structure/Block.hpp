@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Structure.hpp"
+#include "BlockValue.hpp"
 #include "StructureValue.hpp"
 #include "ValueBuilder.hpp"
 
@@ -26,12 +27,13 @@ public:
 
     const std::list<std::unique_ptr<Structure>> &getFields() const;
 
-    std::unique_ptr<StructureValue> with(ValueBuilder builder) const override;
+    BlockValue with(ValueBuilder builder) const;
     std::string getTypeName() const override { return "Block"; }
 
 private:
     std::list<std::unique_ptr<Structure>> mFields;
 
+    std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override;
     template <class T>
     void addField(T child)
     {
