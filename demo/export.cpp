@@ -1,69 +1,95 @@
 #include "export.hpp"
 #include "functions.hpp"
 #include "Field.hpp"
+#include "StockTypes.hpp"
 
 #include <sstream>
-#include <map>
 #include <string>
 
-namespace structure
+using namespace structure;
+
+void exportStructure(const Structure &structure, std::list<std::string> &components,
+                     std::list<std::string> &instances);
+
+static auto tab = [](int level) { return std::string(4 * level, ' '); };
+
+void PfwStructureVisitor::visit(const Block &block)
 {
+    std::string tagName(isRoot() ? "ComponentType" : "ParameterBlock");
+    mCurrent << tab(mLevel) << "<" << tagName << " Name=\"" << block.getName() << "\">\n";
 
-std::string exportStructure(const Structure &structure, std::list<std::string> &components,
-                            int level = 1)
+    mLevel++;
+    for (const auto &field : block.getFields()) {
+        field->accept(*this);
+    }
+    mLevel--;
+
+    mCurrent << tab(mLevel) << "</" << tagName << ">\n";
+
+    if (isRoot()) {
+        // root component
+        mComponents.push_back(mCurrent.str());
+        mCurrent.clear();
+
+        mInstances.push_back(tab(mLevel) + "<Component Name=\"" + block.getName() + "\" Type=\"" +
+                             block.getName() + "\"/>");
+    }
+}
+
+void PfwStructureVisitor::visit(const GenericField &)
 {
-    auto tab = [&](int level) { return std::string(4 * level, ' '); };
+    throw std::runtime_error("Unknown type");
+}
 
-    std::string instance;
+void PfwStructureVisitor::visit(const Integer &i)
+{
+    mCurrent << tab(mLevel)
+             << "<IntegerParameter Name=\"" + i.getName() + "\" Size=\"32\" Signed=\"false\"/>\n";
+}
 
-    auto onEnterBlock = [&](auto &block) {
-        std::stringstream result;
+void PfwStructureVisitor::visit(const Float &f)
+{
+    mCurrent << tab(mLevel)
+             << "<FloatingPointParameter Name=\"" + f.getName() + "\" Size=\"32\"/>\n";
+}
 
-        result << tab(1) << "<ComponentType Name=\"" << block.getName() << "\">\n";
+void exportStructure(const Structure &structure, std::list<std::string> &components,
+                     std::list<std::string> &instances)
+{
+    PfwStructureVisitor visitor;
 
-        for (auto &field : block.getFields()) {
-            result << exportStructure(*field, components, 2) << "\n";
-        }
+    structure.accept(visitor);
 
-        result << tab(1) << "</ComponentType>\n";
-
-        components.push_back(result.str());
-
-        instance = tab(level) + "<Component Name=\"" + block.getName() + "\" Type=\"" +
-                   block.getName() + "\">";
-    };
-
-    auto onEnterField = [&](auto &field) {
-        instance = tab(level) + "<" + field.getTypeName() + " Name=\"" + field.getName() + "\">";
-    };
-
-    apply(structure, onEnterBlock, defaultBlockFunction, onEnterField, false);
-
-    return instance;
+    instances = std::move(visitor.mInstances);
+    components = std::move(visitor.mComponents);
 }
 
 std::string exportStructure(const Structure &structure)
 {
     std::stringstream result;
 
-    std::list<std::string> components;
+    std::list<std::string> instances, components;
 
-    std::string instance = exportStructure(structure, components);
+    exportStructure(structure, components, instances);
+
+    result << "<Subsystem xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" Name=\"Example\" "
+              "Type=\"Virtual\">\n";
 
     result << "<ComponentLibrary>\n\n";
 
     for (auto &c : components) {
         result << c << "\n";
     }
-
     result << "</ComponentLibrary>\n\n";
 
-    result << "<InstanceDefinition>\n\n";
+    result << "<InstanceDefinition>\n";
 
-    result << instance << "\n\n";
+    for (auto &i : instances) {
+        result << i << "\n";
+    }
 
     result << "</InstanceDefinition>\n";
+    result << "</Subsystem>";
 
     return result.str();
-}
 }

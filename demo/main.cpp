@@ -25,7 +25,7 @@ int main(void)
 
     std::cout << std::endl;
 
-    std::cout << strc::exportStructure(root) << std::endl;
+    std::cout << exportStructure(root) << std::endl;
 
     return 0;
 }
