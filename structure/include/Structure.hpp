@@ -1,5 +1,7 @@
 #pragma once
 
+#include "structure_export.h"
+
 #include "ValueBuilder.hpp"
 
 #include <initializer_list>
@@ -13,7 +15,7 @@ namespace structure
 class StructureValue;
 class StructureVisitor;
 
-class Structure
+class STRUCTURE_EXPORT Structure
 {
 public:
     Structure(std::string name);

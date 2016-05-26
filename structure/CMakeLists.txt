@@ -5,4 +5,9 @@ add_library(structure SHARED
     StructureValue.cpp
     Field.cpp
     Visitor.cpp)
-target_include_directories(structure PUBLIC include PRIVATE .)
+
+target_include_directories(structure PUBLIC include ${CMAKE_CURRENT_BINARY_DIR})
+
+include(GenerateExportHeader)
+generate_export_header(structure)
+

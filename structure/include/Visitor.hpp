@@ -1,6 +1,7 @@
 #pragma once
 
 #include "StockTypes.hpp"
+#include "structure_export.h"
 
 namespace structure
 {
@@ -10,7 +11,7 @@ class GenericField;
 class BlockValue;
 class GenericFieldValue;
 
-class StructureVisitor
+class STRUCTURE_EXPORT StructureVisitor
 {
 public:
     virtual ~StructureVisitor() = default;
@@ -23,7 +24,7 @@ public:
     virtual void visit(const String &s);
 };
 
-class ValueVisitor
+class STRUCTURE_EXPORT ValueVisitor
 {
 public:
     virtual ~ValueVisitor() = default;

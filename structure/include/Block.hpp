@@ -1,5 +1,7 @@
 #pragma once
 
+#include "structure_export.h"
+
 #include "Structure.hpp"
 #include "BlockValue.hpp"
 #include "StructureValue.hpp"
@@ -11,7 +13,7 @@
 namespace structure
 {
 
-class Block : public Structure
+class STRUCTURE_EXPORT Block : public Structure
 {
 public:
     template <typename... Fields>

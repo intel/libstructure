@@ -1,11 +1,13 @@
 #pragma once
 
+#include "structure_export.h"
+
 #include "StructureValue.hpp"
 
 namespace structure
 {
 
-class GenericFieldValue : public StructureValue
+class STRUCTURE_EXPORT GenericFieldValue : public StructureValue
 {
 public:
     virtual ~GenericFieldValue() = default;

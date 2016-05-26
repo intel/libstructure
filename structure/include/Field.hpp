@@ -7,6 +7,9 @@
 #include "Exception.hpp"
 
 #include "Field.fw.hpp"
+#include "StockTypes.hpp"
+
+#include "structure_export.h"
 
 namespace structure
 {
@@ -34,6 +37,6 @@ private:
         return std::make_unique<FieldValue<T>>(with(builder));
     }
 
-    static const std::string typeName;
+    STRUCTURE_EXPORT static const std::string typeName;
 };
 }

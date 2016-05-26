@@ -32,9 +32,25 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Required to include the export header
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 if (UNIX)
     add_compile_options(-Wall -Wextra -Werror)
 endif()
+
+if(WIN32)
+    # Force include iso646.h to support alternative operator form (and, or, not...)
+    #
+    # Suppress warning 4251 (needs to have dll-interface to be used by clients)
+    # Exporting classes containing attributes from STL trigger the warning C4251
+    # Thoses are private attributes so this is not an issue here
+    add_compile_options(/W4 /FIiso646.h -wd4251)
+endif()
+
+# Hide symbols by default, then exposed symbols are the same in linux and windows
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN true)
 
 project(libstructure)
 

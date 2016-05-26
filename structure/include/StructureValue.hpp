@@ -1,5 +1,7 @@
 #pragma once
 
+#include "structure_export.h"
+
 #include "Structure.hpp"
 
 #include <initializer_list>
@@ -10,7 +12,7 @@ namespace structure
 
 class ValueVisitor;
 
-class StructureValue
+class STRUCTURE_EXPORT StructureValue
 {
 public:
     virtual ~StructureValue() = default;
