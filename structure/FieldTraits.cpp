@@ -4,7 +4,7 @@
 namespace structure
 {
 template <>
-const std::string FieldTraits<Float>::name{"Float"};
+const std::string FieldTraits<Float>::name = "Float";
 template <>
-const std::string FieldTraits<Integer>::name{"Integer"};
+const std::string FieldTraits<Integer>::name = "Integer";
 }
