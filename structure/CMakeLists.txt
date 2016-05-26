@@ -1,14 +1,7 @@
-
-
-set(
-	SRCS
-    main.cpp
+add_library(structure SHARED
     functions.cpp
     Structure.cpp
     Block.cpp
     StructureValue.cpp
-    FieldTraits.cpp
-    export.cpp
-)
-
-add_executable (demo ${SRCS})
+    FieldTraits.cpp)
+target_include_directories(structure PUBLIC include PRIVATE .)
