@@ -2,7 +2,6 @@
 
 #include "GenericField.hpp"
 #include "FieldValue.hpp"
-#include "FieldTraits.hpp"
 #include "Visitor.hpp"
 #include "ValueBuilder.hpp"
 #include "Exception.hpp"
@@ -27,12 +26,14 @@ public:
 
         return FieldValue<T>(*this, builder.atomicValue);
     }
-    std::string getTypeName() const override { return FieldTraits<Field<T>>::name; }
+    std::string getTypeName() const override { return typeName; }
 
 private:
     std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override
     {
         return std::make_unique<FieldValue<T>>(with(builder));
     }
+
+    static const std::string typeName;
 };
 }
