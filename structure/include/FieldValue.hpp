@@ -3,70 +3,47 @@
 #include "GenericFieldValue.hpp"
 #include "Visitor.hpp"
 
+#include "convert.hpp"
+
 #include <initializer_list>
 #include <string>
+#include <iostream>
+#include <type_traits>
+#include <stdexcept>
 
 #include "Field.fw.hpp"
 
 namespace structure
 {
 
-template <typename T>
+template <typename FieldType>
 class FieldValue : public GenericFieldValue
 {
+    // This prevents hard-to-understand compilation errors.
+    static_assert(std::is_convertible<FieldType, const GenericField &>::value,
+                  "FieldType must be a GenericField.");
+
 public:
-    FieldValue(const Field<T> &field, std::string value)
-        : mStructure(field), mValue(fromString(value))
+    FieldValue(FieldType field, typename FieldType::Storage value)
+        : mStructure(field), mValue(value)
     {
     }
 
-    const std::string getValue() const override { return toString(mValue); }
-    const Field<T> &getField() const { return mStructure; }
-    const Structure &getStructure() const override { return getField(); }
+    FieldValue(FieldType field, const std::string &value) : mStructure(field)
+    {
+        if (not convertTo(value, mValue)) {
+            throw std::runtime_error("incorrect value");
+        }
+    }
 
-    virtual void accept(ValueVisitor &visitor) const override { visitor.visit(*this); }
+    const std::string getValue() const override { return std::to_string(mValue); }
+    const FieldType &getField() const { return mStructure; }
+    const Structure &getStructure() const override { return mStructure; }
+
+    void accept(ValueVisitor &visitor) const override { visitor.visit(*this); }
 
 private:
-    static T fromString(std::string value);
-    static std::string toString(T value);
-
-    const Field<T> &mStructure;
-    T mValue;
+    const FieldType mStructure;
+    typename FieldType::Storage mValue;
 };
-
-// Integer
-template <>
-inline int FieldValue<int>::fromString(std::string value)
-{
-    return std::atoi(value.c_str());
-}
-template <>
-inline std::string FieldValue<int>::toString(int value)
-{
-    return std::to_string(value);
-}
-
-// Float
-template <>
-inline float FieldValue<float>::fromString(std::string value)
-{
-    return (float)std::atof(value.c_str());
-}
-template <>
-inline std::string FieldValue<float>::toString(float value)
-{
-    return std::to_string(value);
-}
-
-// String
-template <>
-inline std::string FieldValue<std::string>::fromString(std::string value)
-{
-    return value;
-}
-template <>
-inline std::string FieldValue<std::string>::toString(std::string value)
-{
-    return value;
-}
 }

@@ -6,5 +6,5 @@
 namespace structure
 {
 using Float = Field<float>;
-using Integer = Field<int>;
+class Integer;
 }

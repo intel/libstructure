@@ -2,9 +2,11 @@
 #include "functions.hpp"
 #include "Field.hpp"
 #include "StockTypes.hpp"
+#include "Integer.hpp"
 
 #include <sstream>
 #include <string>
+#include <ios>
 
 using namespace structure;
 
@@ -43,8 +45,8 @@ void PfwStructureVisitor::visit(const GenericField &)
 
 void PfwStructureVisitor::visit(const Integer &i)
 {
-    mCurrent << tab(mLevel)
-             << "<IntegerParameter Name=\"" + i.getName() + "\" Size=\"32\" Signed=\"false\"/>\n";
+    mCurrent << tab(mLevel) << "<IntegerParameter Name=\"" + i.getName() + "\" Size=\""
+             << i.getSize() << "\" Signed=\"" << std::boolalpha << i.getSignedness() << "\"/>\n";
 }
 
 void PfwStructureVisitor::visit(const Float &f)

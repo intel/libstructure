@@ -6,7 +6,8 @@ add_library(structure SHARED
     Field.cpp
     Visitor.cpp)
 
-target_include_directories(structure PUBLIC include ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(structure
+    PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/convert)
 
 include(GenerateExportHeader)
 generate_export_header(structure)

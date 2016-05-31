@@ -70,4 +70,16 @@ FieldValue<T> with(const Field<T> &field, ValueBuilder builder)
 {
     return field.with(builder);
 }
+
+template <class FieldType>
+FieldValue<FieldType> with(FieldType fieldType, typename FieldType::Storage value)
+{
+    return {fieldType, value};
+}
+
+template <class FieldType>
+FieldValue<FieldType> with(FieldType fieldType, const std::string &value)
+{
+    return {fieldType, value};
+}
 }

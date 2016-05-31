@@ -1,5 +1,6 @@
 #include "Visitor.hpp"
 #include "Field.hpp"
+#include "Integer.hpp"
 
 namespace structure
 {
