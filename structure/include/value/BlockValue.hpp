@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Block.hpp"
-#include "StructureValue.hpp"
+#include "type/Block.hpp"
+#include "value/StructureValue.hpp"
 #include "Visitor.hpp"
 
 #include <initializer_list>

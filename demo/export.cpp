@@ -1,8 +1,8 @@
 #include "export.hpp"
 #include "functions.hpp"
-#include "Field.hpp"
-#include "StockTypes.hpp"
-#include "Integer.hpp"
+#include "type/Field.hpp"
+#include "type/StockTypes.hpp"
+#include "type/Integer.hpp"
 
 #include <sstream>
 #include <string>

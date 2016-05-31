@@ -1,5 +1,5 @@
-#include "Field.hpp"
-#include "StockTypes.hpp"
+#include "type/Field.hpp"
+#include "type/StockTypes.hpp"
 
 namespace structure
 {

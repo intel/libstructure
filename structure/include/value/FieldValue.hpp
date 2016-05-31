@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GenericFieldValue.hpp"
+#include "value/GenericFieldValue.hpp"
 #include "Visitor.hpp"
 
 #include "convert.hpp"
@@ -11,7 +11,7 @@
 #include <type_traits>
 #include <stdexcept>
 
-#include "Field.fw.hpp"
+#include "type/Field.fw.hpp"
 
 namespace structure
 {

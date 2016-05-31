@@ -1,5 +1,5 @@
-#include "StructureValue.hpp"
-#include "Structure.hpp"
+#include "value/StructureValue.hpp"
+#include "type/Structure.hpp"
 
 namespace structure
 {

@@ -1,8 +1,8 @@
 #include "functions.hpp"
-#include "Block.hpp"
-#include "Field.hpp"
-#include "FieldValue.hpp"
-#include "BlockValue.hpp"
+#include "type/Block.hpp"
+#include "type/Field.hpp"
+#include "value/FieldValue.hpp"
+#include "value/BlockValue.hpp"
 #include "Exception.hpp"
 #include <iostream>
 

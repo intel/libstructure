@@ -2,9 +2,9 @@
 
 #include "structure_export.h"
 
-#include "StockTypes.hpp"
-#include "Field.hpp"
-#include "FieldValue.hpp"
+#include "type/StockTypes.hpp"
+#include "type/Field.hpp"
+#include "value/FieldValue.hpp"
 #include "Visitor.hpp"
 #include <cstdint>
 

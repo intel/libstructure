@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Structure.hpp"
+#include "type/Structure.hpp"
 #include "Visitor.hpp"
 
 #include <sstream>

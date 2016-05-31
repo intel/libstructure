@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StockTypes.hpp"
+#include "type/StockTypes.hpp"
 #include "structure_export.h"
 
 namespace structure

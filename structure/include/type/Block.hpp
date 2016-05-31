@@ -2,9 +2,9 @@
 
 #include "structure_export.h"
 
-#include "Structure.hpp"
-#include "BlockValue.hpp"
-#include "StructureValue.hpp"
+#include "type/Structure.hpp"
+#include "value/BlockValue.hpp"
+#include "value/StructureValue.hpp"
 #include "ValueBuilder.hpp"
 
 #include <list>

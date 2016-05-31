@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GenericField.hpp"
-#include "FieldValue.hpp"
+#include "type/GenericField.hpp"
+#include "value/FieldValue.hpp"
 #include "Visitor.hpp"
 #include "ValueBuilder.hpp"
 #include "Exception.hpp"

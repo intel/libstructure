@@ -2,10 +2,10 @@
 
 #include "structure_export.h"
 
-#include "Structure.hpp"
-#include "Block.hpp"
-#include "GenericField.hpp"
-#include "Field.hpp"
+#include "type/Structure.hpp"
+#include "type/Block.hpp"
+#include "type/GenericField.hpp"
+#include "type/Field.hpp"
 
 #include <string>
 #include <list>

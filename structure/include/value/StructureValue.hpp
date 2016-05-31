@@ -2,7 +2,7 @@
 
 #include "structure_export.h"
 
-#include "Structure.hpp"
+#include "type/Structure.hpp"
 
 #include <initializer_list>
 #include <string>
