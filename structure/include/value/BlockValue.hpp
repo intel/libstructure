@@ -22,6 +22,7 @@ public:
     const Structure &getStructure() const override { return (const Structure &)mStructure; }
 
     virtual void accept(ValueVisitor &visitor) const override { visitor.visit(*this); }
+    virtual void accept(StorageVisitor &visitor) const override { visitor.visitStorage(*this); }
 
 private:
     const Block &mStructure;

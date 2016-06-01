@@ -41,6 +41,7 @@ public:
     const Structure &getStructure() const override { return mStructure; }
 
     void accept(ValueVisitor &visitor) const override { visitor.visit(*this); }
+    void accept(StorageVisitor &visitor) const override { visitor.visitStorage(mValue); }
 
 private:
     const FieldType mStructure;

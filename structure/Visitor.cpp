@@ -1,5 +1,6 @@
 #include "Visitor.hpp"
 #include "type/Field.hpp"
+#include "type/Block.hpp"
 #include "type/Integer.hpp"
 #include "type/FloatingPoint.hpp"
 
@@ -15,5 +16,12 @@ void StructureVisitor::visit(const Integer &i)
 void StructureVisitor::visit(const FloatingPoint &f)
 {
     visit(static_cast<const GenericField &>(f));
+}
+
+void StorageVisitor::visitStorage(const BlockValue &block)
+{
+    for (const auto &field : block.getFields()) {
+        field->accept(*this);
+    }
 }
 }
