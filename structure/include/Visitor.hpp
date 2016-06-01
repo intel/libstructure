@@ -30,6 +30,5 @@ public:
 
     virtual void visit(const BlockValue &block) = 0;
     virtual void visit(const GenericFieldValue &field) = 0;
-    // TODO: overloads for stock value types
 };
 }

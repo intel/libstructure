@@ -28,3 +28,17 @@ private:
 };
 
 std::string exportStructure(const structure::Structure &structure);
+
+class PfwValueVisitor : public structure::ValueVisitor
+{
+public:
+    void visit(const structure::BlockValue &block) override;
+    void visit(const structure::GenericFieldValue &field) override;
+
+    std::ostringstream mResult;
+
+private:
+    int mLevel{0};
+};
+
+std::string exportValue(const structure::StructureValue &value);

@@ -40,6 +40,8 @@ int main(void)
     std::cout << std::endl;
 
     std::cout << exportStructure(root) << std::endl;
+    std::cout << std::endl;
+    std::cout << exportValue(r) << std::endl;
 
     return 0;
 }
