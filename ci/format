@@ -1,0 +1,1 @@
+git ls-files | grep -E -v '^external' | grep -E '\.[ch](pp)?$' | xargs clang-format-3.8 -i && git diff --exit-code
