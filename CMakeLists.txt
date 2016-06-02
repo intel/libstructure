@@ -28,12 +28,16 @@
 
 cmake_minimum_required(VERSION 3.2.0)
 
+project(libstructure)
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Required to include the export header
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+list(APPEND CMAKE_INCLUDE_PATH "${PROJECT_SOURCE_DIR}/external")
 
 if (UNIX)
     add_compile_options(-Wall -Wextra -Werror)
@@ -52,7 +56,12 @@ endif()
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN true)
 
-project(libstructure)
+# Use a common binary output directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+
+include(ctest/CMakeLists.txt)
 
 include(CMakeDependentOption)
 option(DOXYGEN "Enable doxygen generation" ON)
@@ -61,3 +70,4 @@ add_subdirectory(doxygen)
 
 add_subdirectory(structure)
 add_subdirectory(demo)
+add_subdirectory(test)
