@@ -39,6 +39,22 @@ public:
         }
     }
 
+    void visit(const structure::FixedQ &q) override
+    {
+        if (not q.getSignedness()) {
+            throw std::runtime_error(
+                "The Parameter Framework does not support unsigned Q numbers.");
+        }
+
+        if (mOpen) {
+            mResult << "<FixedPointParameter Name=\"" + q.getName() + "\" Size=\"" << q.getSize()
+                    << " Integral=\"" << q.getIntegral() << "\" Fractional=\"" << q.getFractional()
+                    << "\">";
+        } else {
+            mResult << "</FixedPointParameter>";
+        }
+    }
+
     std::ostringstream &mResult;
     bool mOpen;
 };

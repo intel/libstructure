@@ -2,6 +2,7 @@
 #include "type/StockTypes.hpp"
 #include "type/Integer.hpp"
 #include "type/FloatingPoint.hpp"
+#include "type/FixedQ.hpp"
 #include "ValueBuilder.hpp"
 #include "export.hpp"
 
@@ -15,7 +16,7 @@ int main(void)
 
     auto root =
         strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
+                    strc::UInt32("Counter"), strc::Q32f31("Fixed"));
 
     strc::display(root);
 
@@ -33,7 +34,7 @@ int main(void)
     strc::display(valueFromMethod);
     strc::display(valueFromFreefunc);
 
-    auto r = strc::with(root, {{"1.2", "3.4"}, "2"});
+    auto r = strc::with(root, {{"1.2", "3.4"}, "2", "0.2"});
 
     strc::display(r);
 

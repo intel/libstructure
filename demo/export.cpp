@@ -4,6 +4,7 @@
 #include "type/StockTypes.hpp"
 #include "type/Integer.hpp"
 #include "type/FloatingPoint.hpp"
+#include "type/FixedQ.hpp"
 
 #include <sstream>
 #include <string>
@@ -42,6 +43,17 @@ void PfwStructureVisitor::visit(const Block &block)
 void PfwStructureVisitor::visit(const GenericField &)
 {
     throw std::runtime_error("Unknown type");
+}
+
+void PfwStructureVisitor::visit(const FixedQ &q)
+{
+    if (not q.getSignedness()) {
+        throw std::runtime_error("The Parameter Framework does not support unsigned Q numbers.");
+    }
+
+    mCurrent << tab(mLevel) << "<FixedPointParameter Name=\"" + q.getName() + "\" Size=\""
+             << q.getSize() << " Integral=\"" << q.getIntegral() << "\" Fractional=\""
+             << q.getFractional() << "\"/>\n";
 }
 
 void PfwStructureVisitor::visit(const Integer &i)

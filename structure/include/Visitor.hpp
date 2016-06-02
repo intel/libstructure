@@ -23,6 +23,7 @@ public:
 
     virtual void visit(const Integer &i);
     virtual void visit(const FloatingPoint &f);
+    virtual void visit(const FixedQ &q);
 };
 
 class STRUCTURE_EXPORT ValueVisitor
