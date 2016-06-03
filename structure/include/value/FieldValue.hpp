@@ -29,11 +29,9 @@ public:
     {
     }
 
-    FieldValue(FieldType field, const std::string &value) : mStructure(field)
+    FieldValue(FieldType field, const std::string &value)
+        : mStructure(field), mValue(mStructure.fromString(value))
     {
-        if (not convertTo(value, mValue)) {
-            throw std::runtime_error("incorrect value");
-        }
     }
 
     std::string getValue() const override { return std::to_string(mValue); }

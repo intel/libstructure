@@ -42,6 +42,15 @@ public:
         return {*static_cast<const Derived *>(this), builder.atomicValue};
     }
 
+    static _Storage fromString(const std::string &input)
+    {
+        _Storage parsed;
+        if (not convertTo(input, parsed)) {
+            throw std::runtime_error("incorrect value");
+        }
+        return parsed;
+    }
+
 private:
     std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override
     {
