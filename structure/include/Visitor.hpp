@@ -21,7 +21,6 @@ public:
 
     virtual void visit(const Integer &i);
     virtual void visit(const Float &f);
-    virtual void visit(const String &s);
 };
 
 class STRUCTURE_EXPORT ValueVisitor

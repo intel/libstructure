@@ -14,8 +14,4 @@ void StructureVisitor::visit(const Float &f)
 {
     visit(static_cast<const GenericField &>(f));
 }
-void StructureVisitor::visit(const String &s)
-{
-    visit(static_cast<const GenericField &>(s));
-}
 }
