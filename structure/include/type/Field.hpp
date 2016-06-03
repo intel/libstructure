@@ -35,8 +35,9 @@ public:
 
     ThisValue with(ValueBuilder builder) const
     {
-        if (!builder.atom)
-            throw ValueStructureMismatch(static_cast<const Base &>(*this).getName());
+        if (!builder.atom) {
+            throw ValueStructureMismatch(this->getName());
+        }
 
         return {*static_cast<const Derived *>(this), builder.atomicValue};
     }
