@@ -27,6 +27,8 @@ class NewInteger : public detail::FieldCrtp<NewInteger<size, isSigned, _Storage>
 {
     // We could write a clever class template to deduce the ideal storage type but for now, it's
     // easier to just pass it as argument and statically check it.
+    static_assert(std::is_integral<_Storage>::value,
+                  "The specified storage must be an integral type.");
     static_assert(size <= sizeof(_Storage) * 8,
                   "The specified storage is smaller than the specified size.");
     static_assert(isSigned == std::is_signed<_Storage>::value,
