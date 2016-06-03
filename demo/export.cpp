@@ -3,6 +3,7 @@
 #include "type/Field.hpp"
 #include "type/StockTypes.hpp"
 #include "type/Integer.hpp"
+#include "type/FloatingPoint.hpp"
 
 #include <sstream>
 #include <string>
@@ -49,7 +50,7 @@ void PfwStructureVisitor::visit(const Integer &i)
              << i.getSize() << "\" Signed=\"" << std::boolalpha << i.getSignedness() << "\"/>\n";
 }
 
-void PfwStructureVisitor::visit(const Float &f)
+void PfwStructureVisitor::visit(const FloatingPoint &f)
 {
     mCurrent << tab(mLevel)
              << "<FloatingPointParameter Name=\"" + f.getName() + "\" Size=\"32\"/>\n";

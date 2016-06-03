@@ -17,7 +17,7 @@ public:
     void visit(const structure::Block &block) override;
     void visit(const structure::GenericField &field) override;
     void visit(const structure::Integer &i) override;
-    void visit(const structure::Float &f) override;
+    void visit(const structure::FloatingPoint &f) override;
 
     std::list<std::string> mInstances, mComponents;
 

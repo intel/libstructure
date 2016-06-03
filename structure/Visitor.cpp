@@ -1,6 +1,7 @@
 #include "Visitor.hpp"
 #include "type/Field.hpp"
 #include "type/Integer.hpp"
+#include "type/FloatingPoint.hpp"
 
 namespace structure
 {
@@ -11,7 +12,7 @@ void StructureVisitor::visit(const Integer &i)
 {
     visit(static_cast<const GenericField &>(i));
 }
-void StructureVisitor::visit(const Float &f)
+void StructureVisitor::visit(const FloatingPoint &f)
 {
     visit(static_cast<const GenericField &>(f));
 }

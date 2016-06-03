@@ -5,6 +5,6 @@
 
 namespace structure
 {
-using Float = Field<float>;
 class Integer;
+class FloatingPoint;
 }

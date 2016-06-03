@@ -3,7 +3,6 @@ add_library(structure SHARED
     Structure.cpp
     Block.cpp
     StructureValue.cpp
-    Field.cpp
     Visitor.cpp)
 
 target_include_directories(structure

@@ -1,6 +1,7 @@
 #include "functions.hpp"
 #include "type/StockTypes.hpp"
 #include "type/Integer.hpp"
+#include "type/FloatingPoint.hpp"
 #include "ValueBuilder.hpp"
 #include "export.hpp"
 
