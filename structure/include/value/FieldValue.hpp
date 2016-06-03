@@ -36,7 +36,7 @@ public:
         }
     }
 
-    const std::string getValue() const override { return std::to_string(mValue); }
+    std::string getValue() const override { return std::to_string(mValue); }
     const FieldType &getField() const { return mStructure; }
     const Structure &getStructure() const override { return mStructure; }
 

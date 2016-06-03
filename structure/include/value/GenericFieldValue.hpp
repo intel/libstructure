@@ -12,6 +12,6 @@ class STRUCTURE_EXPORT GenericFieldValue : public StructureValue
 public:
     virtual ~GenericFieldValue() = default;
 
-    const virtual std::string getValue() const = 0;
+    virtual std::string getValue() const = 0;
 };
 }
