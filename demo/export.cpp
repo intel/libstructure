@@ -1,10 +1,7 @@
 #include "export.hpp"
 #include "functions.hpp"
 #include "type/Field.hpp"
-#include "type/StockTypes.hpp"
-#include "type/Integer.hpp"
-#include "type/FloatingPoint.hpp"
-#include "type/FixedQ.hpp"
+#include "client/stock.hpp"
 
 #include <sstream>
 #include <string>

@@ -1,9 +1,7 @@
 #include "Visitor.hpp"
 #include "type/Field.hpp"
 #include "type/Block.hpp"
-#include "type/Integer.hpp"
-#include "type/FloatingPoint.hpp"
-#include "type/FixedQ.hpp"
+#include "client/stock.hpp"
 
 namespace structure
 {

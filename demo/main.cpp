@@ -1,8 +1,5 @@
 #include "functions.hpp"
-#include "type/StockTypes.hpp"
-#include "type/Integer.hpp"
-#include "type/FloatingPoint.hpp"
-#include "type/FixedQ.hpp"
+#include "client/stock.hpp"
 #include "ValueBuilder.hpp"
 #include "export.hpp"
 
