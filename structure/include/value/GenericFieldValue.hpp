@@ -10,8 +10,6 @@ namespace structure
 class STRUCTURE_EXPORT GenericFieldValue : public StructureValue
 {
 public:
-    virtual ~GenericFieldValue() = default;
-
     virtual std::string getValue() const = 0;
 };
 }
