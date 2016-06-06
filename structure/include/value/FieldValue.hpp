@@ -35,6 +35,11 @@ public:
     }
 
     std::string getValue() const override { return std::to_string(mValue); }
+    void setValue(std::string value) { mValue = mStructure.fromString(value); }
+
+    typename FieldType::Storage getTypedValue() const { return mValue; }
+    void setTypedValue(typename FieldType::Storage value) { mValue = value; }
+
     const FieldType &getField() const { return mStructure; }
     const Structure &getStructure() const override { return mStructure; }
 
