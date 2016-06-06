@@ -245,7 +245,7 @@ Structure &getChild(const std::unique_ptr<Block> &structure, std::string path)
 class GetChildValueVisitor : public ValueVisitor
 {
 public:
-    GetChildValueVisitor(std::string path) : path(path) {}
+    GetChildValueVisitor(std::string path) : path(path), result(nullptr) {}
 
     void visit(const BlockValue &block) override
     {
@@ -278,7 +278,7 @@ public:
         }
     }
 
-    void visit(const GenericFieldValue &) override { result = nullptr; }
+    void visit(const GenericFieldValue &) override {}
 
     std::string path;
     std::unique_ptr<StructureValue> const *result;
