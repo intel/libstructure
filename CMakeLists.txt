@@ -70,4 +70,5 @@ add_subdirectory(doxygen)
 
 add_subdirectory(structure)
 add_subdirectory(demo)
+add_subdirectory(binary-export)
 add_subdirectory(test)
