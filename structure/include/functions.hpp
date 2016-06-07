@@ -45,11 +45,10 @@ STRUCTURE_EXPORT void print(std::ostream &outStream, const Structure &structure)
 STRUCTURE_EXPORT void print(std::ostream &outStream, const StructureValue &value);
 STRUCTURE_EXPORT void print(std::ostream &outStream, const std::unique_ptr<StructureValue> &value);
 STRUCTURE_EXPORT void print(std::ostream &outStream, const std::unique_ptr<Block> &structure);
-template <typename T>
-void print(std::ostream &outStream, const std::unique_ptr<Field<T>> &structure)
-{
-    print(*structure, outStream);
-}
+STRUCTURE_EXPORT void display(const Structure &structure);
+STRUCTURE_EXPORT void display(const StructureValue &value);
+STRUCTURE_EXPORT void display(const std::unique_ptr<StructureValue> &value);
+STRUCTURE_EXPORT void display(const std::unique_ptr<Block> &structure);
 
 STRUCTURE_EXPORT std::string getValue(const StructureValue &value);
 STRUCTURE_EXPORT std::string getValue(const std::unique_ptr<StructureValue> &value);
@@ -59,18 +58,8 @@ STRUCTURE_EXPORT StructureValue &getChild(const StructureValue &value, std::stri
 STRUCTURE_EXPORT StructureValue &getChild(const std::unique_ptr<StructureValue> &value,
                                           std::string path);
 STRUCTURE_EXPORT Structure &getChild(const std::unique_ptr<Block> &structure, std::string path);
-template <typename T>
-Structure &getChild(const std::unique_ptr<Field<T>> &structure, std::string path)
-{
-    return getChild(*structure, path);
-}
 
 STRUCTURE_EXPORT BlockValue with(const Block &block, ValueBuilder builder);
-template <typename T>
-FieldValue<T> with(const Field<T> &field, ValueBuilder builder)
-{
-    return field.with(builder);
-}
 
 template <class FieldType>
 FieldValue<FieldType> with(FieldType fieldType, typename FieldType::Storage value)

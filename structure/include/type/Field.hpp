@@ -2,12 +2,8 @@
 
 #include "type/GenericField.hpp"
 #include "value/FieldValue.hpp"
-#include "Visitor.hpp"
 #include "ValueBuilder.hpp"
 #include "Exception.hpp"
-
-#include "Field.fw.hpp"
-#include "StockTypes.hpp"
 
 #include "structure_export.h"
 
@@ -58,35 +54,4 @@ private:
     }
 };
 } // namespace detail
-
-template <typename T>
-class Field : public GenericField
-{
-private:
-    using This = Field<T>;
-
-public:
-    using Storage = T;
-
-    Field(std::string name) : GenericField(name) {}
-
-    void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
-    std::string getTypeName() const override { return typeName; }
-
-    FieldValue<This> with(ValueBuilder builder) const
-    {
-        if (!builder.atom)
-            throw ValueStructureMismatch(getName());
-
-        return FieldValue<This>(*this, builder.atomicValue);
-    }
-
-private:
-    std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override
-    {
-        return std::make_unique<FieldValue<This>>(with(builder));
-    }
-
-    STRUCTURE_EXPORT static const std::string typeName;
-};
 }

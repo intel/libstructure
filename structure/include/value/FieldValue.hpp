@@ -11,8 +11,6 @@
 #include <type_traits>
 #include <stdexcept>
 
-#include "type/Field.fw.hpp"
-
 namespace structure
 {
 
