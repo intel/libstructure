@@ -17,9 +17,9 @@ class STRUCTURE_EXPORT Block : public Structure
 {
 public:
     template <typename... Fields>
-    Block(std::string name, Fields... fields) : Structure(name)
+    Block(std::string name, Fields &&... fields) : Structure(name)
     {
-        addFields(std::move(fields)...);
+        addFields(std::forward<Fields>(fields)...);
     }
 
     Block(Block &&other) = default;
@@ -37,17 +37,18 @@ private:
 
     std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override;
     template <class T>
-    void addField(T child)
+    void addField(T &&child)
     {
-        mFields.emplace_back(new T(std::move(child)));
+        mFields.emplace_back(new T(std::forward<T>(child)));
     }
 
     template <typename T, typename... Fields>
-    void addFields(T first, Fields... fields)
+    void addFields(T &&first, Fields &&... fields)
     {
-        addField(std::move(first));
-        addFields(std::move(fields)...);
+        addField(std::forward<T>(first));
+        addFields(std::forward<Fields>(fields)...);
     }
+
     void addFields(){};
 };
 }
