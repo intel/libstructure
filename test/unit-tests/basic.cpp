@@ -22,6 +22,7 @@ TEST_CASE("Structure and Value creation", "[structure][value]")
     CHECK_NOTHROW(Int16("name"));
     CHECK_NOTHROW(UInt32("name"));
     CHECK_NOTHROW(Int32("name"));
+    CHECK_NOTHROW(Q16f15("name"));
 
     CHECK_NOTHROW(Block("name").with({}));
     CHECK_NOTHROW(Float("name").with("42"));
@@ -32,6 +33,7 @@ TEST_CASE("Structure and Value creation", "[structure][value]")
     CHECK_NOTHROW(Int16("name").with("42"));
     CHECK_NOTHROW(UInt32("name").with("42"));
     CHECK_NOTHROW(Int32("name").with("42"));
+    CHECK_NOTHROW(Q16f15("name").with("0.2"));
 }
 
 TEST_CASE("GetName", "[structure][value][name]")
@@ -81,6 +83,12 @@ TEST_CASE("Get value", "[value]")
 
         CHECK(convertTo(with(structure, 3.14f).getValue(), f));
         CHECK(f == Approx(3.14f));
+    }
+    SECTION ("FixedQ") {
+        Q16f15 structure("structure");
+        CHECK(structure.with("0.5").getValue() == "16384");
+        CHECK(with(structure, "0.25").getValue() == "8192");
+        CHECK(with(structure, 4096).getValue() == "4096");
     }
 }
 
@@ -178,7 +186,7 @@ TEST_CASE("BlockStructure", "[structure][block]")
 
 TEST_CASE("Display", "[structure][value][display]")
 {
-    std::unique_ptr<Block> root(new Block("root", Float("a"), Int32("b")));
+    std::unique_ptr<Block> root(new Block("root", Float("a"), Int32("b"), Q16f15("c")));
 
     SECTION ("Structure") {
         std::stringstream ss;
@@ -186,6 +194,7 @@ TEST_CASE("Display", "[structure][value][display]")
         std::string expected = "Block : root {\n"
                                "    FloatingPoint : a\n"
                                "    Integer : b\n"
+                               "    FixedQ : c\n"
                                "}\n";
 
         print(ss, root);
@@ -193,12 +202,13 @@ TEST_CASE("Display", "[structure][value][display]")
     }
 
     SECTION ("Value") {
-        auto value = root->with({"1", "2"});
+        auto value = root->with({"1", "2", "0.5"});
         std::stringstream ss;
 
         std::string expected = "BlockValue : root {\n"
                                "    FloatingPoint : a = 1.000000\n"
                                "    Integer : b = 2\n"
+                               "    FixedQ : c = 16384\n"
                                "}\n";
 
         print(ss, value);

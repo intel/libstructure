@@ -59,6 +59,7 @@ public:
         if (not convertTo(input, parsed)) {
             throw std::runtime_error("FixedPoint: Incorrect or out-of-bounds value");
         }
+        // TODO: range checking
 
         // For Qn.m number, multiply by 2^n and round to the nearest integer
         // Q numbers are a ratio, of which the denominator is 2^fractional
