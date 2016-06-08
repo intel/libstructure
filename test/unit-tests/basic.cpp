@@ -23,6 +23,8 @@ TEST_CASE("Structure and Value creation", "[structure][value]")
     CHECK_NOTHROW(UInt32("name"));
     CHECK_NOTHROW(Int32("name"));
     CHECK_NOTHROW(Q16f15("name"));
+    CHECK_NOTHROW(VarArray("name", UInt8("item name")));
+    CHECK_NOTHROW(VarArray("name", Block("item name", UInt8("subitem name"))));
 
     CHECK_NOTHROW(Block("name").with({}));
     CHECK_NOTHROW(Float("name").with("42"));
@@ -34,6 +36,8 @@ TEST_CASE("Structure and Value creation", "[structure][value]")
     CHECK_NOTHROW(UInt32("name").with("42"));
     CHECK_NOTHROW(Int32("name").with("42"));
     CHECK_NOTHROW(Q16f15("name").with("0.2"));
+    CHECK_NOTHROW(VarArray("name", UInt8("item name")).with({"42"}));
+    CHECK_NOTHROW(VarArray("name", Block("item name", UInt8("subitem name"))).with({{"42"}}));
 }
 
 TEST_CASE("GetName", "[structure][value][name]")
@@ -207,18 +211,21 @@ TEST_CASE("Value Builder", "[value]")
 
 SCENARIO("Constructing erroneous values", "[value][failure]")
 {
-    auto root = Block("root", Int8("a"), Block("b", Int8("c")), Int8("d"));
+    auto root =
+        Block("root", Int8("a"), Block("b", Int8("c")), VarArray("varArray", Int8("d")), Int8("e"));
 
     GIVEN ("A valid structure") {
         THEN ("Creating a value missing a field should throw.") {
-            CHECK_THROWS(with(root, {"1", {"2"}}));
+            CHECK_THROWS(with(root, {"1", {"2"}, {}}));
         }
         THEN ("Creating a value with too many fields should throw.") {
-            CHECK_THROWS(with(root, {"1", {"2"}, "3", "4"}));
+            CHECK_THROWS(with(root, {"1", {"2"}, {}, "3", "4"}));
         }
         THEN ("Creating a misaligned value should throw.") {
             // "1" is nested albeit it shouldn't
-            CHECK_THROWS(with(root, {{"1"}, {"2"}, "3"}));
+            CHECK_THROWS(with(root, {{"1"}, {"2"}, {}, "3"}));
+            // "3" should be nested in an array
+            CHECK_THROWS(with(root, {"1", {"2"}, "3", "4"}));
         }
     }
 }
@@ -242,7 +249,8 @@ TEST_CASE("BlockStructure", "[structure][block]")
 
 TEST_CASE("Display", "[structure][value][display]")
 {
-    std::unique_ptr<Block> root(new Block("root", Float("a"), Int32("b"), Q16f15("c")));
+    std::unique_ptr<Block> root(
+        new Block("root", Float("a"), Int32("b"), Q16f15("c"), VarArray("varArray", UInt8("d"))));
 
     SECTION ("Structure") {
         std::stringstream ss;
@@ -251,6 +259,9 @@ TEST_CASE("Display", "[structure][value][display]")
                                "    FloatingPoint : a\n"
                                "    Integer : b\n"
                                "    FixedQ : c\n"
+                               "    VarArray : varArray {\n"
+                               "        Integer : d\n"
+                               "    }\n"
                                "}\n";
 
         print(ss, root);
@@ -258,13 +269,17 @@ TEST_CASE("Display", "[structure][value][display]")
     }
 
     SECTION ("Value") {
-        auto value = root->with({"1", "2", "0.5"});
+        auto value = root->with({"1", "2", "0.5", {"3", "4"}});
         std::stringstream ss;
 
         std::string expected = "BlockValue : root {\n"
                                "    FloatingPoint : a = 1.000000\n"
                                "    Integer : b = 2\n"
                                "    FixedQ : c = 16384\n"
+                               "    BlockValue : varArray {\n"
+                               "        Integer : d = 3\n"
+                               "        Integer : d = 4\n"
+                               "    }\n"
                                "}\n";
 
         print(ss, value);

@@ -31,19 +31,11 @@ public:
     using StructureRef = std::reference_wrapper<const Structure>;
     virtual std::vector<StructureRef> getFields() const;
 
-    BlockValue with(ValueBuilder builder) const;
+    // Specialized block can override this method; it will be called by Block::genericWith
+    virtual BlockValue with(ValueBuilder builder) const;
     std::string getTypeName() const override { return "Block"; }
 
-private:
-    std::vector<std::unique_ptr<Structure>> mFields;
-
-    std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override;
-    template <class T>
-    void addField(T &&child)
-    {
-        mFields.emplace_back(new T(std::forward<T>(child)));
-    }
-
+protected:
     template <typename T, typename... Fields>
     void addFields(T &&first, Fields &&... fields)
     {
@@ -51,6 +43,17 @@ private:
         addFields(std::forward<Fields>(fields)...);
     }
 
+private:
+    std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override;
+
+    template <class T>
+    void addField(T &&child)
+    {
+        mFields.emplace_back(new T(std::forward<T>(child)));
+    }
+
     void addFields(){};
+
+    std::vector<std::unique_ptr<Structure>> mFields;
 };
 }

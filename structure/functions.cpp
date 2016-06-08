@@ -97,7 +97,7 @@ void print(std::ostream &outStream, const Structure &structure)
     };
 
     auto onEnterBlock = [&](auto &b) {
-        outStream << tab() << "Block : " << b.getName() << " {" << std::endl;
+        outStream << tab() << b.getTypeName() << " : " << b.getName() << " {" << std::endl;
         level++;
     };
 
