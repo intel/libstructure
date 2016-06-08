@@ -91,15 +91,18 @@ TEST_CASE("FixedQ basic tests", "[structure][fixedq]")
 
 TEST_CASE("Get Child", "[child]")
 {
+    std::unique_ptr<Block> block(new Block("block", Float("child")));
+
     SECTION ("Structure") {
-        Block block("block", Float("child"));
         CHECK_NOTHROW(getChild(block, "child"));
         CHECK_THROWS(getChild(block, "notchild"));
+
+        CHECK_NOTHROW(getChild(*block, "child"));
+        CHECK_THROWS(getChild(*block, "notchild"));
     }
 
     SECTION ("Value") {
-        Block block("block", Float("child"));
-        auto value = block.with({"3.14"});
+        auto value = block->with({"3.14"});
         CHECK_NOTHROW(getChild(value, "child"));
         CHECK_THROWS(getChild(value, "notchild"));
     }
