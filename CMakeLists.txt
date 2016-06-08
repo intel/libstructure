@@ -30,6 +30,8 @@ cmake_minimum_required(VERSION 3.2.0)
 
 project(libstructure)
 
+option(COVERAGE "Build with coverage support" OFF)
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -50,6 +52,13 @@ if(WIN32)
     # Exporting classes containing attributes from STL trigger the warning C4251
     # Thoses are private attributes so this is not an issue here
     add_compile_options(/W4 /FIiso646.h -wd4251)
+endif()
+
+# Since there is no directory-wide property for linker flags, we can't use
+# set_property for the link-time coverage flags.
+if(COVERAGE)
+    list(APPEND CMAKE_CXX_FLAGS "--coverage")
+    list(APPEND CMAKE_EXE_LINKER_FLAGS "--coverage")
 endif()
 
 # Hide symbols by default, then exposed symbols are the same in linux and windows
