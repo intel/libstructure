@@ -47,6 +47,44 @@ TEST_CASE("GetName", "[structure][value][name]")
     CHECK(Int32("name").with("42").getName() == "name");
 }
 
+TEST_CASE("Integer basic tests", "[structure][integer]")
+{
+    CHECK(UInt32::fromString("5") == 5);
+    CHECK_THROWS(Int8::fromString("128"));
+
+    UInt32 u32("u32");
+    CHECK(u32.getSize() == 32);
+    CHECK(u32.getSignedness() == false);
+
+    Int16 s16("s16");
+    CHECK(s16.getSize() == 16);
+    CHECK(s16.getSignedness() == true);
+}
+
+TEST_CASE("FloatingPoint basic tests", "[structure][floating]")
+{
+    CHECK(Double::fromString("5.1") == Approx(5.1));
+    CHECK_THROWS(Float::fromString("99999999999999999999999999999999999999999999999999999999999"));
+}
+
+TEST_CASE("FixedQ basic tests", "[structure][fixedq]")
+{
+    CHECK(Q16f15::fromString("0.5") == 16384);
+    /* CHECK_THROWS(Q16f15::fromString("100000")); */ // TODO: implement range-checking
+
+    NewFixedQ<16, 10, true, int16_t> q16f10("q16f10");
+    CHECK(q16f10.getSize() == 16);
+    CHECK(q16f10.getFractional() == 10);
+    CHECK(q16f10.getIntegral() == 5);
+    CHECK(q16f10.getSignedness() == true);
+
+    NewFixedQ<16, 10, false, uint16_t> uq16f10("uq16f10");
+    CHECK(uq16f10.getSize() == 16);
+    CHECK(uq16f10.getFractional() == 10);
+    CHECK(uq16f10.getIntegral() == 6);
+    CHECK(uq16f10.getSignedness() == false);
+}
+
 TEST_CASE("Get Child", "[child]")
 {
     SECTION ("Structure") {
