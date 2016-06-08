@@ -85,7 +85,7 @@ void apply(const StructureValue &structure, BlockValueFunction onEnterBlock,
 
 // Functions
 
-void display(const Structure &structure)
+void print(std::ostream &outStream, const Structure &structure)
 {
     int level = 0;
 
@@ -97,28 +97,28 @@ void display(const Structure &structure)
     };
 
     auto onEnterBlock = [&](auto &b) {
-        std::cout << tab() << "Block : " << b.getName() << " {" << std::endl;
+        outStream << tab() << "Block : " << b.getName() << " {" << std::endl;
         level++;
     };
 
     auto onExitBlock = [&](auto &) {
         level--;
-        std::cout << tab() << "}" << std::endl;
+        outStream << tab() << "}" << std::endl;
     };
 
     auto onEnterField = [&](auto &f) {
-        std::cout << tab() << f.getTypeName() << " : " << f.getName() << std::endl;
+        outStream << tab() << f.getTypeName() << " : " << f.getName() << std::endl;
     };
 
     apply(structure, onEnterBlock, onExitBlock, onEnterField, true);
 }
 
-void display(const std::unique_ptr<Block> &structure)
+void print(std::ostream &outStream, const std::unique_ptr<Block> &structure)
 {
-    display(*structure);
+    print(outStream, *structure);
 }
 
-void display(const StructureValue &value)
+void print(std::ostream &outStream, const StructureValue &value)
 {
     int level = 0;
 
@@ -130,26 +130,26 @@ void display(const StructureValue &value)
     };
 
     auto onEnterBlock = [&](auto &b) {
-        std::cout << tab() << "BlockValue : " << b.getName() << " {" << std::endl;
+        outStream << tab() << "BlockValue : " << b.getName() << " {" << std::endl;
         level++;
     };
 
     auto onExitBlock = [&](auto &) {
         level--;
-        std::cout << tab() << "}" << std::endl;
+        outStream << tab() << "}" << std::endl;
     };
 
     auto onEnterField = [&](auto &f) {
-        std::cout << tab() << f.getStructure().getTypeName() << " : " << f.getName() << " = "
+        outStream << tab() << f.getStructure().getTypeName() << " : " << f.getName() << " = "
                   << f.getValue() << std::endl;
     };
 
     apply(value, onEnterBlock, onExitBlock, onEnterField, true);
 }
 
-void display(const std::unique_ptr<StructureValue> &value)
+void print(std::ostream &outStream, const std::unique_ptr<StructureValue> &value)
 {
-    display(*value);
+    print(outStream, *value);
 }
 
 std::string getValue(const StructureValue &value)

@@ -11,6 +11,7 @@
 #include <list>
 #include <memory>
 #include <functional>
+#include <ostream>
 
 namespace structure
 {
@@ -40,14 +41,14 @@ STRUCTURE_EXPORT void apply(const StructureValue &structure, BlockValueFunction 
 
 // Functions
 
-STRUCTURE_EXPORT void display(const Structure &structure);
-STRUCTURE_EXPORT void display(const StructureValue &value);
-STRUCTURE_EXPORT void display(const std::unique_ptr<StructureValue> &value);
-STRUCTURE_EXPORT void display(const std::unique_ptr<Block> &structure);
+STRUCTURE_EXPORT void print(std::ostream &outStream, const Structure &structure);
+STRUCTURE_EXPORT void print(std::ostream &outStream, const StructureValue &value);
+STRUCTURE_EXPORT void print(std::ostream &outStream, const std::unique_ptr<StructureValue> &value);
+STRUCTURE_EXPORT void print(std::ostream &outStream, const std::unique_ptr<Block> &structure);
 template <typename T>
-void display(const std::unique_ptr<Field<T>> &structure)
+void print(std::ostream &outStream, const std::unique_ptr<Field<T>> &structure)
 {
-    display(*structure);
+    print(*structure, outStream);
 }
 
 STRUCTURE_EXPORT std::string getValue(const StructureValue &value);
