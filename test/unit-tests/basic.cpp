@@ -205,6 +205,24 @@ TEST_CASE("Value Builder", "[value]")
     }
 }
 
+SCENARIO("Constructing erroneous values", "[value][failure]")
+{
+    auto root = Block("root", Int8("a"), Block("b", Int8("c")), Int8("d"));
+
+    GIVEN ("A valid structure") {
+        THEN ("Creating a value missing a field should throw.") {
+            CHECK_THROWS(with(root, {"1", {"2"}}));
+        }
+        THEN ("Creating a value with too many fields should throw.") {
+            CHECK_THROWS(with(root, {"1", {"2"}, "3", "4"}));
+        }
+        THEN ("Creating a misaligned value should throw.") {
+            // "1" is nested albeit it shouldn't
+            CHECK_THROWS(with(root, {{"1"}, {"2"}, "3"}));
+        }
+    }
+}
+
 TEST_CASE("Attributes", "[attributes]")
 {
     Block root("root");
