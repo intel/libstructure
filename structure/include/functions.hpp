@@ -49,11 +49,12 @@ STRUCTURE_EXPORT void print(std::ostream &outStream, const std::unique_ptr<Block
 STRUCTURE_EXPORT std::string getValue(const StructureValue &value);
 STRUCTURE_EXPORT std::string getValue(const std::unique_ptr<StructureValue> &value);
 
-STRUCTURE_EXPORT Structure &getChild(const Structure &structure, std::string path);
+STRUCTURE_EXPORT const Structure &getChild(const Structure &structure, std::string path);
 STRUCTURE_EXPORT StructureValue &getChild(const StructureValue &value, std::string path);
 STRUCTURE_EXPORT StructureValue &getChild(const std::unique_ptr<StructureValue> &value,
                                           std::string path);
-STRUCTURE_EXPORT Structure &getChild(const std::unique_ptr<Block> &structure, std::string path);
+STRUCTURE_EXPORT const Structure &getChild(const std::unique_ptr<Block> &structure,
+                                           std::string path);
 
 STRUCTURE_EXPORT BlockValue with(const Block &block, ValueBuilder builder);
 

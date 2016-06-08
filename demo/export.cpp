@@ -21,7 +21,7 @@ void PfwStructureVisitor::visit(const Block &block)
 
     mLevel++;
     for (const auto &field : block.getFields()) {
-        field->accept(*this);
+        field.get().accept(*this);
     }
     mLevel--;
 

@@ -2,6 +2,9 @@
 #include "Visitor.hpp"
 #include "Exception.hpp"
 
+#include <algorithm>
+#include <iterator>
+
 namespace structure
 {
 
@@ -10,9 +13,12 @@ void Block::accept(StructureVisitor &visitor) const
     visitor.visit(*this);
 }
 
-const std::list<std::unique_ptr<Structure>> &Block::getFields() const
+std::vector<Block::StructureRef> Block::getFields() const
 {
-    return mFields;
+    std::vector<StructureRef> result;
+    std::transform(begin(mFields), end(mFields), std::back_inserter(result),
+                   [](auto &&from) { return StructureRef(*from); });
+    return result;
 }
 
 BlockValue Block::with(ValueBuilder builder) const

@@ -25,7 +25,7 @@ public:
 
         if (recursive)
             for (const auto &field : block.getFields())
-                field->accept(*this);
+                field.get().accept(*this);
 
         onExitBlock(block);
     }
@@ -187,7 +187,7 @@ std::string getValue(const std::unique_ptr<StructureValue> &value)
 class GetChildStructureVisitor : public StructureVisitor
 {
 public:
-    GetChildStructureVisitor(std::string path) : path(path), result(nullptr) {}
+    GetChildStructureVisitor(std::string path) : path(path), mResult(nullptr) {}
 
     void visit(const Block &block) override
     {
@@ -209,12 +209,12 @@ public:
         }
 
         for (auto &field : block.getFields()) {
-            if (field->getName() == name) {
+            if (field.get().getName() == name) {
                 if (path.empty()) {
-                    result = &field;
+                    mResult = std::addressof(field.get());
                     return;
                 } else {
-                    field->accept(*this);
+                    field.get().accept(*this);
                 }
             }
         }
@@ -222,22 +222,25 @@ public:
 
     void visit(const GenericField &) override {}
 
+    const Structure *get() const { return mResult; }
+
+private:
     std::string path;
-    const std::unique_ptr<Structure> *result;
+    const Structure *mResult;
 };
 
-Structure &getChild(const Structure &structure, std::string path)
+const Structure &getChild(const Structure &structure, std::string path)
 {
     GetChildStructureVisitor visitor(path);
     structure.accept(visitor);
 
-    if (visitor.result) {
-        return *(visitor.result->get());
+    if (visitor.get()) {
+        return *(visitor.get());
     }
     throw ChildNotFound(structure.getName(), path);
 }
 
-Structure &getChild(const std::unique_ptr<Block> &structure, std::string path)
+const Structure &getChild(const std::unique_ptr<Block> &structure, std::string path)
 {
     return getChild(*structure, path);
 }

@@ -7,7 +7,8 @@
 #include "value/StructureValue.hpp"
 #include "ValueBuilder.hpp"
 
-#include <list>
+#include <vector>
+#include <utility>
 #include <memory>
 
 namespace structure
@@ -27,13 +28,14 @@ public:
 
     void accept(StructureVisitor &visitor) const override;
 
-    const std::list<std::unique_ptr<Structure>> &getFields() const;
+    using StructureRef = std::reference_wrapper<const Structure>;
+    virtual std::vector<StructureRef> getFields() const;
 
     BlockValue with(ValueBuilder builder) const;
     std::string getTypeName() const override { return "Block"; }
 
 private:
-    std::list<std::unique_ptr<Structure>> mFields;
+    std::vector<std::unique_ptr<Structure>> mFields;
 
     std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override;
     template <class T>
