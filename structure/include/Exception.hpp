@@ -1,51 +1,37 @@
 #pragma once
 
-#include <exception>
+#include <stdexcept>
 #include <string>
 
 namespace structure
 {
 
-class StructureException : public std::exception
+class StructureException : public std::runtime_error
 {
+    using runtime_error::runtime_error;
 };
 
 class ChildNotFound : public StructureException
 {
 public:
     ChildNotFound(const std::string &self, const std::string &child)
-        : mError("'" + self + "': no such child: '" + child + "'.")
+        : StructureException("'" + self + "': no such child: '" + child + "'.")
     {
     }
-
-    const char *what() const noexcept override { return mError.c_str(); }
-
-private:
-    std::string mError;
 };
 
 class NotABlock : public StructureException
 {
 public:
-    NotABlock(const std::string &self) : mError("'" + self + "' is not a Block.") {}
-
-    const char *what() const noexcept override { return mError.c_str(); }
-
-private:
-    std::string mError;
+    NotABlock(const std::string &self) : StructureException("'" + self + "' is not a Block.") {}
 };
 
 class ValueStructureMismatch : public StructureException
 {
 public:
     ValueStructureMismatch(const std::string &self)
-        : mError("Instanciation values do not match with the Structure '" + self + "'")
+        : StructureException("Instanciation values do not match with the Structure '" + self + "'")
     {
     }
-
-    const char *what() const noexcept override { return mError.c_str(); }
-
-private:
-    std::string mError;
 };
 }
