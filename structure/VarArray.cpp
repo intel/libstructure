@@ -6,7 +6,7 @@ namespace structure
 BlockValue VarArray::with(ValueBuilder builder) const
 {
     if (builder.atom) {
-        throw ValueStructureMismatch(getName());
+        throw ValueStructureMismatch(getName(), "Expected a VarArray (or Block), got an atom");
     }
 
     BlockValue b(*this);

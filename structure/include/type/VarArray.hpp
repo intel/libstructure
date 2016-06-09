@@ -15,6 +15,8 @@ public:
     VarArray(const std::string &name, ItemType &&itemType)
         : Block(name, std::forward<ItemType>(itemType))
     {
+        static_assert(is_structure<ItemType>::value,
+                      "The ItemType in a VarArray must be a Structure");
     }
 
     BlockValue with(ValueBuilder builder) const override;

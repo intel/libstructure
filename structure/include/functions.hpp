@@ -61,12 +61,16 @@ STRUCTURE_EXPORT BlockValue with(const Block &block, ValueBuilder builder);
 template <class FieldType>
 FieldValue<FieldType> with(FieldType fieldType, typename FieldType::Storage value)
 {
+    static_assert(is_structure<FieldType>::value,
+                  "The FieldType template type must be a Structure");
     return {fieldType, value};
 }
 
 template <class FieldType>
 FieldValue<FieldType> with(FieldType fieldType, const std::string &value)
 {
+    static_assert(is_structure<FieldType>::value,
+                  "The FieldType template type must be a Structure");
     return {fieldType, value};
 }
 }

@@ -18,8 +18,8 @@ template <typename FieldType>
 class FieldValue : public GenericFieldValue
 {
     // This prevents hard-to-understand compilation errors.
-    static_assert(std::is_convertible<FieldType, const GenericField &>::value,
-                  "FieldType must be a GenericField.");
+    static_assert(std::is_base_of<GenericField, FieldType>::value,
+                  "The FieldType of a FieldValue must be a GenericField.");
 
 public:
     FieldValue(FieldType field, typename FieldType::Storage value)

@@ -36,4 +36,15 @@ private:
     std::string mName;
     std::map<std::string, std::string> mAttributes;
 };
+
+/** Helper type trait for checking that a type is a Structure
+ *
+ * It helps preventing complicated error messages further down the stack.
+ *
+ * @tparam T The type to be checked against Structure.
+ */
+template <typename T>
+struct is_structure : std::is_base_of<Structure, T>
+{
+};
 }

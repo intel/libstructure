@@ -49,6 +49,8 @@ private:
     template <class T>
     void addField(T &&child)
     {
+        // This prevents hard-to-understand compilation errors.
+        static_assert(is_structure<T>::value, "The field to be added must be a Structure.");
         mFields.emplace_back(new T(std::forward<T>(child)));
     }
 

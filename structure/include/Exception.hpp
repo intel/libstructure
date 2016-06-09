@@ -29,8 +29,19 @@ public:
 class ValueStructureMismatch : public StructureException
 {
 public:
-    ValueStructureMismatch(const std::string &self)
-        : StructureException("Instanciation values do not match with the Structure '" + self + "'")
+    ValueStructureMismatch(const std::string &self, const std::string &details)
+        : StructureException("Instanciation values do not match with the Structure '" + self +
+                             "' (" + details + ").")
+    {
+    }
+};
+
+class ParseError : public StructureException
+{
+public:
+    // TODO: make it possible to pass a type name
+    ParseError(const std::string &input)
+        : StructureException("Incompatible value \"" + input + "\".")
     {
     }
 };

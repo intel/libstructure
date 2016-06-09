@@ -56,7 +56,7 @@ public:
         // TODO: choose the intermediate type according to the storage type
         double parsed;
         if (not convertTo(input, parsed)) {
-            throw std::runtime_error("FixedPoint: Incorrect or out-of-bounds value");
+            throw ParseError("FixedPoint: Incorrect or out-of-bounds value");
         }
         // TODO: range checking
 

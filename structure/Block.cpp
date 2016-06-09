@@ -24,18 +24,24 @@ std::vector<Block::StructureRef> Block::getFields() const
 BlockValue Block::with(ValueBuilder builder) const
 {
 
-    if (builder.atom)
-        throw ValueStructureMismatch(getName());
+    if (builder.atom) {
+        throw ValueStructureMismatch(getName(), "Expected a Block, got an atom");
+    }
 
-    if (builder.listValue.size() != mFields.size())
-        throw ValueStructureMismatch(getName());
+    if (builder.listValue.size() != mFields.size()) {
+        throw ValueStructureMismatch(getName(), "Expected " + std::to_string(mFields.size()) +
+                                                    " fields; got " +
+                                                    std::to_string(builder.listValue.size()));
+    }
 
     BlockValue b(*this);
 
     auto it = builder.listValue.begin();
     for (auto &f : mFields) {
-        if (it == builder.listValue.end())
-            throw ValueStructureMismatch(getName());
+        if (it == builder.listValue.end()) {
+            // This can't happen since we checked the sizes above
+            throw ValueStructureMismatch(getName(), "Not enough fields were provided");
+        }
 
         auto v = f->with(*(it++));
         b.addValue(std::move(v));

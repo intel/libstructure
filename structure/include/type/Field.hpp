@@ -15,10 +15,8 @@ namespace detail
 template <typename Derived, typename Base, typename _Storage>
 class FieldCrtp : public Base
 {
-    // This prevents hard-to-understand compilation errors. The base class must be a GenericField
-    // because it need the getName() method.
-    static_assert(std::is_convertible<Base, const GenericField &>::value,
-                  "Base must be a GenericField.");
+    // This prevents hard-to-understand compilation errors.
+    static_assert(is_structure<Base>::value, "Base must be a Structure.");
 
 private:
     using This = FieldCrtp<Derived, Base, _Storage>;
@@ -32,7 +30,8 @@ public:
     ThisValue with(ValueBuilder builder) const
     {
         if (!builder.atom) {
-            throw ValueStructureMismatch(this->getName());
+            throw ValueStructureMismatch(this->getName(),
+                                         "Expected a " + getTypeName() + ", got a Block.");
         }
 
         return {*static_cast<const Derived *>(this), builder.atomicValue};
@@ -42,7 +41,7 @@ public:
     {
         _Storage parsed;
         if (not convertTo(input, parsed)) {
-            throw std::runtime_error("incorrect value");
+            throw ParseError(input);
         }
         return parsed;
     }
