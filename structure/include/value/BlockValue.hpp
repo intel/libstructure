@@ -9,15 +9,21 @@
 
 namespace structure
 {
-
+/** An instantiated Block */
 class BlockValue : public StructureValue
 {
 public:
     BlockValue(const Block &block) : mStructure(block) {}
 
+    /** Add a child value at the end of the block value */
     void addValue(std::unique_ptr<StructureValue> child) { mValues.push_back(std::move(child)); }
 
+    /** @returns the list of children */
     const std::list<std::unique_ptr<StructureValue>> &getFields() const { return mValues; }
+    /** @returns the Block type corresponding to this value
+     *
+     * Same as getStructure() but with a stronger type.
+     */
     const Block &getBlock() const { return mStructure; }
     const Structure &getStructure() const override { return (const Structure &)mStructure; }
 

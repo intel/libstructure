@@ -13,7 +13,10 @@
 
 namespace structure
 {
-
+/** An instantiated Field
+ *
+ * @tparam FieldType The type of the field with which this value is instantiated.
+ */
 template <typename FieldType>
 class FieldValue : public GenericFieldValue
 {
@@ -22,11 +25,13 @@ class FieldValue : public GenericFieldValue
                   "The FieldType of a FieldValue must be a GenericField.");
 
 public:
+    /** Constructs a value from a Field and typed value */
     FieldValue(FieldType field, typename FieldType::Storage value)
         : mStructure(field), mValue(value)
     {
     }
 
+    /** Constructs a value from a Field and string */
     FieldValue(FieldType field, const std::string &value)
         : mStructure(field), mValue(mStructure.fromString(value))
     {
@@ -38,6 +43,10 @@ public:
     typename FieldType::Storage getTypedValue() const { return mValue; }
     void setTypedValue(typename FieldType::Storage value) { mValue = value; }
 
+    /** @returns the Field type corresponding to this value
+     *
+     * Same as getStructure() but with a stronger type.
+     */
     const FieldType &getField() const { return mStructure; }
     const Structure &getStructure() const override { return mStructure; }
 
