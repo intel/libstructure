@@ -17,7 +17,6 @@ public:
 
     void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
 
-    std::string getTypeName() const override { return "Integer"; }
     virtual size_t getSize() const = 0;
     virtual bool getSignedness() const = 0;
 };
@@ -41,6 +40,11 @@ public:
     using Base::Base;
     size_t getSize() const override { return size; }
     bool getSignedness() const override { return isSigned; }
+
+    static std::string typeToString()
+    {
+        return std::string(isSigned ? "Int" : "UInt") + std::to_string(size);
+    }
 };
 
 using UInt32 = NewInteger<32, false, uint32_t>;

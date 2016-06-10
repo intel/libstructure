@@ -259,11 +259,11 @@ TEST_CASE("Display", "[structure][value][display]")
         std::stringstream ss;
 
         std::string expected = "Block : root {\n"
-                               "    FloatingPoint : a\n"
-                               "    Integer : b\n"
-                               "    FixedQ : c\n"
+                               "    Float : a\n"
+                               "    Int32 : b\n"
+                               "    Q16f15 : c\n"
                                "    VarArray : varArray {\n"
-                               "        Integer : d\n"
+                               "        UInt8 : d\n"
                                "    }\n"
                                "}\n";
 
@@ -276,12 +276,12 @@ TEST_CASE("Display", "[structure][value][display]")
         std::stringstream ss;
 
         std::string expected = "BlockValue : root {\n"
-                               "    FloatingPoint : a = 1.000000\n"
-                               "    Integer : b = 2\n"
-                               "    FixedQ : c = 16384\n"
+                               "    Float : a = 1.000000\n"
+                               "    Int32 : b = 2\n"
+                               "    Q16f15 : c = 16384\n"
                                "    BlockValue : varArray {\n"
-                               "        Integer : d = 3\n"
-                               "        Integer : d = 4\n"
+                               "        UInt8 : d = 3\n"
+                               "        UInt8 : d = 4\n"
                                "    }\n"
                                "}\n";
 

@@ -47,6 +47,8 @@ public:
         return parsed;
     }
 
+    std::string getTypeName() const override { return Derived::typeToString(); }
+
 private:
     std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override
     {

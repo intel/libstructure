@@ -7,14 +7,37 @@
 
 namespace structure
 {
+namespace detail
+{
+template <typename F>
+struct FloatingTrait
+{
+    static std::string getName();
+};
+
+template <>
+struct FloatingTrait<float>
+{
+    static std::string getName() { return "Float"; }
+};
+template <>
+struct FloatingTrait<double>
+{
+    static std::string getName() { return "Double"; }
+};
+template <>
+struct FloatingTrait<long double>
+{
+    static std::string getName() { return "LongDouble"; }
+};
+} // namespace detail
+
 class STRUCTURE_EXPORT FloatingPoint : public GenericField
 {
 public:
     using GenericField::GenericField;
 
     void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
-
-    std::string getTypeName() const override { return "FloatingPoint"; }
 };
 
 template <class _Storage>
@@ -29,6 +52,8 @@ private:
 
 public:
     using Base::Base;
+
+    static std::string typeToString() { return detail::FloatingTrait<_Storage>::getName(); }
 };
 
 using Float = NewFloatingPoint<float>;

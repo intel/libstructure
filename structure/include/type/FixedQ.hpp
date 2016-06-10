@@ -15,7 +15,6 @@ public:
 
     void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
 
-    std::string getTypeName() const override { return "FixedQ"; }
     virtual size_t getSize() const = 0;
     virtual size_t getFractional() const = 0;
     virtual size_t getIntegral() const = 0;
@@ -64,6 +63,12 @@ public:
         // For Qn.m number, multiply by 2^n and round to the nearest integer
         // Q numbers are a ratio, of which the denominator is 2^fractional
         return static_cast<_Storage>(round(parsed * mDenominator));
+    }
+
+    static std::string typeToString()
+    {
+        return std::string(isSigned ? "Q" : "UQ") + std::to_string(size) + "f" +
+               std::to_string(fractional);
     }
 };
 
