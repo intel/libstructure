@@ -2,6 +2,9 @@
 #include "client/stock.hpp"
 #include "ValueBuilder.hpp"
 #include "export.hpp"
+#include "import.hpp"
+#include "ValueImporter.hpp"
+#include "importer/MapImporter.hpp"
 
 #include <iostream>
 #include <exception>
@@ -19,27 +22,18 @@ int main(void)
 
     std::cout << std::endl;
 
-    strc::UInt32 int32Type("SomeU32");
-    auto valueFromInt = with(int32Type, 25);
-    auto valueFromString = with(int32Type, "25");
-    strc::print(std::cout, valueFromInt);
-    strc::print(std::cout, valueFromString);
-
-    strc::Float floatType("SomeFloat");
-    auto valueFromMethod = with(floatType, 1.2);
-    auto valueFromFreefunc = floatType.with("1.2");
-    strc::print(std::cout, valueFromMethod);
-    strc::print(std::cout, valueFromFreefunc);
-
-    auto r = strc::with(root, {{"1.2", "3.4"}, "2", "0.2"});
-
-    strc::print(std::cout, r);
+    std::map<std::string, std::string> values = {{"/MyData/Complex/Real", "1.2"},
+                                                 {"/MyData/Complex/Imaginary", "3.4"},
+                                                 {"/MyData/Counter", "5"},
+                                                 {"/MyData/Fixed", "0.12345"}};
+    auto importer = strc::MapImporter(values);
+    auto value = strc::importValue(root, importer);
 
     std::cout << std::endl;
 
-    std::cout << exportStructure(root) << std::endl;
+    strc::print(std::cout, value);
+
     std::cout << std::endl;
-    std::cout << exportValue(r) << std::endl;
 
     return 0;
 }

@@ -4,7 +4,8 @@ add_library(structure SHARED
     Block.cpp
     StructureValue.cpp
     Visitor.cpp
-    VarArray.cpp)
+    VarArray.cpp
+    import.cpp)
 
 target_include_directories(structure
     PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/convert)
