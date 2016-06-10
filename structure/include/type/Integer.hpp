@@ -10,6 +10,7 @@
 
 namespace structure
 {
+/** A type of field containing an integer value. */
 class STRUCTURE_EXPORT Integer : public GenericField
 {
 public:
@@ -21,6 +22,15 @@ public:
     virtual bool getSignedness() const = 0;
 };
 
+/** Helper class for creating new integer field types
+ *
+ * @tparam size The size (typically 8, 16, 32 or 64).
+ * @tparam isSigned The signedness.
+ * @tparam _Storage The type with which values will be stored (e.g. `uint32_t`); consistency with
+ *                  other template parameters is checked at compile time.
+ *
+ * @ingroup StockTypes
+ */
 template <size_t size, bool isSigned, class _Storage>
 class NewInteger : public detail::FieldCrtp<NewInteger<size, isSigned, _Storage>, Integer, _Storage>
 {
@@ -41,16 +51,21 @@ public:
     size_t getSize() const override { return size; }
     bool getSignedness() const override { return isSigned; }
 
+    /** @returns the human-readable name of the field type */
     static std::string typeToString()
     {
         return std::string(isSigned ? "Int" : "UInt") + std::to_string(size);
     }
 };
 
+/** @addtogroup StockTypes
+ * @{
+ */
 using UInt32 = NewInteger<32, false, uint32_t>;
 using Int32 = NewInteger<32, true, int32_t>;
 using UInt16 = NewInteger<16, false, uint16_t>;
 using Int16 = NewInteger<16, true, int16_t>;
 using UInt8 = NewInteger<8, false, uint8_t>;
 using Int8 = NewInteger<8, true, int8_t>;
+/** @} */
 }

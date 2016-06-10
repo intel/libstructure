@@ -11,7 +11,10 @@ namespace structure
 {
 namespace detail
 {
-// CRTP = Curiously Reccuring Template Pattern
+/** Helper class for implementing new field types.
+ *
+ * CRTP = Curiously Reccuring Template Pattern.
+ */
 template <typename Derived, typename Base, typename _Storage>
 class FieldCrtp : public Base
 {
@@ -27,6 +30,7 @@ public:
 
     using Storage = _Storage;
 
+    /** @see Structure::with() */
     ThisValue with(ValueBuilder builder) const
     {
         if (!builder.atom) {
@@ -37,6 +41,10 @@ public:
         return {*static_cast<const Derived *>(this), builder.atomicValue};
     }
 
+    /** @returns A parsed value.
+     *
+     * @throws ParseError in case the value can't be parsed into the field's type.
+     */
     static _Storage fromString(const std::string &input)
     {
         _Storage parsed;

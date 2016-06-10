@@ -8,9 +8,14 @@
 
 namespace structure
 {
+/** Represents a Variable-Length Array (aka VLA) */
 class STRUCTURE_EXPORT VarArray : public Block
 {
 public:
+    /** Constructs a Variable-Length Array of any kind of field.
+     *
+     * @param[in] itemType The structure that is repeated in the array.
+     */
     template <class ItemType>
     VarArray(const std::string &name, ItemType &&itemType)
         : Block(name, std::forward<ItemType>(itemType))

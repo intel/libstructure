@@ -8,6 +8,7 @@
 
 namespace structure
 {
+/** A type of field containing a Q-number (Fixed Point) */
 class STRUCTURE_EXPORT FixedQ : public GenericField
 {
 public:
@@ -21,6 +22,40 @@ public:
     virtual bool getSignedness() const = 0;
 };
 
+/** Helper class for creating new Q-number field types
+ *
+ * Q numbers are a kind of fixed-point numbers. They have 3 characteristic:
+ * - the size of their "integral" part (noted "i");
+ * - the size of the "fractional" part (noter "f");
+ * - their signedness.
+ *
+ * Another possible, equivalent characterisation is:
+ * - their size (noted "s");
+ * - the size of the fractional part;
+ * - their signedness.
+ *
+ * In that second notation, the size of the integral part is implicit (size - fractional - (sign
+ * bit if any)). A Q number format can be noted:  Qs.f (or UQs.f for an unsigned number); this is
+ * the representation chosen here.
+ *
+ * They have a fixed precision over their range of values. The precision is 1/2^f; their max
+ * value is:
+ * - 2^i (for an unsigned Q);
+ * - 2^i - (1/2^f) (for a signed Q);
+ * their min value is:
+ * - 0 (for an unsigned Q)
+ * - -(2^i) (for a signed Q).
+ *
+ * Their in-memory representation is N in the following equation: value = N/2^f
+ *
+ * @tparam size The size (typically 8, 16, 32 or 64).
+ * @tparam fractional The size of the "fractional part".
+ * @tparam isSigned The signedness.
+ * @tparam _Storage The type with which values will be stored (e.g. `uint32_t`); consistency with
+ *                  other template parameters is checked at compile time.
+ *
+ * @ingroup StockTypes
+ */
 template <size_t size, size_t fractional, bool isSigned, class _Storage>
 class NewFixedQ
     : public detail::FieldCrtp<NewFixedQ<size, fractional, isSigned, _Storage>, FixedQ, _Storage>
@@ -49,6 +84,11 @@ public:
     size_t getIntegral() const override { return size - fractional - (isSigned ? 1 : 0); }
     bool getSignedness() const override { return isSigned; }
 
+    /** Parse a decimal number into a FixedQ
+     *
+     * @param[in] input A string representing a decimal number (e.g. "1.125").
+     * @returns the memory representation for the Q number.
+     */
     static _Storage fromString(const std::string &input)
     {
         // TODO: we assume that the user inputs a decimal value... what is he wants to directly
@@ -65,6 +105,7 @@ public:
         return static_cast<_Storage>(round(parsed * mDenominator));
     }
 
+    /** @returns the human-readable name of the field type (e.g. "Q16.4") */
     static std::string typeToString()
     {
         return std::string(isSigned ? "Q" : "UQ") + std::to_string(size) + "f" +
@@ -72,9 +113,14 @@ public:
     }
 };
 
-// This macro defines a new Q number type and checks that its parameters are coherent.
-// Calling sizeof() in the type is a trick that forces the compiler to instantiate the type. If it
-// wasn't, the static assertions contained in NewFixedQ wouln't be triggered.
+/** This macro defines a new Q number type.
+ *
+ * It also checks that its parameters are coherent. Calling sizeof() in the type is a trick that
+ * forces the compiler to instantiate the type. If it wasn't, the static assertions contained in
+ * NewFixedQ wouln't be triggered.
+ *
+ * @ingroup StockTypes
+ */
 #define MK_NEW_QTYPE(name, size, fractional, isSigned, storage)                                    \
     using name = NewFixedQ<size, fractional, isSigned, storage>;                                   \
     static_assert(sizeof(name), "This message shouldn't be displayed.")

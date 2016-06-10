@@ -6,7 +6,7 @@
 
 namespace structure
 {
-
+/** Base class for all atomic field types. */
 class STRUCTURE_EXPORT GenericField : public Structure
 {
 public:

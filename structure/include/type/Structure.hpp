@@ -15,20 +15,59 @@ namespace structure
 class StructureValue;
 class StructureVisitor;
 
+/** Base class for all structure types.
+ *
+ * This class represents any structure (field, block or combination of those). A Structure has a
+ * name (the name with which it is referred to) and a type name (the type of structure it is);
+ * see examples below. A Structure may also have arbitrary attributes. The definition of those
+ * attributes belongs to the user and constitutes a protocol agreement between the producer and the
+ * consumer of the structure. A Structured Value (structure::StructureValue) can be created based on
+ * a Structure.
+ *
+ * To better understand what the name and the type name are, consider the following C code:
+ *
+ * @code
+ * struct MyStruct {
+ *     int foo;
+ *     char bar;
+ * };
+ * @endcode
+ *
+ * The name of the `MyStruct` struct is "MyStruct" and its type name is "struct" (note that
+ * libstructure will call it a "Block" instead). `foo`'s name is "foo" and its type name is "int".
+ */
 class STRUCTURE_EXPORT Structure
 {
 public:
     Structure(std::string name);
     virtual ~Structure() = default;
 
+    /** Entry point for Structure visitors.
+     *
+     * This implements the "Visitor" design pattern.
+     */
     virtual void accept(StructureVisitor &visitor) const = 0;
 
+    /** Return the structure's name; see the main description. */
     std::string getName() const;
+    /** Return the structure's type name; see the main description */
     virtual std::string getTypeName() const = 0;
 
+    /** Set an arbitrary attribute. */
     void setAttribute(std::string key, std::string value = "");
+    /** Get the map of attributes. */
     const std::map<std::string, std::string> &getAttributes();
 
+    /** Create a StructureValue of the Structure's type.
+     *
+     * This is analogous to instantiating a class. Usage example:
+     *
+     * @code
+     * auto myValue = myStructure.with({"1", "2", {"3.4", "5"}});
+     * @endcode
+     *
+     * @param[in] builder The values; see ValueBuilder.
+     */
     std::unique_ptr<StructureValue> with(ValueBuilder builder) const;
 
 private:

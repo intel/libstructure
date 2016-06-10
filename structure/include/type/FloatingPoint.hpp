@@ -32,6 +32,7 @@ struct FloatingTrait<long double>
 };
 } // namespace detail
 
+/** A type of field containing a floating point value. */
 class STRUCTURE_EXPORT FloatingPoint : public GenericField
 {
 public:
@@ -40,6 +41,12 @@ public:
     void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
 };
 
+/** Helper class for creating new floating point field types
+ *
+ * @tparam _Storage The type with which values will be stored (e.g. `float`)
+ *
+ * @ingroup StockTypes
+ */
 template <class _Storage>
 class NewFloatingPoint
     : public detail::FieldCrtp<NewFloatingPoint<_Storage>, FloatingPoint, _Storage>
@@ -53,10 +60,15 @@ private:
 public:
     using Base::Base;
 
+    /** @returns the human-readable name of the field type */
     static std::string typeToString() { return detail::FloatingTrait<_Storage>::getName(); }
 };
 
+/** @addtogroup StockTypes
+ * @{
+ */
 using Float = NewFloatingPoint<float>;
 using Double = NewFloatingPoint<double>;
 using LongDouble = NewFloatingPoint<long double>;
-}
+/** @} */
+} // namespace structure
