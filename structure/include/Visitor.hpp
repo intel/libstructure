@@ -13,6 +13,16 @@ class GenericFieldValue;
 template <typename T>
 class FieldValue;
 
+/** @defgroup Visitors Visitors
+ *
+ * TODO: add detailed description.
+ * @{
+ */
+
+/** Visits a Structure
+ *
+ * Implements the Visitor design pattern.
+ */
 class STRUCTURE_EXPORT StructureVisitor
 {
 public:
@@ -21,11 +31,18 @@ public:
     virtual void visit(const Block &block) = 0;
     virtual void visit(const GenericField &field) = 0;
 
+    /** Defaults to visit(const GenericField &) */
     virtual void visit(const Integer &i);
+    /** Defaults to visit(const GenericField &) */
     virtual void visit(const FloatingPoint &f);
+    /** Defaults to visit(const GenericField &) */
     virtual void visit(const FixedQ &q);
 };
 
+/** Visits a StructureValue
+ *
+ * Implements the Visitor design pattern.
+ */
 class STRUCTURE_EXPORT ValueVisitor
 {
 public:
@@ -35,6 +52,15 @@ public:
     virtual void visit(const GenericFieldValue &field) = 0;
 };
 
+/** Visits actual values stored in StructureValue
+ *
+ * Implements the Visitor design pattern.
+ *
+ * Derived classes may simply implement the `BlockValue`, the `unsigned long long`, the `long long`
+ * and the `long double` overloads of visitorStorage() because all the other defaults to one of the
+ * latter three (signed integers (and `char`) default to `long long`; unsigned integers default to
+ * `unsigned long long`; floating point types default to `long double`).
+ */
 class STRUCTURE_EXPORT StorageVisitor
 {
 public:
@@ -59,4 +85,5 @@ public:
     virtual void visitStorage(ll) = 0;
     virtual void visitStorage(ld) = 0;
 };
+/** @} */
 }
