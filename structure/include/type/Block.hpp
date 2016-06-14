@@ -6,6 +6,7 @@
 #include "value/BlockValue.hpp"
 #include "value/StructureValue.hpp"
 #include "ValueBuilder.hpp"
+#include "ValueImporter.hpp"
 
 #include <vector>
 #include <utility>
@@ -60,6 +61,8 @@ protected:
 
 private:
     std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override;
+    std::unique_ptr<StructureValue> doWith(ValueImporter &importer,
+                                           std::string path) const override;
 
     template <class T>
     void addField(T &&child)

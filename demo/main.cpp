@@ -2,7 +2,6 @@
 #include "client/stock.hpp"
 #include "ValueBuilder.hpp"
 #include "export.hpp"
-#include "import.hpp"
 #include "ValueImporter.hpp"
 #include "importer/MapImporter.hpp"
 
@@ -27,7 +26,7 @@ int main(void)
                                                  {"/MyData/Counter", "5"},
                                                  {"/MyData/Fixed", "0.12345"}};
     auto importer = strc::MapImporter(values);
-    auto value = strc::importValue(root, importer);
+    auto value = strc::with(root, importer);
 
     std::cout << std::endl;
 

@@ -14,6 +14,7 @@ namespace structure
 
 class StructureValue;
 class StructureVisitor;
+class ValueImporter;
 
 /** Base class for all structure types.
  *
@@ -69,9 +70,28 @@ public:
      * @param[in] builder The values; see ValueBuilder.
      */
     std::unique_ptr<StructureValue> with(ValueBuilder builder) const;
+    /** Create a StructureValue from a value importer
+     *
+     * Usage exemple:
+     * @code
+     * std::stringstream values;
+     * values << "1 2 3 4";
+     * auto importer = StreamImporter<>(values);
+     *
+     * Block myBlock(UInt8("a"), UInt8("d"), UInt8("c"), UInt8("b"));
+     * auto myValue = myBlock.with(importer);
+     * @endcode
+     *
+     * @param importer: The source of values
+     * @param path: The path of the field to be imported. Internal context - users of the Structure
+     *              class should not override the default argument value.
+     */
+    std::unique_ptr<StructureValue> with(ValueImporter &importer, std::string path = "") const;
 
 private:
     virtual std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const = 0;
+    virtual std::unique_ptr<StructureValue> doWith(ValueImporter &importer,
+                                                   std::string path) const = 0;
     std::string mName;
     std::map<std::string, std::string> mAttributes;
 };

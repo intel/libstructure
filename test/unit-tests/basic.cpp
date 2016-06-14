@@ -8,7 +8,6 @@
 #include "importer/StreamImporter.hpp"
 #include "importer/PromptImporter.hpp"
 #include "importer/MapImporter.hpp"
-#include "import.hpp"
 
 #include <sstream>
 #include <string>
@@ -309,18 +308,18 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 ss << "1 2.3 4";
                 auto importer = StreamImporter<>(ss);
                 std::unique_ptr<StructureValue> value;
-                CHECK_NOTHROW(value = importValue(root, importer));
+                CHECK_NOTHROW(value = with(root, importer));
                 CHECK(getValue(value) == "{1, {2.300000}, 4}");
             }
             THEN ("Creating a value from erroneous input should throw.") {
                 ss << "1.2 3 3";
                 auto importer = StreamImporter<>(ss);
-                CHECK_THROWS(importValue(root, importer));
+                CHECK_THROWS(with(root, importer));
             }
             THEN ("Creating a value from partial input should throw.") {
                 ss << "1 2.3";
                 auto importer = StreamImporter<>(ss);
-                CHECK_THROWS(importValue(root, importer));
+                CHECK_THROWS(with(root, importer));
             }
         }
 
@@ -329,18 +328,18 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 ss << "1 2.3 4";
                 auto importer = PromptImporter<>(ss, null);
                 std::unique_ptr<StructureValue> value;
-                CHECK_NOTHROW(value = importValue(root, importer));
+                CHECK_NOTHROW(value = with(root, importer));
                 CHECK(getValue(value) == "{1, {2.300000}, 4}");
             }
             THEN ("Creating a value from erroneous input should throw.") {
                 ss << "1.0 2.3 4";
                 auto importer = PromptImporter<>(ss, null);
-                CHECK_THROWS(importValue(root, importer));
+                CHECK_THROWS(with(root, importer));
             }
             THEN ("Creating a value from partial input should throw.") {
                 ss << "1 2.3";
                 auto importer = PromptImporter<>(ss, null);
-                CHECK_THROWS(importValue(root, importer));
+                CHECK_THROWS(with(root, importer));
             }
         }
 
@@ -351,7 +350,7 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 };
                 auto importer = MapImporter(values);
                 std::unique_ptr<StructureValue> value;
-                CHECK_NOTHROW(value = importValue(root, importer));
+                CHECK_NOTHROW(value = with(root, importer));
                 CHECK(getValue(value) == "{1, {2.300000}, 4}");
             }
             THEN ("Creating a value from erroneous input should throw.") {
@@ -359,14 +358,14 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                     {"/root/a", "1.0"}, {"/root/b/c", "2.3"}, {"/root/d", "4"},
                 };
                 auto importer = MapImporter(values);
-                CHECK_THROWS(importValue(root, importer));
+                CHECK_THROWS(with(root, importer));
             }
             THEN ("Creating a value from partial input should throw.") {
                 std::map<std::string, std::string> values = {
                     {"/root/a", "1"}, {"/root/b/c", "2.3"},
                 };
                 auto importer = MapImporter(values);
-                CHECK_THROWS(importValue(root, importer));
+                CHECK_THROWS(with(root, importer));
             }
         }
     }

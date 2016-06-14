@@ -107,8 +107,12 @@ STRUCTURE_EXPORT StructureValue &getChild(const StructureValue &value, std::stri
 STRUCTURE_EXPORT StructureValue &getChild(const std::unique_ptr<StructureValue> &value,
                                           std::string path);
 
-/** Equivalent to Block::with() */
+/** Equivalent to Block::with(ValueBuilder) */
 STRUCTURE_EXPORT BlockValue with(const Block &block, ValueBuilder builder);
+
+/** Equivalent to Structure::with(ValueImporter &) */
+STRUCTURE_EXPORT std::unique_ptr<StructureValue> with(const Structure &structure,
+                                                      ValueImporter &importer);
 
 /** Equivalent to constructing a FieldValue
  *

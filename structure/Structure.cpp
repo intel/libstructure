@@ -26,4 +26,8 @@ std::unique_ptr<StructureValue> Structure::with(ValueBuilder builder) const
 {
     return genericWith(builder);
 };
+std::unique_ptr<StructureValue> Structure::with(ValueImporter &importer, std::string path) const
+{
+    return doWith(importer, path + "/" + getName());
+}
 }

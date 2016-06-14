@@ -307,4 +307,9 @@ BlockValue with(const Block &block, ValueBuilder builder)
 {
     return block.with(builder);
 }
+
+std::unique_ptr<StructureValue> with(const Structure &structure, ValueImporter &importer)
+{
+    return structure.with(importer);
+}
 }

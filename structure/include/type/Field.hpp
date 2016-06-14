@@ -3,6 +3,7 @@
 #include "type/GenericField.hpp"
 #include "value/FieldValue.hpp"
 #include "ValueBuilder.hpp"
+#include "ValueImporter.hpp"
 #include "Exception.hpp"
 
 #include "structure_export.h"
@@ -60,6 +61,10 @@ private:
     std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override
     {
         return std::make_unique<ThisValue>(with(builder));
+    }
+    std::unique_ptr<StructureValue> doWith(ValueImporter &importer, std::string path) const override
+    {
+        return importer.import(*this, path);
     }
 };
 } // namespace detail

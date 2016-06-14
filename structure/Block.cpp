@@ -54,4 +54,13 @@ std::unique_ptr<StructureValue> Block::genericWith(ValueBuilder builder) const
 {
     return std::make_unique<BlockValue>(with(builder));
 }
+
+std::unique_ptr<StructureValue> Block::doWith(ValueImporter &importer, std::string path) const
+{
+    auto value = std::make_unique<BlockValue>(*this);
+    for (const auto &field : getFields()) {
+        value->addValue(field.get().with(importer, path));
+    }
+    return std::move(value);
+}
 }
