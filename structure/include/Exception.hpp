@@ -54,4 +54,14 @@ public:
     {
     }
 };
+
+/** Thrown when a ValueInitializer runs out of values */
+class NotEnoughValues : public ValueStructureMismatch
+{
+public:
+    NotEnoughValues(const std::string &self)
+        : ValueStructureMismatch(self, "Not enought value in initializer.")
+    {
+    }
+};
 }

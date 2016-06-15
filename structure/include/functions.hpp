@@ -6,6 +6,7 @@
 #include "type/Block.hpp"
 #include "type/GenericField.hpp"
 #include "type/Field.hpp"
+#include "ValueInitializer.hpp"
 
 #include <string>
 #include <list>
@@ -107,12 +108,15 @@ STRUCTURE_EXPORT StructureValue &getChild(const StructureValue &value, std::stri
 STRUCTURE_EXPORT StructureValue &getChild(const std::unique_ptr<StructureValue> &value,
                                           std::string path);
 
-/** Equivalent to Block::with(ValueBuilder) */
-STRUCTURE_EXPORT BlockValue with(const Block &block, ValueBuilder builder);
+/** Equivalent to Block::build(ValueImporter &) */
+STRUCTURE_EXPORT BlockValue build(const Block &block, ValueImporter &importer);
 
-/** Equivalent to Structure::with(ValueImporter &) */
-STRUCTURE_EXPORT std::unique_ptr<StructureValue> with(const Structure &structure,
-                                                      ValueImporter &importer);
+/** Equivalent to Structure::build(ValueImporter &) */
+STRUCTURE_EXPORT std::unique_ptr<StructureValue> build(const Structure &structure,
+                                                       ValueImporter &importer);
+
+/** Equivalent to Block::with(ValueInitializer) */
+STRUCTURE_EXPORT BlockValue with(const Block &block, ValueInitializer initializer);
 
 /** Equivalent to constructing a FieldValue
  *

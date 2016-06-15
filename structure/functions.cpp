@@ -4,6 +4,7 @@
 #include "value/FieldValue.hpp"
 #include "value/BlockValue.hpp"
 #include "Exception.hpp"
+
 #include <iostream>
 
 namespace structure
@@ -303,13 +304,18 @@ StructureValue &getChild(const std::unique_ptr<StructureValue> &value, std::stri
     return getChild(*value, path);
 }
 
-BlockValue with(const Block &block, ValueBuilder builder)
+BlockValue with(const Block &block, ValueInitializer initializer)
 {
-    return block.with(builder);
+    return block.with(initializer);
 }
 
-std::unique_ptr<StructureValue> with(const Structure &structure, ValueImporter &importer)
+BlockValue build(const Block &block, ValueImporter &importer)
 {
-    return structure.with(importer);
+    return block.build(importer);
+}
+
+std::unique_ptr<StructureValue> build(const Structure &structure, ValueImporter &importer)
+{
+    return structure.build(importer);
 }
 }

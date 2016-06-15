@@ -45,7 +45,7 @@ public:
                                            const std::string & /*path*/) override
     {
         std::string val = read();
-        return f.with(val.c_str());
+        return f.genericWith(val.c_str());
     }
 
 private:

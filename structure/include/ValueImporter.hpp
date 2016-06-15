@@ -1,10 +1,16 @@
 #pragma once
 
 #include "structure_export.h"
-#include "type/GenericField.hpp"
+
+#include <string>
+#include <memory>
 
 namespace structure
 {
+
+class GenericField;
+class StructureValue;
+class Block;
 
 /**
  * @defgroup ValueImporter Allow to create StructureValue from Structure and formatted values

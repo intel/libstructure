@@ -204,15 +204,13 @@ SCENARIO("Apply", "[apply][value][structure]")
 TEST_CASE("Value Builder", "[value]")
 {
     SECTION ("AtomicValue") {
-        ValueBuilder builder("atom");
-        CHECK(builder.atom == true);
-        CHECK(builder.atomicValue == "atom");
+        ValueInitializer builder("atom");
+        CHECK(builder.getAtomicValue() == "atom");
     }
 
     SECTION ("ListValue") {
-        ValueBuilder builder({"atom1", "atom2"});
-        CHECK(builder.atom == false);
-        CHECK(builder.listValue.size() == 2);
+        ValueInitializer builder({"atom1", "atom2"});
+        CHECK(builder.getListValue().size() == 2);
     }
 }
 
@@ -308,18 +306,18 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 ss << "1 2.3 4";
                 auto importer = StreamImporter<>(ss);
                 std::unique_ptr<StructureValue> value;
-                CHECK_NOTHROW(value = with(root, importer));
+                CHECK_NOTHROW(value = build((Structure &)root, importer));
                 CHECK(getValue(value) == "{1, {2.300000}, 4}");
             }
             THEN ("Creating a value from erroneous input should throw.") {
                 ss << "1.2 3 3";
                 auto importer = StreamImporter<>(ss);
-                CHECK_THROWS(with(root, importer));
+                CHECK_THROWS(build(root, importer));
             }
             THEN ("Creating a value from partial input should throw.") {
                 ss << "1 2.3";
                 auto importer = StreamImporter<>(ss);
-                CHECK_THROWS(with(root, importer));
+                CHECK_THROWS(build(root, importer));
             }
         }
 
@@ -328,18 +326,18 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 ss << "1 2.3 4";
                 auto importer = PromptImporter<>(ss, null);
                 std::unique_ptr<StructureValue> value;
-                CHECK_NOTHROW(value = with(root, importer));
+                CHECK_NOTHROW(value = build((Structure &)root, importer));
                 CHECK(getValue(value) == "{1, {2.300000}, 4}");
             }
             THEN ("Creating a value from erroneous input should throw.") {
                 ss << "1.0 2.3 4";
                 auto importer = PromptImporter<>(ss, null);
-                CHECK_THROWS(with(root, importer));
+                CHECK_THROWS(build(root, importer));
             }
             THEN ("Creating a value from partial input should throw.") {
                 ss << "1 2.3";
                 auto importer = PromptImporter<>(ss, null);
-                CHECK_THROWS(with(root, importer));
+                CHECK_THROWS(build(root, importer));
             }
         }
 
@@ -350,7 +348,7 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 };
                 auto importer = MapImporter(values);
                 std::unique_ptr<StructureValue> value;
-                CHECK_NOTHROW(value = with(root, importer));
+                CHECK_NOTHROW(value = build((Structure &)root, importer));
                 CHECK(getValue(value) == "{1, {2.300000}, 4}");
             }
             THEN ("Creating a value from erroneous input should throw.") {
@@ -358,14 +356,14 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                     {"/root/a", "1.0"}, {"/root/b/c", "2.3"}, {"/root/d", "4"},
                 };
                 auto importer = MapImporter(values);
-                CHECK_THROWS(with(root, importer));
+                CHECK_THROWS(build(root, importer));
             }
             THEN ("Creating a value from partial input should throw.") {
                 std::map<std::string, std::string> values = {
                     {"/root/a", "1"}, {"/root/b/c", "2.3"},
                 };
                 auto importer = MapImporter(values);
-                CHECK_THROWS(with(root, importer));
+                CHECK_THROWS(build(root, importer));
             }
         }
         GIVEN ("A custom Importer") {
@@ -385,7 +383,7 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 ss << "1 2.3 4";
                 CustomImporter importer(ss);
                 std::unique_ptr<StructureValue> value;
-                CHECK_NOTHROW(value = with(root, importer));
+                CHECK_NOTHROW(value = build((Structure &)root, importer));
                 CHECK(getValue(value) == "{1, {2.300000}, 4}");
                 CHECK(importer.onEnterBlockCount == 2);
                 CHECK(importer.onExitBlockCount == 2);

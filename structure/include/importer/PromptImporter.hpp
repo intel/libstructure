@@ -36,7 +36,7 @@ public:
     std::unique_ptr<StructureValue> import(const GenericField &f, const std::string &path) override
     {
         std::string val = read(path + " = ");
-        return f.with(val.c_str());
+        return f.genericWith(val.c_str());
     }
 
 private:

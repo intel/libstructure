@@ -14,7 +14,7 @@ int main(void)
         strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
                     strc::UInt32("Counter"));
 
-    auto value = strc::with(root, {{"1.2", "3.4"}, "2"});
+    auto value = root.with({{"1.2", "3.4"}, "2"});
 
     binary_export::Visitor::Output out;
     binary_export::write(out, value);

@@ -5,8 +5,8 @@
 #include "type/Structure.hpp"
 #include "value/BlockValue.hpp"
 #include "value/StructureValue.hpp"
-#include "ValueBuilder.hpp"
 #include "ValueImporter.hpp"
+#include "ValueInitializer.hpp"
 
 #include <vector>
 #include <utility>
@@ -44,11 +44,13 @@ public:
 
     /** Create a BlockValue of the block's type.
      *
-     * Specialized blocks can override this method; it will be called by Block::genericWith().
-     *
-     * @see Structure::with().
+     * @see Structure::build().
      */
-    virtual BlockValue with(ValueBuilder builder) const;
+    virtual BlockValue build(ValueImporter &importer, const std::string &path = "") const;
+    /** Create a BlockValue of the block's type.
+     */
+    BlockValue with(ValueInitializer initializer) const;
+
     std::string getTypeName() const override { return "Block"; }
 
 protected:
@@ -60,9 +62,8 @@ protected:
     }
 
 private:
-    std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override;
-    std::unique_ptr<StructureValue> doWith(ValueImporter &importer,
-                                           std::string path) const override;
+    std::unique_ptr<StructureValue> doBuild(ValueImporter &importer,
+                                            const std::string &path) const override;
 
     template <class T>
     void addField(T &&child)

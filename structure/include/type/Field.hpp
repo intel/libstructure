@@ -2,7 +2,6 @@
 
 #include "type/GenericField.hpp"
 #include "value/FieldValue.hpp"
-#include "ValueBuilder.hpp"
 #include "ValueImporter.hpp"
 #include "Exception.hpp"
 
@@ -32,14 +31,9 @@ public:
     using Storage = _Storage;
 
     /** @see Structure::with() */
-    ThisValue with(ValueBuilder builder) const
+    ThisValue with(const std::string &value) const
     {
-        if (!builder.atom) {
-            throw ValueStructureMismatch(this->getName(),
-                                         "Expected a " + getTypeName() + ", got a Block.");
-        }
-
-        return {*static_cast<const Derived *>(this), builder.atomicValue};
+        return {*static_cast<const Derived *>(this), value};
     }
 
     /** @returns A parsed value.
@@ -57,12 +51,14 @@ public:
 
     std::string getTypeName() const override { return Derived::typeToString(); }
 
-private:
-    std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const override
+    std::unique_ptr<StructureValue> genericWith(const std::string &value) const override
     {
-        return std::make_unique<ThisValue>(with(builder));
+        return std::make_unique<ThisValue>(with(value));
     }
-    std::unique_ptr<StructureValue> doWith(ValueImporter &importer, std::string path) const override
+
+private:
+    std::unique_ptr<StructureValue> doBuild(ValueImporter &importer,
+                                            const std::string &path) const override
     {
         return importer.import(*this, path);
     }

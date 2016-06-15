@@ -22,12 +22,10 @@ const std::map<std::string, std::string> &Structure::getAttributes()
 {
     return mAttributes;
 }
-std::unique_ptr<StructureValue> Structure::with(ValueBuilder builder) const
+
+std::unique_ptr<StructureValue> Structure::build(ValueImporter &importer,
+                                                 const std::string &path) const
 {
-    return genericWith(builder);
-};
-std::unique_ptr<StructureValue> Structure::with(ValueImporter &importer, std::string path) const
-{
-    return doWith(importer, path + "/" + getName());
+    return doBuild(importer, path + "/" + getName());
 }
 }

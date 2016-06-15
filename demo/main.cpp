@@ -1,8 +1,6 @@
 #include "functions.hpp"
 #include "client/stock.hpp"
 #include "export.hpp"
-#include "ValueImporter.hpp"
-#include "importer/MapImporter.hpp"
 
 #include <iostream>
 #include <exception>
@@ -20,12 +18,7 @@ int main(void)
 
     std::cout << std::endl;
 
-    std::map<std::string, std::string> values = {{"/MyData/Complex/Real", "1.2"},
-                                                 {"/MyData/Complex/Imaginary", "3.4"},
-                                                 {"/MyData/Counter", "5"},
-                                                 {"/MyData/Fixed", "0.12345"}};
-    auto importer = strc::MapImporter(values);
-    auto value = strc::with(root, importer);
+    auto value = root.with({{"1.2", "3.4"}, "5", "0.1"});
 
     std::cout << std::endl;
 

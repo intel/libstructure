@@ -2,8 +2,6 @@
 
 #include "structure_export.h"
 
-#include "ValueBuilder.hpp"
-
 #include <initializer_list>
 #include <string>
 #include <map>
@@ -59,17 +57,6 @@ public:
     /** Get the map of attributes. */
     const std::map<std::string, std::string> &getAttributes();
 
-    /** Create a StructureValue of the Structure's type.
-     *
-     * This is analogous to instantiating a class. Usage example:
-     *
-     * @code
-     * auto myValue = myStructure.with({"1", "2", {"3.4", "5"}});
-     * @endcode
-     *
-     * @param[in] builder The values; see ValueBuilder.
-     */
-    std::unique_ptr<StructureValue> with(ValueBuilder builder) const;
     /** Create a StructureValue from a value importer
      *
      * Usage exemple:
@@ -86,12 +73,12 @@ public:
      * @param path: The path of the field to be imported. Internal context - users of the Structure
      *              class should not override the default argument value.
      */
-    std::unique_ptr<StructureValue> with(ValueImporter &importer, std::string path = "") const;
+    std::unique_ptr<StructureValue> build(ValueImporter &importer,
+                                          const std::string &path = "") const;
 
 private:
-    virtual std::unique_ptr<StructureValue> genericWith(ValueBuilder builder) const = 0;
-    virtual std::unique_ptr<StructureValue> doWith(ValueImporter &importer,
-                                                   std::string path) const = 0;
+    virtual std::unique_ptr<StructureValue> doBuild(ValueImporter &importer,
+                                                    const std::string &path) const = 0;
     std::string mName;
     std::map<std::string, std::string> mAttributes;
 };

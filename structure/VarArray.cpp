@@ -3,19 +3,29 @@
 
 namespace structure
 {
-BlockValue VarArray::with(ValueBuilder builder) const
+BlockValue VarArray::build(ValueImporter &importer, const std::string &path) const
 {
-    if (builder.atom) {
-        throw ValueStructureMismatch(getName(), "Expected a VarArray (or Block), got an atom");
+    BlockValue b(*this);
+    importer.onEnterBlock(*this);
+
+    try {
+        while (true) {
+            b.addValue(getFields()[0].get().build(importer, path));
+        }
+    } catch (NotEnoughValues & /*ex*/) {
+        // VarArray is supposed to consume all values in Block
+        // The only way to detect that all the values have been consumed is to catch
+        // a NotEnoughValue exception
     }
 
-    BlockValue b(*this);
-    for (auto &entry : builder.listValue) {
-        // A VarArray type only contains one field but a value can contain
-        // multiple instances of that field type.
-        b.addValue(getFields()[0].get().with(entry));
-    }
+    importer.onExitBlock(*this);
     return b;
+}
+
+std::unique_ptr<StructureValue> VarArray::doBuild(ValueImporter &importer,
+                                                  const std::string &path) const
+{
+    return std::make_unique<BlockValue>(build(importer, path));
 }
 
 std::string VarArray::getTypeName() const
