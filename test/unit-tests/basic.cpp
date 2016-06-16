@@ -368,5 +368,28 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 CHECK_THROWS(with(root, importer));
             }
         }
+        GIVEN ("A custom Importer") {
+            THEN ("onEnterBlock and onExitBlock should be called for each block") {
+                struct CustomImporter : StreamImporter<>
+                {
+                    int onEnterBlockCount = 0;
+                    int onExitBlockCount = 0;
+
+                    CustomImporter(std::istream &input) : StreamImporter<>(input) {}
+
+                    void onEnterBlock(const Block &) override { onEnterBlockCount++; }
+
+                    void onExitBlock(const Block &) override { onExitBlockCount++; }
+                };
+
+                ss << "1 2.3 4";
+                CustomImporter importer(ss);
+                std::unique_ptr<StructureValue> value;
+                CHECK_NOTHROW(value = with(root, importer));
+                CHECK(getValue(value) == "{1, {2.300000}, 4}");
+                CHECK(importer.onEnterBlockCount == 2);
+                CHECK(importer.onExitBlockCount == 2);
+            }
+        }
     }
 }

@@ -27,5 +27,18 @@ public:
      */
     virtual std::unique_ptr<StructureValue> import(const GenericField &field,
                                                    const std::string &path) = 0;
+
+    // We need to write the name of the parameter in the declaration, so that Doxygen will know it
+    // but in the same time, that would trigger an 'unused parameter' warning.
+    /** Notify the importer that the caller wants to begin importing a sub-block
+     *
+     * @param[in] block The type of block being imported
+     */
+    virtual void onEnterBlock(const Block &block) { (void)block; }
+    /** Notify the importer that the caller is done importing a sub-block
+     *
+     * @param[in] block The type of block being imported
+     */
+    virtual void onExitBlock(const Block &block) { (void)block; }
 };
 }
