@@ -6,6 +6,7 @@
 
 #include <initializer_list>
 #include <string>
+#include <list>
 
 namespace structure
 {

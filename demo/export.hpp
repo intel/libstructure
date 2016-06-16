@@ -4,6 +4,7 @@
 #include "Visitor.hpp"
 
 #include <sstream>
+#include <list>
 
 template <typename T>
 struct ExportTraits
