@@ -2,6 +2,7 @@
 
 #include "type/GenericField.hpp"
 #include "value/FieldValue.hpp"
+#include "value/GenericFieldValue.hpp"
 #include "ValueImporter.hpp"
 #include "Exception.hpp"
 
@@ -30,10 +31,9 @@ public:
 
     using Storage = _Storage;
 
-    /** @see Structure::with() */
-    ThisValue with(const std::string &value) const
+    std::unique_ptr<GenericFieldValue> with(const std::string &value) const override
     {
-        return {*static_cast<const Derived *>(this), value};
+        return std::make_unique<ThisValue>(*static_cast<const Derived *>(this), value);
     }
 
     /** @returns A parsed value.
@@ -50,11 +50,6 @@ public:
     }
 
     std::string getTypeName() const override { return Derived::typeToString(); }
-
-    std::unique_ptr<StructureValue> genericWith(const std::string &value) const override
-    {
-        return std::make_unique<ThisValue>(with(value));
-    }
 
 private:
     std::unique_ptr<StructureValue> doBuild(ValueImporter &importer,

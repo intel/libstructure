@@ -50,9 +50,9 @@ TEST_CASE("GetName", "[structure][value][name]")
     CHECK(Float("name").getName() == "name");
     CHECK(Int32("name").getName() == "name");
 
-    CHECK(Block("name").with({}).getName() == "name");
-    CHECK(Float("name").with("42").getName() == "name");
-    CHECK(Int32("name").with("42").getName() == "name");
+    CHECK(Block("name").with({})->getName() == "name");
+    CHECK(Float("name").with("42")->getName() == "name");
+    CHECK(Int32("name").with("42")->getName() == "name");
 }
 
 TEST_CASE("Integer basic tests", "[structure][integer]")
@@ -116,28 +116,28 @@ TEST_CASE("Get value", "[value]")
 {
     SECTION ("Int32") {
         Int32 structure("structure");
-        CHECK(structure.with("42").getValue() == "42");
-        CHECK(with(structure, "42").getValue() == "42");
-        CHECK(with(structure, 42).getValue() == "42");
+        CHECK(structure.with("42")->getValue() == "42");
+        CHECK(with(structure, "42")->getValue() == "42");
+        CHECK(with(structure, 42)->getValue() == "42");
     }
     SECTION ("Float") {
         Float structure("structure");
         float f;
 
-        CHECK(convertTo(structure.with("3.14").getValue(), f));
+        CHECK(convertTo(structure.with("3.14")->getValue(), f));
         CHECK(f == Approx(3.14f));
 
-        CHECK(convertTo(with(structure, "3.14").getValue(), f));
+        CHECK(convertTo(with(structure, "3.14")->getValue(), f));
         CHECK(f == Approx(3.14f));
 
-        CHECK(convertTo(with(structure, 3.14f).getValue(), f));
+        CHECK(convertTo(with(structure, 3.14f)->getValue(), f));
         CHECK(f == Approx(3.14f));
     }
     SECTION ("FixedQ") {
         Q16f15 structure("structure");
-        CHECK(structure.with("0.5").getValue() == "16384");
-        CHECK(with(structure, "0.25").getValue() == "8192");
-        CHECK(with(structure, 4096).getValue() == "4096");
+        CHECK(structure.with("0.5")->getValue() == "16384");
+        CHECK(with(structure, "0.25")->getValue() == "8192");
+        CHECK(with(structure, 4096)->getValue() == "4096");
     }
 }
 

@@ -16,7 +16,7 @@ SCENARIO("Binary export", "[export][value][binary]")
         binary_export::Visitor::Output expected = {0xab};
 
         THEN ("Serializing it should produce a 1-byte-long result.") {
-            binary_export::write(actual, value);
+            binary_export::write(actual, *value);
             CHECK(actual == expected);
         }
     }
@@ -31,7 +31,7 @@ SCENARIO("Binary export", "[export][value][binary]")
         };
 
         THEN ("Serializing it should produce a flatten string of bytes.") {
-            binary_export::write(actual, value);
+            binary_export::write(actual, *value);
             CHECK(actual == expected);
         }
     }

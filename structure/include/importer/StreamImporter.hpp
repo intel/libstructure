@@ -41,11 +41,11 @@ class StreamImporter : public ValueImporter
 public:
     StreamImporter(Input &input = std::cin) : mInput(input) {}
 
-    std::unique_ptr<StructureValue> import(const GenericField &f,
-                                           const std::string & /*path*/) override
+    std::unique_ptr<GenericFieldValue> import(const GenericField &f,
+                                              const std::string & /*path*/) override
     {
         std::string val = read();
-        return f.genericWith(val.c_str());
+        return f.with(val.c_str());
     }
 
 private:

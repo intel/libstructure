@@ -24,7 +24,6 @@ public:
                       "The ItemType in a VarArray must be a Structure");
     }
 
-    BlockValue build(ValueImporter &importer, const std::string &path = "") const override;
     std::string getTypeName() const override;
 
 private:

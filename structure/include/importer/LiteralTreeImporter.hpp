@@ -17,8 +17,8 @@ class STRUCTURE_EXPORT LiteralTreeImporter : public ValueImporter
 public:
     LiteralTreeImporter(ValueInitializer initializer);
 
-    std::unique_ptr<StructureValue> import(const GenericField &field,
-                                           const std::string &path) override;
+    std::unique_ptr<GenericFieldValue> import(const GenericField &field,
+                                              const std::string &path) override;
 
     void onEnterBlock(const Block &block) override;
 

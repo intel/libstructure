@@ -42,14 +42,8 @@ public:
     /** @returns const handles to the fields contained in the block */
     virtual std::vector<StructureRef> getFields() const;
 
-    /** Create a BlockValue of the block's type.
-     *
-     * @see Structure::build().
-     */
-    virtual BlockValue build(ValueImporter &importer, const std::string &path = "") const;
-    /** Create a BlockValue of the block's type.
-     */
-    BlockValue with(ValueInitializer initializer) const;
+    /** Create a BlockValue of the block's type. */
+    std::unique_ptr<StructureValue> with(ValueInitializer initializer) const;
 
     std::string getTypeName() const override { return "Block"; }
 

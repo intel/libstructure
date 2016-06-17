@@ -17,7 +17,7 @@ int main(void)
     auto value = root.with({{"1.2", "3.4"}, "2"});
 
     binary_export::Visitor::Output out;
-    binary_export::write(out, value);
+    binary_export::write(out, *value);
 
     std::cout.write((char *)out.data(), out.size());
 

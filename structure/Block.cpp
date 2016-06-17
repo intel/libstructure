@@ -22,21 +22,7 @@ std::vector<Block::StructureRef> Block::getFields() const
     return result;
 }
 
-BlockValue Block::build(ValueImporter &importer, const std::string &path) const
-{
-
-    BlockValue value(*this);
-
-    importer.onEnterBlock(*this);
-    for (const auto &field : getFields()) {
-        value.addValue(field.get().build(importer, path + "/" + getName()));
-    }
-    importer.onExitBlock(*this);
-
-    return value;
-}
-
-BlockValue Block::with(ValueInitializer initializer) const
+std::unique_ptr<StructureValue> Block::with(ValueInitializer initializer) const
 {
     LiteralTreeImporter builder(initializer);
     return build(builder);

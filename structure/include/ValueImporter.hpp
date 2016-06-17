@@ -11,6 +11,7 @@ namespace structure
 class GenericField;
 class StructureValue;
 class Block;
+class GenericFieldValue;
 
 /**
  * @defgroup ValueImporter Allow to create StructureValue from Structure and formatted values
@@ -31,8 +32,8 @@ public:
      *
      * @return     The value coresponding to the field
      */
-    virtual std::unique_ptr<StructureValue> import(const GenericField &field,
-                                                   const std::string &path) = 0;
+    virtual std::unique_ptr<GenericFieldValue> import(const GenericField &field,
+                                                      const std::string &path) = 0;
 
     // We need to write the name of the parameter in the declaration, so that Doxygen will know it
     // but in the same time, that would trigger an 'unused parameter' warning.

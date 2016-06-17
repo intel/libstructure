@@ -1,6 +1,7 @@
 #include "importer/LiteralTreeImporter.hpp"
 #include "type/GenericField.hpp"
 #include "type/Block.hpp"
+#include "value/GenericFieldValue.hpp"
 #include "Exception.hpp"
 
 namespace structure
@@ -13,13 +14,13 @@ LiteralTreeImporter::LiteralTreeImporter(ValueInitializer initializer)
     iteratorEnd = initializerRoot.end();
 }
 
-std::unique_ptr<StructureValue> LiteralTreeImporter::import(const GenericField &field,
-                                                            const std::string & /*path*/) try {
+std::unique_ptr<GenericFieldValue> LiteralTreeImporter::import(const GenericField &field,
+                                                               const std::string & /*path*/) try {
     if (not isIteratorValid()) {
         throw NotEnoughValues(field.getName());
     }
 
-    auto value = field.genericWith(iterator->getAtomicValue());
+    auto value = field.with(iterator->getAtomicValue());
     ++iterator;
 
     return value;

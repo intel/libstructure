@@ -304,14 +304,9 @@ StructureValue &getChild(const std::unique_ptr<StructureValue> &value, std::stri
     return getChild(*value, path);
 }
 
-BlockValue with(const Block &block, ValueInitializer initializer)
+std::unique_ptr<StructureValue> with(const Block &block, ValueInitializer initializer)
 {
     return block.with(initializer);
-}
-
-BlockValue build(const Block &block, ValueImporter &importer)
-{
-    return block.build(importer);
 }
 
 std::unique_ptr<StructureValue> build(const Structure &structure, ValueImporter &importer)

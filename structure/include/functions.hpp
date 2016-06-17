@@ -108,15 +108,13 @@ STRUCTURE_EXPORT StructureValue &getChild(const StructureValue &value, std::stri
 STRUCTURE_EXPORT StructureValue &getChild(const std::unique_ptr<StructureValue> &value,
                                           std::string path);
 
-/** Equivalent to Block::build(ValueImporter &) */
-STRUCTURE_EXPORT BlockValue build(const Block &block, ValueImporter &importer);
-
 /** Equivalent to Structure::build(ValueImporter &) */
 STRUCTURE_EXPORT std::unique_ptr<StructureValue> build(const Structure &structure,
                                                        ValueImporter &importer);
 
 /** Equivalent to Block::with(ValueInitializer) */
-STRUCTURE_EXPORT BlockValue with(const Block &block, ValueInitializer initializer);
+STRUCTURE_EXPORT std::unique_ptr<StructureValue> with(const Block &block,
+                                                      ValueInitializer initializer);
 
 /** Equivalent to constructing a FieldValue
  *
@@ -124,20 +122,20 @@ STRUCTURE_EXPORT BlockValue with(const Block &block, ValueInitializer initialize
  * @param value The actual (in-memory) value
  */
 template <class FieldType>
-FieldValue<FieldType> with(FieldType fieldType, typename FieldType::Storage value)
+std::unique_ptr<FieldValue<FieldType>> with(FieldType fieldType, typename FieldType::Storage value)
 {
     static_assert(is_structure<FieldType>::value,
                   "The FieldType template type must be a Structure");
-    return {fieldType, value};
+    return std::make_unique<FieldValue<FieldType>>(fieldType, value);
 }
 /** Same as structure::with(FieldType, FieldType::Storage) but constructed with string
  * representation */
 template <class FieldType>
-FieldValue<FieldType> with(FieldType fieldType, const std::string &value)
+std::unique_ptr<FieldValue<FieldType>> with(FieldType fieldType, const std::string &value)
 {
     static_assert(is_structure<FieldType>::value,
                   "The FieldType template type must be a Structure");
-    return {fieldType, value};
+    return std::make_unique<FieldValue<FieldType>>(fieldType, value);
 }
 /** @} */
 }

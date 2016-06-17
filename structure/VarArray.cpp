@@ -3,14 +3,16 @@
 
 namespace structure
 {
-BlockValue VarArray::build(ValueImporter &importer, const std::string &path) const
+
+std::unique_ptr<StructureValue> VarArray::doBuild(ValueImporter &importer,
+                                                  const std::string &path) const
 {
-    BlockValue b(*this);
+    auto b = std::make_unique<BlockValue>(*this);
     importer.onEnterBlock(*this);
 
     try {
         while (true) {
-            b.addValue(getFields()[0].get().build(importer, path));
+            b->addValue(getFields()[0].get().build(importer, path));
         }
     } catch (NotEnoughValues & /*ex*/) {
         // VarArray is supposed to consume all values in Block
@@ -19,13 +21,7 @@ BlockValue VarArray::build(ValueImporter &importer, const std::string &path) con
     }
 
     importer.onExitBlock(*this);
-    return b;
-}
-
-std::unique_ptr<StructureValue> VarArray::doBuild(ValueImporter &importer,
-                                                  const std::string &path) const
-{
-    return std::make_unique<BlockValue>(build(importer, path));
+    return std::move(b);
 }
 
 std::string VarArray::getTypeName() const
