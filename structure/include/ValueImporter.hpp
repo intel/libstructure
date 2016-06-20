@@ -1,6 +1,7 @@
 #pragma once
 
 #include "structure_export.h"
+#include "Exception.hpp"
 
 #include <string>
 #include <memory>
@@ -24,6 +25,18 @@ class GenericFieldValue;
 class STRUCTURE_EXPORT ValueImporter
 {
 public:
+    struct WrongType : StructureException
+    {
+        WrongType(const std::string &required, const std::string &actual)
+            : StructureException("Required : \"" + required + "\", Actual : \"" + actual + "\"."),
+              required(required), actual(actual)
+        {
+        }
+
+        const std::string required;
+        const std::string actual;
+    };
+
     virtual ~ValueImporter() = default;
 
     /**

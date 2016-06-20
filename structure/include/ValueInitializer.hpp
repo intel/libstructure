@@ -1,59 +1,61 @@
 #pragma once
 
-#include "Exception.hpp"
+#include "structure_export.h"
+#include "ValueImporter.hpp"
 
-#include <list>
-#include <string>
+#include <initializer_list>
+#include <memory>
 
 namespace structure
 {
 
-class ValueInitializer
+class GenericField;
+class GenericFieldValue;
+
+class STRUCTURE_EXPORT ValueInitializer : public ValueImporter
 {
-
 public:
-    struct WrongType : StructureException
-    {
-        WrongType(const std::string &required, const std::string &actual)
-            : StructureException("Required : \"" + required + "\", Actual : \"" + actual + "\"."),
-              required(required), actual(actual)
-        {
-        }
+    /** Constructs a ValueInitializer from a string literal
+     *
+     * It should coincide with a Field.
+     */
+    ValueInitializer(const char *atomicValue);
 
-        const std::string required;
-        const std::string actual;
-    };
+    /** Constructs a ValueInitializer from an previously-defined importer
+     *
+     * This should coincide with a Block.
+     */
+    ValueInitializer(ValueImporter &importer);
 
-    ValueInitializer(const char *atomicValue) : mAtomicValue(atomicValue), mIsAtom(true) {}
+    /** Constructs a ValueInitializer from a recursive initializer list
+     *
+     * This should coincide with a Block.
+     *
+     * Example 1:
+     * @code
+     * PromptImporter<> importer;
+     * Block structure("b1", Block("b2", ...), UInt8("u"), UInt8("v"));
+     * structure.with({importer, "1", "2"});
+     * @endcode
+     *
+     * Example 2:
+     * @code
+     * Block structure("b1", Block("b2", ...), UInt8("u"), UInt8("v"));
+     * ValueInitializer value = {{"1", "2"}, "3", "4"};
+     * structure.with(value);
+     * @endcode
+     */
+    ValueInitializer(std::initializer_list<ValueInitializer> list);
 
-    ValueInitializer(std::initializer_list<ValueInitializer> list) : mIsAtom(false)
-    {
-        for (auto value : list) {
-            mListValue.push_back(value);
-        }
-    }
-
-    const std::string &getAtomicValue() const
-    {
-        if (not mIsAtom) {
-            throw WrongType("atom", "Block");
-        }
-
-        return mAtomicValue;
-    }
-
-    const std::list<ValueInitializer> &getListValue() const
-    {
-        if (mIsAtom) {
-            throw WrongType("Block", "atom");
-        }
-
-        return mListValue;
-    }
+    std::unique_ptr<GenericFieldValue> import(const GenericField &field,
+                                              const std::string &path) override;
+    void onEnterBlock(const Block &block) override;
+    void onExitBlock(const Block &block) override;
 
 private:
-    const std::string mAtomicValue;
-    std::list<ValueInitializer> mListValue;
-    bool mIsAtom;
+    // This class needs to be copiable because instances will be copied from initializer_list to
+    // list when they are part of a ListImporter. (Copied and not moved because items of a
+    // initializer_list can't be moved). That's why we use a shared_ptr.
+    std::shared_ptr<ValueImporter> mImporter;
 };
 }

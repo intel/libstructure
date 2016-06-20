@@ -1,7 +1,6 @@
 #include "type/Block.hpp"
 #include "Visitor.hpp"
 #include "Exception.hpp"
-#include "importer/LiteralTreeImporter.hpp"
 
 #include <algorithm>
 #include <iterator>
@@ -24,8 +23,7 @@ std::vector<Block::StructureRef> Block::getFields() const
 
 std::unique_ptr<StructureValue> Block::with(ValueInitializer initializer) const
 {
-    LiteralTreeImporter builder(initializer);
-    return build(builder);
+    return build(initializer);
 }
 
 std::unique_ptr<StructureValue> Block::doBuild(ValueImporter &importer,

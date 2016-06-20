@@ -1,6 +1,7 @@
 #include "functions.hpp"
 #include "client/stock.hpp"
 #include "export.hpp"
+#include "importer/PromptImporter.hpp"
 
 #include <iostream>
 #include <exception>
@@ -18,7 +19,8 @@ int main(void)
 
     std::cout << std::endl;
 
-    auto value = root.with({{"1.2", "3.4"}, "5", "0.1"});
+    strc::PromptImporter<> importer;
+    auto value = root.with({importer, "5", "0.1"});
 
     std::cout << std::endl;
 

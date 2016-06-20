@@ -204,19 +204,6 @@ SCENARIO("Apply", "[apply][value][structure]")
     }
 }
 
-TEST_CASE("Value Builder", "[value]")
-{
-    SECTION ("AtomicValue") {
-        ValueInitializer builder("atom");
-        CHECK(builder.getAtomicValue() == "atom");
-    }
-
-    SECTION ("ListValue") {
-        ValueInitializer builder({"atom1", "atom2"});
-        CHECK(builder.getListValue().size() == 2);
-    }
-}
-
 SCENARIO("Constructing erroneous values", "[value][failure]")
 {
     auto root =
