@@ -60,7 +60,7 @@ class NotEnoughValues : public ValueStructureMismatch
 {
 public:
     NotEnoughValues(const std::string &self)
-        : ValueStructureMismatch(self, "Not enought value in initializer.")
+        : ValueStructureMismatch(self, "Not enough values in initializer.")
     {
     }
 };
