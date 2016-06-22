@@ -55,7 +55,9 @@ class NewFloatingPoint
                   "The specified storage is not a floating point type.");
 
 private:
-    using Base = detail::FieldCrtp<NewFloatingPoint<_Storage>, FloatingPoint, _Storage>;
+    using This = NewFloatingPoint<_Storage>;
+    using ThisValue = FieldValue<This>;
+    using Base = detail::FieldCrtp<This, FloatingPoint, _Storage>;
 
 public:
     using Base::Base;

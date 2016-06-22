@@ -72,8 +72,9 @@ class NewFixedQ
                   "The specified has a different signedness than the specified one.");
 
 private:
-    using Base =
-        detail::FieldCrtp<NewFixedQ<size, fractional, isSigned, _Storage>, FixedQ, _Storage>;
+    using This = NewFixedQ<size, fractional, isSigned, _Storage>;
+    using ThisValue = FieldValue<This>;
+    using Base = detail::FieldCrtp<This, FixedQ, _Storage>;
 
     static constexpr double mDenominator{1UL << fractional};
 

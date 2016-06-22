@@ -44,7 +44,9 @@ class NewInteger : public detail::FieldCrtp<NewInteger<size, isSigned, _Storage>
                   "The specified has a different signedness than the specified one.");
 
 private:
-    using Base = detail::FieldCrtp<NewInteger<size, isSigned, _Storage>, Integer, _Storage>;
+    using This = NewInteger<size, isSigned, _Storage>;
+    using ThisValue = FieldValue<This>;
+    using Base = detail::FieldCrtp<This, Integer, _Storage>;
 
 public:
     using Base::Base;
