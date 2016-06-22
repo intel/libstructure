@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ValueImporter.hpp"
+#include "type/GenericField.hpp"
 
 #include <map>
 
