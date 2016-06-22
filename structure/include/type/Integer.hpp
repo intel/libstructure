@@ -61,6 +61,8 @@ public:
 /** @addtogroup StockTypes
  * @{
  */
+using UInt64 = NewInteger<64, false, uint64_t>;
+using Int64 = NewInteger<64, true, int64_t>;
 using UInt32 = NewInteger<32, false, uint32_t>;
 using Int32 = NewInteger<32, true, int32_t>;
 using UInt16 = NewInteger<16, false, uint16_t>;

@@ -27,6 +27,8 @@ TEST_CASE("Structure and Value creation", "[structure][value]")
     CHECK_NOTHROW(Int16("name"));
     CHECK_NOTHROW(UInt32("name"));
     CHECK_NOTHROW(Int32("name"));
+    CHECK_NOTHROW(UInt64("name"));
+    CHECK_NOTHROW(Int64("name"));
     CHECK_NOTHROW(Q16f15("name"));
     CHECK_NOTHROW(VarArray("name", UInt8("item name")));
     CHECK_NOTHROW(VarArray("name", Block("item name", UInt8("subitem name"))));
@@ -41,6 +43,8 @@ TEST_CASE("Structure and Value creation", "[structure][value]")
     CHECK_NOTHROW(Int16("name").with("42"));
     CHECK_NOTHROW(UInt32("name").with("42"));
     CHECK_NOTHROW(Int32("name").with("42"));
+    CHECK_NOTHROW(UInt64("name").with("42"));
+    CHECK_NOTHROW(Int64("name").with("42"));
     CHECK_NOTHROW(Q16f15("name").with("0.2"));
     CHECK_NOTHROW(VarArray("name", UInt8("item name")).with({"42"}));
     CHECK_NOTHROW(VarArray("name", Block("item name", UInt8("subitem name"))).with({{"42"}}));
