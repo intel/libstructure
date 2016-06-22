@@ -11,7 +11,6 @@ namespace structure
 
 class GenericField;
 class StructureValue;
-class Block;
 class GenericFieldValue;
 
 /**
@@ -52,13 +51,13 @@ public:
     // but in the same time, that would trigger an 'unused parameter' warning.
     /** Notify the importer that the caller wants to begin importing a sub-block
      *
-     * @param[in] block The type of block being imported
+     * @param[in] block The path of the block being imported
      */
-    virtual void onEnterBlock(const Block &block) { (void)block; }
+    virtual void onEnterBlock(const std::string &block) { (void)block; }
     /** Notify the importer that the caller is done importing a sub-block
      *
-     * @param[in] block The type of block being imported
+     * @param[in] block The path of the block being imported
      */
-    virtual void onExitBlock(const Block &block) { (void)block; }
+    virtual void onExitBlock(const std::string &block) { (void)block; }
 };
 }

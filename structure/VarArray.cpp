@@ -8,7 +8,7 @@ std::unique_ptr<StructureValue> VarArray::doBuild(ValueImporter &importer,
                                                   const std::string &path) const
 {
     auto b = std::make_unique<BlockValue>(*this);
-    importer.onEnterBlock(*this);
+    importer.onEnterBlock(path);
 
     try {
         while (true) {
@@ -20,7 +20,7 @@ std::unique_ptr<StructureValue> VarArray::doBuild(ValueImporter &importer,
         // a NotEnoughValue exception
     }
 
-    importer.onExitBlock(*this);
+    importer.onExitBlock(path);
     return std::move(b);
 }
 

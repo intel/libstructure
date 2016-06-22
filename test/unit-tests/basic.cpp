@@ -384,9 +384,9 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
 
                     CustomImporter(std::istream &input) : StreamImporter<>(input) {}
 
-                    void onEnterBlock(const Block &) override { onEnterBlockCount++; }
+                    void onEnterBlock(const std::string &) override { onEnterBlockCount++; }
 
-                    void onExitBlock(const Block &) override { onExitBlockCount++; }
+                    void onExitBlock(const std::string &) override { onExitBlockCount++; }
                 };
 
                 ss << "1 2.3 4";

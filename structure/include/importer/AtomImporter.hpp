@@ -22,9 +22,9 @@ public:
         return field.with(mValue);
     }
 
-    void onEnterBlock(const Block &) override { throw WrongType("Block", "Atom"); }
+    void onEnterBlock(const std::string &) override { throw WrongType("Block", "Atom"); }
 
-    void onExitBlock(const Block &) override { throw WrongType("Block", "Atom"); }
+    void onExitBlock(const std::string &) override { throw WrongType("Block", "Atom"); }
 
 private:
     std::string mValue;

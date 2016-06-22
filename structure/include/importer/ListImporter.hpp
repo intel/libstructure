@@ -23,8 +23,8 @@ public:
     std::unique_ptr<GenericFieldValue> import(const GenericField &field,
                                               const std::string &path) override;
 
-    void onEnterBlock(const Block &block) override;
-    void onExitBlock(const Block &block) override;
+    void onEnterBlock(const std::string &block) override;
+    void onExitBlock(const std::string &block) override;
 
 private:
     // This class needs to be copiable because importers will be copied from initializer_list to

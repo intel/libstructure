@@ -32,11 +32,11 @@ std::unique_ptr<StructureValue> Block::doBuild(ValueImporter &importer,
 {
     auto value = std::make_unique<BlockValue>(*this);
 
-    importer.onEnterBlock(*this);
+    importer.onEnterBlock(path);
     for (const auto &field : getFields()) {
         value->addValue(field.get().build(importer, path));
     }
-    importer.onExitBlock(*this);
+    importer.onExitBlock(path);
 
     return std::move(value);
 }

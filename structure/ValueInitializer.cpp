@@ -22,11 +22,11 @@ std::unique_ptr<GenericFieldValue> ValueInitializer::import(const GenericField &
 {
     return mImporter->import(field, path);
 }
-void ValueInitializer::onEnterBlock(const Block &block)
+void ValueInitializer::onEnterBlock(const std::string &block)
 {
     mImporter->onEnterBlock(block);
 }
-void ValueInitializer::onExitBlock(const Block &block)
+void ValueInitializer::onExitBlock(const std::string &block)
 {
     mImporter->onExitBlock(block);
 }

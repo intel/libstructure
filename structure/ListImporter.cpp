@@ -36,7 +36,7 @@ std::unique_ptr<GenericFieldValue> ListImporter::import(const GenericField &fiel
     return result;
 }
 
-void ListImporter::onEnterBlock(const Block &block) try {
+void ListImporter::onEnterBlock(const std::string &block) try {
     if (begin(mImporters) == end(mImporters)) {
         // Special case for empty blocks
         ++mDepth;
@@ -44,7 +44,7 @@ void ListImporter::onEnterBlock(const Block &block) try {
     }
     if (iterator == end(mImporters)) {
         // we have already reached the end of this block. There's no block left to import.
-        throw NotEnoughValues(block.getName());
+        throw NotEnoughValues(block);
     }
 
     ++mDepth;
@@ -54,11 +54,11 @@ void ListImporter::onEnterBlock(const Block &block) try {
         iterator->get()->onEnterBlock(block);
     }
 } catch (ValueInitializer::WrongType &ex) {
-    throw ValueStructureMismatch(block.getName(), "Expected : \"" + ex.required +
-                                                      "\", Actual : \"" + ex.actual + "\".");
+    throw ValueStructureMismatch(block, "Expected : \"" + ex.required + "\", Actual : \"" +
+                                            ex.actual + "\".");
 }
 
-void ListImporter::onExitBlock(const Block &block)
+void ListImporter::onExitBlock(const std::string &block)
 {
     // This would be caused by a programming error in the Block class (or a descendant) calling
     // this method.
@@ -75,7 +75,7 @@ void ListImporter::onExitBlock(const Block &block)
     }
 
     if ((mDepth == 0) and (iterator != end(mImporters))) {
-        throw ValueStructureMismatch(block.getName(), "Exiting a Block with leftover values");
+        throw ValueStructureMismatch(block, "Exiting a Block with leftover values");
     }
 }
 } // namespace structure

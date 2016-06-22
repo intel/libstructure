@@ -22,8 +22,8 @@ public:
         return mImporter.import(field, path);
     }
 
-    void onEnterBlock(const Block &block) override { mImporter.onEnterBlock(block); }
-    void onExitBlock(const Block &block) override { mImporter.onExitBlock(block); }
+    void onEnterBlock(const std::string &block) override { mImporter.onEnterBlock(block); }
+    void onExitBlock(const std::string &block) override { mImporter.onExitBlock(block); }
 
 private:
     ValueImporter &mImporter;

@@ -41,7 +41,7 @@ private:
         using Count = typename Prefix::Storage;
         auto value = std::make_unique<BlockValue>(*this);
 
-        importer.onEnterBlock(*this);                    // Enter the prefixed array block ...
+        importer.onEnterBlock(path);                     // Enter the prefixed array block ...
         auto countField = mPrefix.build(importer, path); // ... starting with the prefix ...
         Count count = 0;
         if (not convertTo(getValue(countField), count)) {
@@ -53,13 +53,13 @@ private:
 
         // FIXME: this block's type can't be *this
         auto arrayValue = std::make_unique<BlockValue>(*this);
-        importer.onEnterBlock(*this); // ... followed by yet another block
+        importer.onEnterBlock(path); // ... followed by yet another block
         for (Count i = 0; i < count; ++i) {
             arrayValue->addValue(
                 getFields()[0].get().build(importer, path + "/" + std::to_string(i)));
         }
-        importer.onExitBlock(*this);
-        importer.onExitBlock(*this);
+        importer.onExitBlock(path);
+        importer.onExitBlock(path);
 
         value->addValue(std::move(arrayValue));
         return std::move(value);
