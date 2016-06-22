@@ -315,7 +315,7 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 ss << "1 2.3 4";
                 auto importer = StreamImporter<>(ss);
                 std::unique_ptr<StructureValue> value;
-                CHECK_NOTHROW(value = build((Structure &)root, importer));
+                CHECK_NOTHROW(value = build(root, importer));
                 CHECK(getValue(value) == "{1, {2.300000}, 4}");
             }
             THEN ("Creating a value from erroneous input should throw.") {
@@ -335,7 +335,7 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 ss << "1 2.3 4";
                 auto importer = PromptImporter<>(ss, null);
                 std::unique_ptr<StructureValue> value;
-                CHECK_NOTHROW(value = build((Structure &)root, importer));
+                CHECK_NOTHROW(value = build(root, importer));
                 CHECK(getValue(value) == "{1, {2.300000}, 4}");
             }
             THEN ("Creating a value from erroneous input should throw.") {
@@ -357,7 +357,7 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 };
                 auto importer = MapImporter(values);
                 std::unique_ptr<StructureValue> value;
-                CHECK_NOTHROW(value = build((Structure &)root, importer));
+                CHECK_NOTHROW(value = build(root, importer));
                 CHECK(getValue(value) == "{1, {2.300000}, 4}");
             }
             THEN ("Creating a value from erroneous input should throw.") {
@@ -392,7 +392,7 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                 ss << "1 2.3 4";
                 CustomImporter importer(ss);
                 std::unique_ptr<StructureValue> value;
-                CHECK_NOTHROW(value = build((Structure &)root, importer));
+                CHECK_NOTHROW(value = build(root, importer));
                 CHECK(getValue(value) == "{1, {2.300000}, 4}");
                 CHECK(importer.onEnterBlockCount == 2);
                 CHECK(importer.onExitBlockCount == 2);
