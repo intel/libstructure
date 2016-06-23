@@ -1,5 +1,7 @@
 add_executable(libstructureUnitTest
-               basic.cpp)
+               basic.cpp
+               export.cpp
+               import.cpp)
 
 target_link_libraries(libstructureUnitTest
                       PRIVATE structure catch)
