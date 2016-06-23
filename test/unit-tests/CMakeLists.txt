@@ -1,5 +1,6 @@
 add_executable(libstructureUnitTest
                basic.cpp
+               attributes.cpp
                export.cpp
                import.cpp)
 
