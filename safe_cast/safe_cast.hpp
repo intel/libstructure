@@ -101,7 +101,7 @@ To safe_cast(From from, typename std::enable_if<std::is_floating_point<To>::valu
  * @throws CastError if not possible
  */
 template <class To>
-To safe_cast(const std::string &from) throw(std::range_error)
+To safe_cast(const std::string &from)
 {
     To to;
     if (not convertTo(from, to)) {
