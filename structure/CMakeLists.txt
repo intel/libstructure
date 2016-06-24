@@ -10,6 +10,7 @@ add_library(structure SHARED
 
 target_include_directories(structure
     PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/convert)
+target_link_libraries(structure safe_cast)
 
 include(GenerateExportHeader)
 generate_export_header(structure)
