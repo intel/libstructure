@@ -219,7 +219,7 @@ saving a restoring structures also apply to structured values.
 
 <b>Introductory thoughts:</b>
 
-- “Metadata” refers to any key/value pair attribute of a node in the structure tree that goes beyond
+- “Metadata” refers to any key/value pair attached to a node in the structure tree that goes beyond
   the scope of data type and structure definition/description as covered by this requirements
   documentation.
 

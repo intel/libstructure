@@ -13,14 +13,14 @@ std::string Structure::getName() const
     return mName;
 }
 
-void Structure::setAttribute(std::string key, std::string value)
+void Structure::setMetadata(std::string key, std::string value)
 {
-    mAttributes[key] = value;
+    mMetadata[key] = value;
 }
 
-const std::map<std::string, std::string> &Structure::getAttributes()
+const std::map<std::string, std::string> &Structure::getMetadata()
 {
-    return mAttributes;
+    return mMetadata;
 }
 
 std::unique_ptr<StructureValue> Structure::build(ValueImporter &importer,

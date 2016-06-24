@@ -224,15 +224,15 @@ SCENARIO("Constructing erroneous values", "[value][failure]")
     }
 }
 
-TEST_CASE("Attributes", "[attributes]")
+TEST_CASE("Metadatas", "[metadata]")
 {
     Block root("root");
-    root.setAttribute("attr", "true");
-    CHECK(root.getAttributes().size() == 1);
-    root.setAttribute("attr", "false");
-    CHECK(root.getAttributes().size() == 1);
-    root.setAttribute("other", "other");
-    CHECK(root.getAttributes().size() == 2);
+    root.setMetadata("attr", "true");
+    CHECK(root.getMetadata().size() == 1);
+    root.setMetadata("attr", "false");
+    CHECK(root.getMetadata().size() == 1);
+    root.setMetadata("other", "other");
+    CHECK(root.getMetadata().size() == 2);
 }
 
 TEST_CASE("BlockStructure", "[structure][block]")

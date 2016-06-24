@@ -18,8 +18,8 @@ class ValueImporter;
  *
  * This class represents any structure (field, block or combination of those). A Structure has a
  * name (the name with which it is referred to) and a type name (the type of structure it is);
- * see examples below. A Structure may also have arbitrary attributes. The definition of those
- * attributes belongs to the user and constitutes a protocol agreement between the producer and the
+ * see examples below. A Structure may also have arbitrary metadata. The definition of this
+ * metadata belongs to the user and constitutes a protocol agreement between the producer and the
  * consumer of the structure. A Structured Value (structure::StructureValue) can be created based on
  * a Structure.
  *
@@ -52,10 +52,10 @@ public:
     /** Return the structure's type name; see the main description */
     virtual std::string getTypeName() const = 0;
 
-    /** Set an arbitrary attribute. */
-    void setAttribute(std::string key, std::string value = "");
-    /** Get the map of attributes. */
-    const std::map<std::string, std::string> &getAttributes();
+    /** Set an arbitrary metadata. */
+    void setMetadata(std::string key, std::string value = "");
+    /** Get the map of metadata. */
+    const std::map<std::string, std::string> &getMetadata();
 
     /** Create a StructureValue from a value importer
      *
@@ -80,7 +80,7 @@ private:
     virtual std::unique_ptr<StructureValue> doBuild(ValueImporter &importer,
                                                     const std::string &path) const = 0;
     std::string mName;
-    std::map<std::string, std::string> mAttributes;
+    std::map<std::string, std::string> mMetadata;
 };
 
 /** Helper type trait for checking that a type is a Structure
