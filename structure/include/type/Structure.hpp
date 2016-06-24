@@ -2,6 +2,8 @@
 
 #include "structure_export.h"
 
+#include "attributes/Description.hpp"
+
 #include <initializer_list>
 #include <string>
 #include <map>
@@ -17,17 +19,17 @@ class ValueImporter;
 /** Base class for all structure types.
  *
  * This class represents any structure (field, block or combination of those). A Structure has a
- * name (the name with which it is referred to) and a type name (the type of structure it is);
- * see examples below. A Structure may also have arbitrary metadata. The definition of this
- * metadata belongs to the user and constitutes a protocol agreement between the producer and the
- * consumer of the structure. A Structured Value (structure::StructureValue) can be created based on
- * a Structure.
+ * type name (the type of structure it is); it also has well-known attributes, such as a
+ * description. See examples below. A Structure may also have arbitrary (free-form) metadata. The
+ * definition of this metadata belongs to the user and constitutes a protocol agreement between
+ * the producer and the consumer of the structure. A Structured Value (structure::StructureValue)
+ * can be created based on a Structure.
  *
  * To better understand what the name and the type name are, consider the following C code:
  *
  * @code
  * struct MyStruct {
- *     int foo;
+ *     int foo; //< This is a Description (a well-known attributes).
  *     char bar;
  * };
  * @endcode
@@ -49,6 +51,8 @@ public:
 
     /** Return the structure's name; see the main description. */
     std::string getName() const;
+    /** Return the structure's description; see the main description. */
+    virtual std::string getDescription() const = 0;
     /** Return the structure's type name; see the main description */
     virtual std::string getTypeName() const = 0;
 
@@ -92,5 +96,16 @@ private:
 template <typename T>
 struct is_structure : std::is_base_of<Structure, T>
 {
+};
+
+/** Base class for all attribute classes
+ *
+ * All fields must have these attributes. For now, it only contains a description attribute.
+ */
+struct STRUCTURE_EXPORT StructureAttributes
+{
+    void set(const attributes::Description &desc) { mDescription = desc.mValue; }
+
+    std::string mDescription;
 };
 }

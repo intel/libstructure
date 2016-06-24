@@ -18,18 +18,26 @@ namespace detail
  *
  * CRTP = Curiously Reccuring Template Pattern.
  */
-template <typename Derived, typename Base, typename _Storage>
+template <typename Derived, typename Base, typename _Storage,
+          typename Attributes = GenericFieldAttributes>
 class FieldCrtp : public Base
 {
     // This prevents hard-to-understand compilation errors.
     static_assert(is_structure<Base>::value, "Base must be a Structure.");
 
+    static_assert(std::is_default_constructible<Attributes>::value,
+                  "Attributes classes must be default-constructible.");
+
 private:
-    using This = FieldCrtp<Derived, Base, _Storage>;
+    using This = FieldCrtp<Derived, Base, _Storage, Attributes>;
     using ThisValue = FieldValue<Derived>;
 
 public:
-    using Base::Base;
+    template <typename... Attrs>
+    FieldCrtp(std::string name, Attrs &&... attributes) : Base(name)
+    {
+        setAttributes(std::forward<Attrs>(attributes)...);
+    };
 
     using Storage = _Storage;
 
@@ -45,6 +53,7 @@ public:
     static _Storage fromString(const std::string &input) { return safe_cast<_Storage>(input); }
 
     std::string getTypeName() const override { return Derived::typeToString(); }
+    std::string getDescription() const override { return mAttributes.mDescription; }
 
     template <typename T>
     std::unique_ptr<GenericFieldValue> withTypedTemplate(T value) const try {
@@ -55,6 +64,16 @@ public:
     }
 
 private:
+    Attributes mAttributes;
+
+    template <typename Head, typename... Tail>
+    void setAttributes(Head &&head, Tail &&... tail)
+    {
+        mAttributes.set(std::forward<Head>(head));
+        setAttributes(std::forward<Tail>(tail)...);
+    }
+    void setAttributes() {}
+
     std::unique_ptr<StructureValue> doBuild(ValueImporter &importer,
                                             const std::string &path) const override
     {

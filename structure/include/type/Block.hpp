@@ -46,6 +46,7 @@ public:
     std::unique_ptr<StructureValue> with(ValueInitializer initializer) const;
 
     std::string getTypeName() const override { return "Block"; }
+    std::string getDescription() const override { return ""; }
 
 protected:
     template <typename T, typename... Fields>

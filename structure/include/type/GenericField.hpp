@@ -10,6 +10,9 @@ namespace structure
 
 class GenericFieldValue;
 
+// For now, a GenericField has no more attributes than a Structure
+using GenericFieldAttributes = StructureAttributes;
+
 /** Base class for all atomic field types. */
 class STRUCTURE_EXPORT GenericField : public Structure
 {

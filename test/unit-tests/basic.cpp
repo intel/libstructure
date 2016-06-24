@@ -57,6 +57,16 @@ TEST_CASE("GetName", "[structure][value][name]")
     CHECK(Int32("name").with("42")->getName() == "name");
 }
 
+TEST_CASE("Type attributes", "[structure][attributes]")
+{
+    // A description is optional and empty by default.
+    CHECK(UInt8("name").getDescription() == "");
+
+    std::string desc("Some integer");
+    Int8 i8("name", attributes::Description{desc});
+    CHECK(i8.getDescription() == desc);
+}
+
 TEST_CASE("Integer basic tests", "[structure][integer]")
 {
     CHECK(UInt32::fromString("5") == 5);
