@@ -7,7 +7,6 @@ TEST_CASE("Checked casts", "[cast]")
         unsigned char uc;
         signed char c;
         int i;
-        unsigned int ui;
         long long ll;
         unsigned long long ull;
 
@@ -43,6 +42,9 @@ TEST_CASE("Checked casts", "[cast]")
 
         ll = 255;
         CHECK(safe_cast<unsigned long long>(ll) == 255);
+
+        ull = std::numeric_limits<unsigned long long>::max();
+        CHECK_THROWS_AS(safe_cast<long long>(ull), CastError);
     }
 
     SECTION ("FloatingPoints") {
