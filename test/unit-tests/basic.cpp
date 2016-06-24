@@ -240,3 +240,12 @@ TEST_CASE("BlockStructure", "[structure][block]")
     Block root("root", Float("f1"), Float("f2"));
     CHECK(root.getFields().size() == 2);
 }
+
+TEST_CASE("Typed With", "[typed][value]")
+{
+    Block root("MyData", UInt8("Counter"), Float("Double"), Q32f31("Fixed"));
+    CHECK_NOTHROW(auto value = root.with({255, 3.14f, 0.01}));
+    CHECK_THROWS(auto value = root.with({-1, 3.14f, 0.01}));
+    CHECK_THROWS(auto value = root.with({255, 3.14f, 12}));
+    CHECK_THROWS(auto value = root.with({256, 3.14f, 0.01}));
+}

@@ -78,6 +78,14 @@ private:
 
     static constexpr double mDenominator{1UL << fractional};
 
+    /** Creates a value from the given double representing a decimal number
+     */
+    std::unique_ptr<GenericFieldValue> withTyped(double value) const override
+    {
+        return std::make_unique<ThisValue>(*this,
+                                           static_cast<_Storage>(round(value * mDenominator)));
+    }
+
 public:
     using Base::Base;
     size_t getSize() const override { return size; }

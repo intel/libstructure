@@ -6,9 +6,25 @@
 namespace structure
 {
 ValueInitializer::ValueInitializer(const char *atomicValue)
-    : mImporter(new AtomImporter(atomicValue))
+    : mImporter(new AtomImporter<decltype(atomicValue)>(atomicValue))
 {
 }
+
+ValueInitializer::ValueInitializer(long long atomicValue, void *)
+    : mImporter(new AtomImporter<decltype(atomicValue)>(atomicValue))
+{
+}
+
+ValueInitializer::ValueInitializer(unsigned long long atomicValue, void *)
+    : mImporter(new AtomImporter<decltype(atomicValue)>(atomicValue))
+{
+}
+
+ValueInitializer::ValueInitializer(double atomicValue, void *)
+    : mImporter(new AtomImporter<decltype(atomicValue)>(atomicValue))
+{
+}
+
 ValueInitializer::ValueInitializer(ValueImporter &importer) : mImporter(new WrapImporter(importer))
 {
 }

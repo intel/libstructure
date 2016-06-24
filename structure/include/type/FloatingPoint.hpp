@@ -59,6 +59,19 @@ private:
     using ThisValue = FieldValue<This>;
     using Base = detail::FieldCrtp<This, FloatingPoint, _Storage>;
 
+    /** Creates a value from the given float
+     */
+    std::unique_ptr<GenericFieldValue> withTyped(float value) const override
+    {
+        return this->withTypedTemplate(value);
+    }
+    /** Creates a value from the given double
+     */
+    std::unique_ptr<GenericFieldValue> withTyped(double value) const override
+    {
+        return this->withTypedTemplate(value);
+    }
+
 public:
     using Base::Base;
 

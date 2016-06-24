@@ -8,6 +8,8 @@
 
 #include "structure_export.h"
 
+#include <safe_cast.hpp>
+
 namespace structure
 {
 namespace detail
@@ -50,6 +52,14 @@ public:
     }
 
     std::string getTypeName() const override { return Derived::typeToString(); }
+
+    template <typename T>
+    std::unique_ptr<GenericFieldValue> withTypedTemplate(T value) const try {
+        return std::make_unique<ThisValue>(*static_cast<const Derived *>(this),
+                                           safe_cast<_Storage>(value));
+    } catch (CastError &e) {
+        throw ParseError(this->getName() + ": " + e.what());
+    }
 
 private:
     std::unique_ptr<StructureValue> doBuild(ValueImporter &importer,

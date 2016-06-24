@@ -21,6 +21,48 @@ public:
      */
     ValueInitializer(const char *atomicValue);
 
+    /** Constructs a ValueInitializer from a long long literal
+     */
+    ValueInitializer(long long atomicValue, void *);
+
+    /** Constructs a ValueInitializer from a unsigned long long literal
+     */
+    ValueInitializer(unsigned long long atomicValue, void *);
+
+    /** Constructs a ValueInitializer from a double literal
+     */
+    ValueInitializer(double atomicValue, void *);
+
+    /** Constructs a ValueInitializer from a signed integer
+     */
+    template <typename T>
+    ValueInitializer(
+        T atomicValue,
+        typename std::enable_if<std::is_integral<T>::value and std::is_signed<T>::value, T>::type =
+            0)
+        : ValueInitializer(static_cast<long long>(atomicValue), nullptr)
+    {
+    }
+
+    /** Constructs a ValueInitializer from an unsigned integer
+     */
+    template <typename T>
+    ValueInitializer(T atomicValue,
+                     typename std::enable_if<
+                         std::is_integral<T>::value and std::is_unsigned<T>::value, T>::type = 0)
+        : ValueInitializer(static_cast<unsigned long long>(atomicValue), nullptr)
+    {
+    }
+
+    /** Constructs a ValueInitializer from a floating point
+     */
+    template <typename T>
+    ValueInitializer(T atomicValue,
+                     typename std::enable_if<std::is_floating_point<T>::value, T>::type = 0)
+        : ValueInitializer(static_cast<double>(atomicValue), nullptr)
+    {
+    }
+
     /** Constructs a ValueInitializer from an previously-defined importer
      *
      * This should coincide with a Block.

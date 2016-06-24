@@ -12,15 +12,13 @@ int main(void)
 {
 
     auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"), strc::Q32f31("Fixed"));
+        strc::Block("MyData", strc::UInt8("Counter"), strc::Float("Double"), strc::Q32f31("Fixed"));
 
     strc::print(std::cout, root);
 
     std::cout << std::endl;
 
-    strc::PromptImporter<> importer;
-    auto value = root.with({importer, "5", "0.1"});
+    auto value = root.with({255u, 3.14f, 0.1});
 
     std::cout << std::endl;
 

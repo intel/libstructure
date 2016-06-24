@@ -6,7 +6,6 @@
 #include "type/Field.hpp"
 #include "value/FieldValue.hpp"
 #include "Visitor.hpp"
-#include <cstdint>
 
 namespace structure
 {
@@ -47,6 +46,16 @@ private:
     using This = NewInteger<size, isSigned, _Storage>;
     using ThisValue = FieldValue<This>;
     using Base = detail::FieldCrtp<This, Integer, _Storage>;
+
+    std::unique_ptr<GenericFieldValue> withTyped(long long value) const override
+    {
+        return this->withTypedTemplate(value);
+    }
+
+    std::unique_ptr<GenericFieldValue> withTyped(unsigned long long value) const override
+    {
+        return this->withTypedTemplate(value);
+    }
 
 public:
     using Base::Base;

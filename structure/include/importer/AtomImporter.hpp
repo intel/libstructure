@@ -9,12 +9,15 @@
 
 namespace structure
 {
-/** Wraps a string literal for the purpose of ValueInitializer
+/** Wraps a value of any type for the purpose of ValueInitializer
+ *
+ * @tparam T : The type of the atom value
  */
+template <class T>
 class AtomImporter : public ValueImporter
 {
 public:
-    AtomImporter(const char *value) : mValue(value) {}
+    AtomImporter(T value) : mValue(value) {}
 
     std::unique_ptr<GenericFieldValue> import(const GenericField &field,
                                               const std::string &) override
@@ -27,6 +30,6 @@ public:
     void onExitBlock(const std::string &) override { throw WrongType("Block", "Atom"); }
 
 private:
-    std::string mValue;
+    T mValue;
 };
 }
