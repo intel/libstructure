@@ -45,6 +45,7 @@ public:
     {
         return std::make_unique<ThisValue>(*static_cast<const Derived *>(this), value);
     }
+    virtual bool isAllowed(_Storage) const { return true; };
 
     /** @returns A parsed value.
      *
@@ -62,6 +63,8 @@ public:
     } catch (CastError &e) {
         throw ParseError(this->getName() + ": " + e.what());
     }
+
+    const Attributes &getAttributes() const { return mAttributes; }
 
 private:
     Attributes mAttributes;

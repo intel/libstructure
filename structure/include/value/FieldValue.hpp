@@ -29,11 +29,14 @@ public:
     FieldValue(FieldType field, typename FieldType::Storage value)
         : mStructure(field), mValue(value)
     {
+        if (not field.isAllowed(value)) {
+            throw std::runtime_error("Illegal value");
+        }
     }
 
     /** Constructs a value from a Field and string */
     FieldValue(FieldType field, const std::string &value)
-        : mStructure(field), mValue(mStructure.fromString(value))
+        : FieldValue(field, field.fromString(value))
     {
     }
 

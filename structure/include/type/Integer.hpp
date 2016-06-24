@@ -4,6 +4,7 @@
 
 #include "type/StockTypes.hpp"
 #include "type/Field.hpp"
+#include "attributes/Range.hpp"
 #include "value/FieldValue.hpp"
 #include "Visitor.hpp"
 
@@ -21,6 +22,24 @@ public:
     virtual bool getSignedness() const = 0;
 };
 
+template <typename Storage>
+class IntegerAttributes : public GenericFieldAttributes
+{
+public:
+    attributes::Range<Storage> mRange;
+
+    template <class T>
+    void set(const attributes::Range<T> &range)
+    {
+        mRange = range;
+    }
+    template <typename C>
+    void set(const C &c)
+    {
+        GenericFieldAttributes::set(c);
+    }
+};
+
 /** Helper class for creating new integer field types
  *
  * @tparam size The size (typically 8, 16, 32 or 64).
@@ -31,7 +50,8 @@ public:
  * @ingroup StockTypes
  */
 template <size_t size, bool isSigned, class _Storage>
-class NewInteger : public detail::FieldCrtp<NewInteger<size, isSigned, _Storage>, Integer, _Storage>
+class NewInteger : public detail::FieldCrtp<NewInteger<size, isSigned, _Storage>, Integer, _Storage,
+                                            IntegerAttributes<_Storage>>
 {
     // We could write a clever class template to deduce the ideal storage type but for now, it's
     // easier to just pass it as argument and statically check it.
@@ -45,7 +65,7 @@ class NewInteger : public detail::FieldCrtp<NewInteger<size, isSigned, _Storage>
 private:
     using This = NewInteger<size, isSigned, _Storage>;
     using ThisValue = FieldValue<This>;
-    using Base = detail::FieldCrtp<This, Integer, _Storage>;
+    using Base = detail::FieldCrtp<This, Integer, _Storage, IntegerAttributes<_Storage>>;
 
     std::unique_ptr<GenericFieldValue> withTyped(long long value) const override
     {
@@ -59,8 +79,15 @@ private:
 
 public:
     using Base::Base;
+
     size_t getSize() const override { return size; }
     bool getSignedness() const override { return isSigned; }
+
+    bool isAllowed(_Storage value) const override
+    {
+        auto &range = this->getAttributes().mRange;
+        return range.min() <= value and value <= range.max();
+    }
 
     /** @returns the human-readable name of the field type */
     static std::string typeToString()

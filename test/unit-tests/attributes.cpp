@@ -1,6 +1,7 @@
 #include <catch.hpp>
 
 #include "attributes/Range.hpp"
+#include "client/stock.hpp"
 
 using namespace structure;
 
@@ -24,4 +25,26 @@ TEST_CASE("Range attribute", "[attributes][range]")
 
     CHECK(Range<uint8_t>::Min(10) == Range<uint8_t>(10, 255));
     CHECK(Range<uint8_t>::Max(10) == Range<uint8_t>(0, 10));
+}
+
+TEST_CASE("Type attributes", "[structure][attributes]")
+{
+    // Attributes are optional and empty by default.
+    CHECK(UInt8("name").getDescription() == "");
+
+    std::string desc("Some integer");
+    auto range = attributes::mkRange(-10, 10);
+    Int8 i8("name", attributes::Description{desc}, range);
+
+    CHECK(i8.getDescription() == desc);
+
+    CHECK_NOTHROW(i8.with("10"));
+    CHECK_NOTHROW(i8.with("-10"));
+    CHECK_THROWS(i8.with("11"));
+    CHECK_THROWS(i8.with("-11"));
+
+    auto rangeStr = attributes::mkRange("3", "3");
+    UInt16 u16("", rangeStr);
+    CHECK_NOTHROW(u16.with("3"));
+    CHECK_THROWS(u16.with("4"));
 }
