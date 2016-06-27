@@ -5,7 +5,7 @@
 #include "type/helper/PrefixedArray.hpp"
 #include "client/type.hpp"
 #include "client/value.hpp"
-#include "convert.hpp"
+#include <safe_cast.hpp>
 
 #include <string>
 
@@ -124,16 +124,10 @@ TEST_CASE("Get value", "[value]")
     }
     SECTION ("Float") {
         Float structure("structure");
-        float f;
 
-        CHECK(convertTo(structure.with("3.14")->getValue(), f));
-        CHECK(f == Approx(3.14f));
-
-        CHECK(convertTo(with(structure, "3.14")->getValue(), f));
-        CHECK(f == Approx(3.14f));
-
-        CHECK(convertTo(with(structure, 3.14f)->getValue(), f));
-        CHECK(f == Approx(3.14f));
+        CHECK(safe_cast<float>(structure.with("3.14")->getValue()) == Approx(3.14));
+        CHECK(safe_cast<float>(with(structure, "3.14")->getValue()) == Approx(3.14));
+        CHECK(safe_cast<float>(with(structure, 3.14f)->getValue()) == Approx(3.14));
     }
     SECTION ("FixedQ") {
         Q16f15 structure("structure");

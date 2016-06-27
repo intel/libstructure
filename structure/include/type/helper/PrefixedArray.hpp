@@ -4,6 +4,7 @@
 #include "Exception.hpp"
 #include "functions.hpp"
 
+#include <safe_cast.hpp>
 #include <limits>
 
 namespace structure
@@ -43,12 +44,7 @@ private:
 
         importer.onEnterBlock(path);                     // Enter the prefixed array block ...
         auto countField = mPrefix.build(importer, path); // ... starting with the prefix ...
-        Count count = 0;
-        if (not convertTo(getValue(countField), count)) {
-            // This can never happen because we know that countField contains a Count.
-            throw std::runtime_error(
-                "The impossible happened: can't retrieve a PrefixedArray's item count.");
-        }
+        Count count = safe_cast<Count>(getValue(countField));
         value->addValue(std::move(countField));
 
         // FIXME: this block's type can't be *this

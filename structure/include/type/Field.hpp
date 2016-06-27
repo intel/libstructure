@@ -42,14 +42,7 @@ public:
      *
      * @throws ParseError in case the value can't be parsed into the field's type.
      */
-    static _Storage fromString(const std::string &input)
-    {
-        _Storage parsed;
-        if (not convertTo(input, parsed)) {
-            throw ParseError(input);
-        }
-        return parsed;
-    }
+    static _Storage fromString(const std::string &input) { return safe_cast<_Storage>(input); }
 
     std::string getTypeName() const override { return Derived::typeToString(); }
 

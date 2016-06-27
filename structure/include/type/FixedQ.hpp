@@ -3,6 +3,7 @@
 #include "structure_export.h"
 #include "type/Field.hpp"
 
+#include <safe_cast.hpp>
 #include <cstdint>
 #include <type_traits>
 
@@ -103,10 +104,7 @@ public:
         // TODO: we assume that the user inputs a decimal value... what is he wants to directly
         // enter the numerator?
         // TODO: choose the intermediate type according to the storage type
-        double parsed;
-        if (not convertTo(input, parsed)) {
-            throw ParseError("FixedPoint: Incorrect or out-of-bounds value");
-        }
+        double parsed = safe_cast<double>(input);
         // TODO: range checking
 
         // For Qn.m number, multiply by 2^n and round to the nearest integer
