@@ -38,7 +38,7 @@ class ValueImporter;
 class STRUCTURE_EXPORT Structure
 {
 public:
-    Structure(std::string name);
+    Structure(std::string name) : mName(name){};
     virtual ~Structure() = default;
 
     /** Entry point for Structure visitors.

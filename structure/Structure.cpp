@@ -4,10 +4,6 @@
 namespace structure
 {
 
-Structure::Structure(std::string name) : mName(name)
-{
-}
-
 std::string Structure::getName() const
 {
     return mName;

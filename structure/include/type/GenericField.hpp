@@ -14,7 +14,7 @@ class GenericFieldValue;
 class STRUCTURE_EXPORT GenericField : public Structure
 {
 public:
-    GenericField(std::string name) : Structure(name){};
+    using Structure::Structure;
     virtual ~GenericField() = default;
 
     /** Creates a value from the given string
