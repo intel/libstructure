@@ -53,12 +53,18 @@ public:
      * In the context of this class, "field" may refer to both atomic fields and aggregates
      * (blocks).
      *
-     * @param[in] fields The fields to be included in the new block.
+     * @param[in] args The fields to be included in the new block and the block's attributes
+     *
+     * Usage exemple:
+     * @code
+     * Block myBlock(UInt8("a"), Float("b"), attributes::Description{"desc"});
+     * @endcode
+     *
      */
-    template <typename... Fields>
-    Block(std::string name, Fields &&... fields) : Structure(name)
+    template <typename... Args>
+    Block(std::string name, Args &&... args) : Structure(name)
     {
-        addFields(std::forward<Fields>(fields)...);
+        handleArgs(std::forward<Args>(args)...);
     }
 
     Block(Block &&other) = default;
@@ -75,30 +81,30 @@ public:
     std::unique_ptr<StructureValue> with(ValueInitializer initializer) const;
 
     std::string getTypeName() const override { return "Block"; }
-    std::string getDescription() const override { return ""; }
+    std::string getDescription() const override { return mDescription; }
 
 protected:
     template <typename T, typename... Fields>
-    void addFields(T &&first, Fields &&... fields)
+    void handleArgs(T &&first, Fields &&... fields)
     {
-        addField(std::forward<T>(first));
-        addFields(std::forward<Fields>(fields)...);
+        handleArg(std::forward<T>(first));
+        handleArgs(std::forward<Fields>(fields)...);
     }
 
 private:
     std::unique_ptr<StructureValue> doBuild(ValueImporter &importer,
                                             const std::string &path) const override;
 
-    template <class T>
-    void addField(T &&child)
+    void handleArg(const attributes::Description &desc) { mDescription = desc.mValue; }
+    template <class T, typename = typename std::enable_if<is_structure<T>::value>::type>
+    void handleArg(T &&child)
     {
-        // This prevents hard-to-understand compilation errors.
-        static_assert(is_structure<T>::value, "The field to be added must be a Structure.");
         mFields.emplace_back(new T(std::forward<T>(child)));
     }
 
-    void addFields(){};
+    void handleArgs(){};
 
     std::vector<std::unique_ptr<Structure>> mFields;
+    std::string mDescription;
 };
 }

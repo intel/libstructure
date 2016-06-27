@@ -78,6 +78,18 @@ TEST_CASE("Type attributes", "[structure][attributes]")
     UInt16 u16("", rangeStr);
     CHECK_NOTHROW(u16.with("3"));
     CHECK_THROWS(u16.with("4"));
+
+    // Block with a description
+    Block b("name", attributes::Description{"desc"}, UInt8("u8"));
+    CHECK(b.getDescription() == "desc");
+
+    // VarArray
+    VarArray va("name", UInt8("u8"), attributes::Description{"desc"});
+    CHECK(va.getDescription() == "desc");
+
+    // PrefixedArray
+    PrefixedArray<UInt8> pa("name", UInt8("u8"), "count", attributes::Description{"desc"});
+    CHECK(pa.getDescription() == "desc");
 }
 
 TEST_CASE("Default attributes", "[structure][default]")

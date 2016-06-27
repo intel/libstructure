@@ -32,6 +32,7 @@
 #include "type/Block.hpp"
 #include "Exception.hpp"
 #include "functions.hpp"
+#include "disjunction.hpp"
 
 #include <safe_cast.hpp>
 #include <limits>
@@ -55,11 +56,14 @@ class PrefixedArray : public Block
                   "The type of a PrefixedArray's prefix must be an integer field");
 
 public:
-    template <typename ItemType>
+    template <typename ItemType, typename... Args>
     PrefixedArray(const std::string &name, ItemType &&itemType,
-                  const std::string &prefixName = "count")
-        : Block(name, std::forward<ItemType>(itemType)), mPrefix(prefixName)
+                  const std::string &prefixName = "count", Args &&... args)
+        : Block(name, std::forward<ItemType>(itemType), std::forward<Args>(args)...),
+          mPrefix(prefixName)
     {
+        static_assert(not disjunction<is_structure<Args>...>::value,
+                      "The arguments after ItemType must not be Structures");
     }
 
     std::string getTypeName() const override { return "LV (" + mPrefix.getTypeName() + ")"; }

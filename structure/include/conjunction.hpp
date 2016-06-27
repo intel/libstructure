@@ -27,40 +27,25 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 #pragma once
 
-#include "structure_export.h"
+/*
+ * The following code is licensed under CC-BY-SA which you can find at
+ * https://creativecommons.org/licenses/by-sa/3.0/
+ * The following code comes from cppreference, you can find an up to date version at
+ * http://en.cppreference.com/w/cpp/types/conjunction
+ */
 
-#include "type/Block.hpp"
-#include "disjunction.hpp"
-
-#include <utility>
-
-namespace structure
+template <class...>
+struct conjunction : std::true_type
 {
-/** Represents a Variable-Length Array (aka VLA) */
-class STRUCTURE_EXPORT VarArray : public Block
-{
-public:
-    /** Constructs a Variable-Length Array of any kind of field.
-     *
-     * @param[in] itemType The structure that is repeated in the array.
-     * @param[in] args Attributes of the VarArray
-     */
-    template <class ItemType, typename... Args>
-    VarArray(const std::string &name, ItemType &&itemType, Args &&... args)
-        : Block(name, std::forward<ItemType>(itemType), std::forward<Args>(args)...)
-    {
-        static_assert(is_structure<ItemType>::value,
-                      "The ItemType in a VarArray must be a Structure");
-        static_assert(not disjunction<is_structure<Args>...>::value,
-                      "The arguments after ItemType must not be Structures");
-    }
-
-    std::string getTypeName() const override;
-
-private:
-    std::unique_ptr<StructureValue> doBuild(ValueImporter &importer,
-                                            const std::string &path) const override;
 };
-} // namespace structure
+template <class B1>
+struct conjunction<B1> : B1
+{
+};
+template <class B1, class... Bn>
+struct conjunction<B1, Bn...> : std::conditional_t<B1::value != false, conjunction<Bn...>, B1>
+{
+};
