@@ -64,4 +64,14 @@ public:
     {
     }
 };
+
+/** Thrown when a field does not have a Default attributes and no value was provided */
+class NoDefaultValue : public StructureException
+{
+public:
+    NoDefaultValue(const std::string &self)
+        : StructureException("'" + self + "' does not have a Default attribute")
+    {
+    }
+};
 }

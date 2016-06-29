@@ -55,6 +55,8 @@ public:
 
     std::string getTypeName() const override { return Derived::typeToString(); }
     std::string getDescription() const override { return mAttributes.mDescription; }
+    ValueImporter &getDefaultImporter() const override { return *(mAttributes.mDefaultImporter); }
+    bool hasDefaultImporter() const override { return mAttributes.mHasDefaultImporter; }
 
     template <typename T>
     std::unique_ptr<GenericFieldValue> withTypedTemplate(T value) const try {

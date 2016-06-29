@@ -4,14 +4,29 @@
 
 #include "Structure.hpp"
 #include "Exception.hpp"
+#include "value/GenericFieldValue.hpp"
+#include "attributes/Default.hpp"
 
 namespace structure
 {
 
-class GenericFieldValue;
+struct STRUCTURE_EXPORT GenericFieldAttributes : StructureAttributes
+{
+    void set(const attributes::Default &def)
+    {
+        mDefaultImporter = def.mDefaultImporter;
+        mHasDefaultImporter = true;
+    }
 
-// For now, a GenericField has no more attributes than a Structure
-using GenericFieldAttributes = StructureAttributes;
+    template <typename C>
+    void set(const C &c)
+    {
+        StructureAttributes::set(c);
+    }
+
+    bool mHasDefaultImporter = false;
+    std::shared_ptr<ValueImporter> mDefaultImporter;
+};
 
 /** Base class for all atomic field types. */
 class STRUCTURE_EXPORT GenericField : public Structure
@@ -33,6 +48,9 @@ public:
     {
         return withTyped(value);
     }
+
+    virtual ValueImporter &getDefaultImporter() const = 0;
+    virtual bool hasDefaultImporter() const = 0;
 
 private:
     /** Creates a value from the given long long

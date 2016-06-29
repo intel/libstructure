@@ -2,6 +2,8 @@
 
 #include "attributes/Range.hpp"
 #include "client/stock.hpp"
+#include "client/type.hpp"
+#include "importer/DefaultImporter.hpp"
 
 using namespace structure;
 
@@ -47,4 +49,13 @@ TEST_CASE("Type attributes", "[structure][attributes]")
     UInt16 u16("", rangeStr);
     CHECK_NOTHROW(u16.with("3"));
     CHECK_THROWS(u16.with("4"));
+}
+
+TEST_CASE("Default attributes", "[structure][default]")
+{
+    auto root = Block("root", UInt8("a", attributes::Default(42)), Float("b"));
+
+    CHECK_NOTHROW(root.with({defaultImporter, 3.14}));
+    CHECK_NOTHROW(root.with({42, 3.14}));
+    CHECK_THROWS(root.with({defaultImporter, defaultImporter}));
 }
