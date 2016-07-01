@@ -32,11 +32,28 @@
 #include "value/GenericFieldValue.hpp"
 #include "Visitor.hpp"
 
+#include <safe_cast.hpp>
+
 #include <initializer_list>
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <type_traits>
 #include <stdexcept>
+
+namespace std
+{
+/** @returns the string representation of a string
+ *
+ * Surrounds the string with quotes; inner quotes are escaped.
+ */
+inline std::string to_string(const std::string value)
+{
+    std::ostringstream oss;
+    oss << std::quoted(value);
+    return oss.str();
+}
+}
 
 namespace structure
 {
@@ -52,19 +69,22 @@ class FieldValue : public GenericFieldValue
                   "The FieldType of a FieldValue must be a GenericField.");
 
 public:
-    /** Constructs a value from a Field and typed value */
-    FieldValue(FieldType field, typename FieldType::Storage value)
-        : mStructure(field), mValue(value)
+    /** Constructs a value from a Field and a string (e.g. user input) */
+    FieldValue(FieldType field, const std::string &value)
+        : mStructure(field), mValue(mStructure.fromString(value))
     {
-        if (not field.isAllowed(value)) {
+        if (not field.isAllowed(mValue)) {
             throw std::runtime_error("Illegal value");
         }
     }
-
-    /** Constructs a value from a Field and string */
-    FieldValue(FieldType field, const std::string &value)
-        : FieldValue(field, field.fromString(value))
+    /** Constructs a value from a Field and typed value */
+    template <typename T>
+    FieldValue(FieldType field, const T &value)
+        : mStructure(field), mValue(safe_cast<typename FieldType::Storage>(value))
     {
+        if (not field.isAllowed(mValue)) {
+            throw std::runtime_error("Illegal value");
+        }
     }
 
     std::string getValue() const override { return std::to_string(mValue); }

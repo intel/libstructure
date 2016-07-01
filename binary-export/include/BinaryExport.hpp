@@ -34,6 +34,7 @@
 
 #include <vector>
 #include <iterator>
+#include <algorithm>
 
 #ifdef _MSC_VER
 /** Visual studio raises a warning if the check iterator feature is activated
@@ -71,6 +72,11 @@ public:
     void visitStorage(unsigned long long v) override { visitStorageT(v); }
     void visitStorage(long long v) override { visitStorageT(v); }
     void visitStorage(long double v) override { visitStorageT(v); }
+
+    void visitStorage(const std::string &v) override
+    {
+        std::copy_n(v.c_str(), v.size() + 1, std::back_inserter(mOut));
+    }
 
 private:
     template <class Storage>

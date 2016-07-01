@@ -29,54 +29,27 @@
  */
 #pragma once
 
-#include "ValueImporter.hpp"
-#include "type/GenericField.hpp"
-
-#include <iostream>
-#include <iomanip>
+#include "type/StockTypes.hpp"
+#include "type/Field.hpp"
 
 namespace structure
-{
 
-/** An implementation of a ValueImporter that prompt for the values
- *
- * @tparam     Input  : A class that must provide an overload of the operator >>(std::string&)
- * @tparam     Output : A class that must provide an overload of the operator <<(std::string&)
- *
- *
- * By default, the PromptImporter will use std::cin as input and std::cout as output, so
- * @code
- * PromptImporter<> importer();
- * @endcode
- * is equivalent to
- * @code
- * PromptImporter<std::istream, std::ostream> importer(std::cin, std::count);
- * @endcode
- *
- * @ingroup ValueImporter
- *
- */
-template <class Input = std::istream, class Output = std::ostream>
-class PromptImporter : public ValueImporter
 {
+/** A type of field containing an string value. */
+// Theoretically, if this class is not exported and someone tries to derive from it, MSVC will
+// produce a warning. However, exporting it makes MSVC crash... Since this class is completely
+// defined in its header, it is probably ok not to export it.
+class String : public detail::FieldCrtp<String, GenericField, std::string>
+{
+private:
+    using Base = detail::FieldCrtp<String, GenericField, std::string>;
 
 public:
-    PromptImporter(Input &input = std::cin, Output &output = std::cout)
-        : mInput(input), mOutput(output)
-    {
-    }
+    using Base::Base;
 
-    std::unique_ptr<GenericFieldValue> import(const GenericField &f,
-                                              const std::string &path) override
-    {
-        std::string val;
-        mOutput << path << " = ";
-        mInput >> std::quoted(val);
-        return f.with(val);
-    }
+    void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
 
-private:
-    Input &mInput;
-    Output &mOutput;
+    /** @returns the human-readable name of the field type */
+    static std::string typeToString() { return "String"; }
 };
 } // namespace structure

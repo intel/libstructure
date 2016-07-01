@@ -39,7 +39,7 @@ using namespace structure;
 
 TEST_CASE("Display", "[structure][value][display]")
 {
-    Block root("root", Float("a"), Int32("b"), Q16f15("c"), VarArray("varArray", UInt8("d")),
+    Block root("root", Float("a"), Int32("b"), Q16f15("c"), VarArray("varArray", String("d")),
                PrefixedArray<UInt8>("lv", Block("block", UInt16("x"), UInt16("y"))));
 
     SECTION ("Structure") {
@@ -50,7 +50,7 @@ TEST_CASE("Display", "[structure][value][display]")
                                "    Int32 : b\n"
                                "    Q16f15 : c\n"
                                "    VarArray : varArray {\n"
-                               "        UInt8 : d\n"
+                               "        String : d\n"
                                "    }\n"
                                "    LV (UInt8) : lv {\n"
                                "        Block : block {\n"
@@ -65,7 +65,8 @@ TEST_CASE("Display", "[structure][value][display]")
     }
 
     SECTION ("Value") {
-        auto value = root.with({"1", "2", "0.5", {"3", "4"}, {"2", {{"1", "2"}, {"3", "4"}}}});
+        auto value =
+            root.with({"1", "2", "0.5", {"bacon", "egg", "spam"}, {"2", {{"1", "2"}, {"3", "4"}}}});
         std::stringstream ss;
 
         std::string expected = "BlockValue : root {\n"
@@ -73,8 +74,9 @@ TEST_CASE("Display", "[structure][value][display]")
                                "    Int32 : b = 2\n"
                                "    Q16f15 : c = 16384\n"
                                "    BlockValue : varArray {\n"
-                               "        UInt8 : d = 3\n"
-                               "        UInt8 : d = 4\n"
+                               "        String : d = \"bacon\"\n"
+                               "        String : d = \"egg\"\n"
+                               "        String : d = \"spam\"\n"
                                "    }\n"
                                "    BlockValue : lv {\n"
                                "        UInt8 : count = 2\n"

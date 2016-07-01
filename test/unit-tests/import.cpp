@@ -46,7 +46,8 @@ using namespace structure;
 SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
 {
     GIVEN ("A valid structure ") {
-        auto root = Block("root", Int8("a"), Block("b", Float("c"), Int8("d")), Int8("e"));
+        auto root =
+            Block("root", Int8("a"), Block("b", Float("c"), Int8("d")), String("e"), Int8("f"));
         std::unique_ptr<StructureValue> value;
         std::stringstream null;
         std::stringstream ss;
@@ -54,12 +55,12 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
         GIVEN ("A StreamImporter") {
             auto importer = StreamImporter<>(ss);
             THEN ("Creating a value from correct input should not throw.") {
-                ss << "1 2.3 4 5";
+                ss << R"(1 2.3 4 "egg and spam" 5)";
                 CHECK_NOTHROW(value = build(root, importer));
-                CHECK(getValue(value) == "{1, {2.300000, 4}, 5}");
+                CHECK(getValue(value) == R"({1, {2.300000, 4}, "egg and spam", 5})");
             }
             THEN ("Creating a value from erroneous input should throw.") {
-                ss << "1.2 3 3";
+                ss << R"(1.2 3 4 "egg and spam" 5)";
                 CHECK_THROWS(build(root, importer));
             }
             THEN ("Creating a value from partial input should throw.") {
@@ -71,12 +72,12 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
         GIVEN ("A PromptImporter") {
             auto importer = PromptImporter<>(ss, null);
             THEN ("Creating a value from correct input should not throw.") {
-                ss << "1 2.3 4 5";
+                ss << R"(1 2.3 4 "egg and spam" 5)";
                 CHECK_NOTHROW(value = build(root, importer));
-                CHECK(getValue(value) == "{1, {2.300000, 4}, 5}");
+                CHECK(getValue(value) == R"({1, {2.300000, 4}, "egg and spam", 5})");
             }
             THEN ("Creating a value from erroneous input should throw.") {
-                ss << "1.0 2.3 4";
+                ss << R"(1.0 2.3 4 "egg and spam")";
                 CHECK_THROWS(build(root, importer));
             }
             THEN ("Creating a value from partial input should throw.") {
@@ -87,11 +88,14 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
 
         GIVEN ("A MapImporter") {
             THEN ("Creating a value from correct input should not throw.") {
-                std::map<std::string, std::string> values = {
-                    {"/root/a", "1"}, {"/root/b/c", "2.3"}, {"/root/b/d", "4"}, {"/root/e", "5"}};
+                std::map<std::string, std::string> values = {{"/root/a", "1"},
+                                                             {"/root/b/c", "2.3"},
+                                                             {"/root/b/d", "4"},
+                                                             {"/root/e", "egg and spam"},
+                                                             {"/root/f", "5"}};
                 auto importer = MapImporter(values);
                 CHECK_NOTHROW(value = build(root, importer));
-                CHECK(getValue(value) == "{1, {2.300000, 4}, 5}");
+                CHECK(getValue(value) == R"({1, {2.300000, 4}, "egg and spam", 5})");
             }
             THEN ("Creating a value from erroneous input should throw.") {
                 std::map<std::string, std::string> values = {
@@ -122,10 +126,10 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
                     void onExitBlock(const std::string &) override { onExitBlockCount++; }
                 };
 
-                ss << "1 2.3 4 5";
+                ss << R"(1 2.3 4 "" 5)";
                 CustomImporter importer(ss);
                 CHECK_NOTHROW(value = build(root, importer));
-                CHECK(getValue(value) == "{1, {2.300000, 4}, 5}");
+                CHECK(getValue(value) == R"({1, {2.300000, 4}, "", 5})");
                 CHECK(importer.onEnterBlockCount == 2);
                 CHECK(importer.onExitBlockCount == 2);
             }
@@ -135,8 +139,8 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
             StreamImporter<> importer(ss);
             THEN ("Creating a value from correct input should work") {
                 ss << "2.3 4";
-                CHECK_NOTHROW(value = root.with({"1", importer, "5"}));
-                CHECK(getValue(value) == "{1, {2.300000, 4}, 5}");
+                CHECK_NOTHROW(value = root.with({"1", importer, "egg and spam", "5"}));
+                CHECK(getValue(value) == R"({1, {2.300000, 4}, "egg and spam", 5})");
             }
         }
     }

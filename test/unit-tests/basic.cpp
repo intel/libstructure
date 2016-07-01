@@ -54,6 +54,7 @@ TEST_CASE("Structure and Value creation", "[structure][value]")
     CHECK_NOTHROW(UInt64("name"));
     CHECK_NOTHROW(Int64("name"));
     CHECK_NOTHROW(Q16f15("name"));
+    CHECK_NOTHROW(String("name"));
     CHECK_NOTHROW(VarArray("name", UInt8("item name")));
     CHECK_NOTHROW(VarArray("name", Block("item name", UInt8("subitem name"))));
     CHECK_NOTHROW(PrefixedArray<UInt8>("name", UInt8("subitem name")));
@@ -70,6 +71,7 @@ TEST_CASE("Structure and Value creation", "[structure][value]")
     CHECK_NOTHROW(UInt64("name").with("42"));
     CHECK_NOTHROW(Int64("name").with("42"));
     CHECK_NOTHROW(Q16f15("name").with("0.2"));
+    CHECK_NOTHROW(String("name").with("bacon and spam"));
     CHECK_NOTHROW(VarArray("name", UInt8("item name")).with({"42"}));
     CHECK_NOTHROW(VarArray("name", Block("item name", UInt8("subitem name"))).with({{"42"}}));
     CHECK_NOTHROW(PrefixedArray<UInt8>("name", UInt8("subitem name")).with({"2", {"10", "20"}}));
@@ -163,6 +165,13 @@ TEST_CASE("Get value", "[value]")
         CHECK(structure.with("0.5")->getValue() == "16384");
         CHECK(with(structure, "0.25")->getValue() == "8192");
         CHECK(with(structure, 4096)->getValue() == "4096");
+    }
+    SECTION ("String") {
+        String structure("structure");
+        CHECK(structure.with("egg bacon and \"spam\"")->getValue() ==
+              // MSVC fails to parse this:
+              // R"("egg bacon and \"spam\"")");
+              "\"egg bacon and \\\"spam\\\"\"");
     }
 }
 
@@ -266,9 +275,11 @@ TEST_CASE("BlockStructure", "[structure][block]")
 
 TEST_CASE("Typed With", "[typed][value]")
 {
-    Block root("MyData", UInt8("Counter"), Float("Double"), Q32f31("Fixed"));
-    CHECK_NOTHROW(auto value = root.with({255, 3.14f, 0.01}));
-    CHECK_THROWS(auto value = root.with({-1, 3.14f, 0.01}));
-    CHECK_THROWS(auto value = root.with({255, 3.14f, 12}));
-    CHECK_THROWS(auto value = root.with({256, 3.14f, 0.01}));
+    Block root("MyData", UInt8("Counter"), Float("Double"), Q32f31("Fixed"), String("String"));
+    CHECK_NOTHROW(auto value = root.with({255, 3.14f, 0.01, "bacon and spam"}));
+    CHECK_NOTHROW(auto value = root.with({255, 3.14f, 0.01, ""}));
+    CHECK_THROWS(auto value = root.with({-1, 3.14f, 0.01, "sausages"}));
+    CHECK_THROWS(auto value = root.with({255, 3.14f, 12, "eggs"}));
+    CHECK_THROWS(auto value = root.with({256, 3.14f, 0.01, "spam"}));
+    CHECK_THROWS(auto value = root.with({255, 3.14f, 0.01, 42}));
 }

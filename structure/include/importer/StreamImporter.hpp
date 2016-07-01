@@ -76,18 +76,12 @@ public:
     std::unique_ptr<GenericFieldValue> import(const GenericField &f,
                                               const std::string & /*path*/) override
     {
-        std::string val = read();
-        return f.with(val.c_str());
+        std::string val;
+        mInput >> std::quoted(val);
+        return f.with(val);
     }
 
 private:
-    std::string read()
-    {
-        std::string result;
-        mInput >> result;
-        return result;
-    }
-
     Input &mInput;
 };
 } // namespace structure

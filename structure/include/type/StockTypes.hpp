@@ -34,4 +34,5 @@ namespace structure
 class Integer;
 class FloatingPoint;
 class FixedQ;
+class String;
 }

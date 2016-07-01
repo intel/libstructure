@@ -50,6 +50,17 @@ SCENARIO("Binary export", "[export][value][binary]")
         }
     }
 
+    GIVEN ("A string") {
+        String s("");
+        auto value = s.with("spam");
+        binary_export::Visitor::Output expected = {'s', 'p', 'a', 'm', '\0'};
+
+        THEN ("Serializing it should produce a null-terminated string.") {
+            binary_export::write(actual, *value);
+            CHECK(actual == expected);
+        }
+    }
+
     GIVEN ("A nested strucure with various types") {
         auto type = Block("block1", Block("block2", Float("float1"), Int16("i16")), UInt32("u32"));
         auto value = type.with({{"1.23", "-16000"}, "320000032"});

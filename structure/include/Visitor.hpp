@@ -32,6 +32,8 @@
 #include "type/StockTypes.hpp"
 #include "structure_export.h"
 
+#include <string>
+
 namespace structure
 {
 
@@ -66,6 +68,8 @@ public:
     virtual void visit(const FloatingPoint &f);
     /** Defaults to visit(const GenericField &) */
     virtual void visit(const FixedQ &q);
+    /** Defaults to visit(const GenericField &) */
+    virtual void visit(const String &s);
 };
 
 /** Visits a StructureValue
@@ -113,6 +117,8 @@ public:
     virtual void visitStorage(ull) = 0;
     virtual void visitStorage(ll) = 0;
     virtual void visitStorage(ld) = 0;
+
+    virtual void visitStorage(const std::string &) = 0;
 };
 /** @} */
 }
