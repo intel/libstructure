@@ -29,8 +29,6 @@
  */
 #pragma once
 
-#include <string>
-
 namespace structure
 {
 class Integer;

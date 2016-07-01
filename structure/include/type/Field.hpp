@@ -35,8 +35,6 @@
 #include "ValueImporter.hpp"
 #include "Exception.hpp"
 
-#include "structure_export.h"
-
 #include <safe_cast.hpp>
 
 namespace structure

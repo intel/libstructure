@@ -32,8 +32,6 @@
 #include "value/GenericFieldValue.hpp"
 #include "Visitor.hpp"
 
-#include "convert.hpp"
-
 #include <initializer_list>
 #include <string>
 #include <iostream>
