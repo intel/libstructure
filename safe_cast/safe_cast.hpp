@@ -125,6 +125,15 @@ To safe_cast(From from, typename std::enable_if<std::is_floating_point<To>::valu
     throw CastError(std::to_string(from), To());
 }
 
+template <class To>
+To safe_cast(const std::string &from);
+
+template <>
+inline std::string safe_cast<std::string>(const std::string &from)
+{
+    return from;
+}
+
 /** Converts a string to any numerical type.
  *
  * @throws CastError if not possible
