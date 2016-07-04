@@ -127,15 +127,15 @@ STRUCTURE_EXPORT std::string getValue(const StructureValue &value);
 STRUCTURE_EXPORT std::string getValue(const std::unique_ptr<StructureValue> &value);
 
 /** Equivalent to Structure::getChild() */
-STRUCTURE_EXPORT const Structure &getChild(const Structure &structure, std::string path);
-/** See structure::getChild(Structure&, std::string) */
+STRUCTURE_EXPORT const Structure &getChild(const Structure &structure, const std::string &path);
+/** See structure::getChild(Structure&, const std::string &) */
 STRUCTURE_EXPORT const Structure &getChild(const std::unique_ptr<Block> &structure,
-                                           std::string path);
+                                           const std::string &path);
 /** Equivalent to StructureValue::getChild() */
-STRUCTURE_EXPORT StructureValue &getChild(const StructureValue &value, std::string path);
-/** See structure::getChild(StructureValue&, std::string) */
+STRUCTURE_EXPORT StructureValue &getChild(const StructureValue &value, const std::string &path);
+/** See structure::getChild(StructureValue&, const std::string &) */
 STRUCTURE_EXPORT StructureValue &getChild(const std::unique_ptr<StructureValue> &value,
-                                          std::string path);
+                                          const std::string &path);
 
 /** Equivalent to Structure::build(ValueImporter &) */
 STRUCTURE_EXPORT std::unique_ptr<StructureValue> build(const Structure &structure,

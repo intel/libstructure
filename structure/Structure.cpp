@@ -38,7 +38,7 @@ std::string Structure::getName() const
     return mName;
 }
 
-void Structure::setMetadata(std::string key, std::string value)
+void Structure::setMetadata(const std::string &key, const std::string &value)
 {
     mMetadata[key] = value;
 }

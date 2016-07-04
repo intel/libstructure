@@ -68,10 +68,10 @@ public:
     }
 
     std::string getValue() const override { return std::to_string(mValue); }
-    void setValue(std::string value) { mValue = mStructure.fromString(value); }
+    void setValue(const std::string &value) { mValue = mStructure.fromString(value); }
 
     typename FieldType::Storage getTypedValue() const { return mValue; }
-    void setTypedValue(typename FieldType::Storage value) { mValue = value; }
+    void setTypedValue(const typename FieldType::Storage &value) { mValue = value; }
 
     /** @returns the Field type corresponding to this value
      *

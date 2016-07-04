@@ -217,7 +217,7 @@ std::string getValue(const std::unique_ptr<StructureValue> &value)
 class GetChildStructureVisitor : public StructureVisitor
 {
 public:
-    GetChildStructureVisitor(std::string path) : path(path), mResult(nullptr) {}
+    GetChildStructureVisitor(const std::string &path) : path(path), mResult(nullptr) {}
 
     void visit(const Block &block) override
     {
@@ -259,7 +259,7 @@ private:
     const Structure *mResult;
 };
 
-const Structure &getChild(const Structure &structure, std::string path)
+const Structure &getChild(const Structure &structure, const std::string &path)
 {
     GetChildStructureVisitor visitor(path);
     structure.accept(visitor);
@@ -270,7 +270,7 @@ const Structure &getChild(const Structure &structure, std::string path)
     throw ChildNotFound(structure.getName(), path);
 }
 
-const Structure &getChild(const std::unique_ptr<Block> &structure, std::string path)
+const Structure &getChild(const std::unique_ptr<Block> &structure, const std::string &path)
 {
     return getChild(*structure, path);
 }
@@ -278,7 +278,7 @@ const Structure &getChild(const std::unique_ptr<Block> &structure, std::string p
 class GetChildValueVisitor : public ValueVisitor
 {
 public:
-    GetChildValueVisitor(std::string path) : path(path), result(nullptr) {}
+    GetChildValueVisitor(const std::string &path) : path(path), result(nullptr) {}
 
     void visit(const BlockValue &block) override
     {
@@ -317,7 +317,7 @@ public:
     std::unique_ptr<StructureValue> const *result;
 };
 
-StructureValue &getChild(const StructureValue &value, std::string path)
+StructureValue &getChild(const StructureValue &value, const std::string &path)
 {
     GetChildValueVisitor visitor(path);
     value.accept(visitor);
@@ -328,7 +328,7 @@ StructureValue &getChild(const StructureValue &value, std::string path)
     throw ChildNotFound(value.getName(), path);
 }
 
-StructureValue &getChild(const std::unique_ptr<StructureValue> &value, std::string path)
+StructureValue &getChild(const std::unique_ptr<StructureValue> &value, const std::string &path)
 {
     return getChild(*value, path);
 }

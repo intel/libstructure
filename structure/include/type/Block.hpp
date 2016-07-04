@@ -62,7 +62,7 @@ public:
      *
      */
     template <typename... Args>
-    Block(std::string name, Args &&... args) : Structure(name)
+    Block(const std::string &name, Args &&... args) : Structure(name)
     {
         handleArgs(std::forward<Args>(args)...);
     }

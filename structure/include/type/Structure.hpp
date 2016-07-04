@@ -69,7 +69,7 @@ class ValueImporter;
 class STRUCTURE_EXPORT Structure
 {
 public:
-    Structure(std::string name) : mName(name){};
+    Structure(const std::string &name) : mName(name){};
     virtual ~Structure() = default;
 
     /** Entry point for Structure visitors.
@@ -86,7 +86,7 @@ public:
     virtual std::string getTypeName() const = 0;
 
     /** Set an arbitrary metadata. */
-    void setMetadata(std::string key, std::string value = "");
+    void setMetadata(const std::string &key, const std::string &value = "");
     /** Get the map of metadata. */
     const std::map<std::string, std::string> &getMetadata();
 

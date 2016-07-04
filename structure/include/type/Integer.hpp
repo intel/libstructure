@@ -112,7 +112,7 @@ public:
     size_t getSize() const override { return size; }
     bool getSignedness() const override { return isSigned; }
 
-    bool isAllowed(_Storage value) const override
+    bool isAllowed(const _Storage &value) const override
     {
         auto &range = this->getAttributes().mRange;
         return range.min() <= value and value <= range.max();

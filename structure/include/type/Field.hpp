@@ -61,7 +61,7 @@ private:
 
 public:
     template <typename... Attrs>
-    FieldCrtp(std::string name, Attrs &&... attributes) : Base(name)
+    FieldCrtp(const std::string &name, Attrs &&... attributes) : Base(name)
     {
         setAttributes(std::forward<Attrs>(attributes)...);
     };
@@ -72,7 +72,7 @@ public:
     {
         return std::make_unique<ThisValue>(*static_cast<const Derived *>(this), value);
     }
-    virtual bool isAllowed(_Storage) const { return true; };
+    virtual bool isAllowed(const _Storage &) const { return true; };
 
     /** @returns A parsed value.
      *
