@@ -38,3 +38,5 @@
 #include "type/Integer.hpp"
 #include "type/FloatingPoint.hpp"
 #include "type/FixedQ.hpp"
+#include "type/VarArray.hpp"
+#include "type/helper/PrefixedArray.hpp"
