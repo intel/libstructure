@@ -91,7 +91,7 @@ struct CastError : std::range_error
 {
     template <class To>
     CastError(const std::string &from, const To &)
-        : std::range_error::range_error("Can't fit \"" + from + "\"into a type limited to [" +
+        : std::range_error::range_error("Can't fit \"" + from + "\" into a type limited to [" +
                                         std::to_string(std::numeric_limits<To>::min()) + ", " +
                                         std::to_string(std::numeric_limits<To>::max()) + "].")
     {
