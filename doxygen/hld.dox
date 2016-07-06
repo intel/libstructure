@@ -1,16 +1,164 @@
-/*!
+/**
 @page hld HLD
 @tableofcontents
 
-@section stage1 Stage 1
+libstructure can be used to:
 
--	Create fields -> define the top-level “field” class interface
--	Create blocks -> design field tree
--	Typing framework ? -> choose a set of stock field types; allow users to defined their own types based – or not – on the stock ones.
--	Add attributes to fields -> describe generic metadata; choose a set of “stock” attributes for the stock types.
--	Get/Set fields -> base of the serialization framework
--	How we handle the “default value” concept?
+- define tree datatypes (or "structures");
+- create values (instances) of those types;
+- import/export those type definitions and value instances;
 
+Since they can be imported/exported, types and values can be either <em>programmatically</em> or
+<em>dynamically</em> created and browsed. There isn't a unique import/export format. Import/export
+is to be differentiated from de/serialization. An <em>export is an arbitrarily loose representation
+of the data for custom purposes</em> while <em>serialization is an exact representation of the
+data</em>, mainly for persistence purposes. Deserialization recreates exactly the data that has
+previously been serialized whereas imported data may be incomplete in which case the importer has
+to make some assumptions, potentially with the help of some context.
+
+This allows several use-cases, such as:
+
+- communication between tools that have different input/output formats;
+- data transformation (e.g. binary export);
+- data visualisation.
+
+@section what-can-be-represented What can be represented ?
+
+As mentioned in the introduction, libstructure aims at describing <em>trees</em>. It is designed to
+be similar to C structs, such as:
+
+@code
+struct my_struct {
+    uint32_t a;
+    uint8_t b[20];
+    struct {
+        float c[5];
+        enum my_enum d;
+    } sub;
+};
+@endcode
+
+@subsection fields-and-blocks Fields and Blocks
+
+There are two possible elements to a structure: atomic <b>fields</b> and <b>blocks</b>. In the
+example above, `a` and `d` are fields as well as each item in `b` and `c`. `my_struct`, `b`, `c`
+and `sub` are blocks.
+
+Fields can be of different kinds of types. For now, the following kinds exist:
+
+- `Integer`;
+- `Floating Point`;
+- `Fixed Point` (aka Q-Number);
+- `String`.
+
+Blocks types with specific behaviour can be created by deriving the base `Block` class. This is
+done, for instance, for providing an `Array` type.
+
+Fields and blocks may have <b>properties</b>. There are 3 kinds of properties:
+
+- Characteristics;
+- Attributes;
+- Metadata.
+
+Properties are split according to their intent and their lifecycle.
+
+@subsection characteristics Type Characteristics
+
+Field types may have characteristics. Characteristics are the strongest properties of fields and
+are part of the type definition. As such, they are "mandatory".
+
+For instance, an integer type has a size and a signedness. An IEEE754 floating point has
+a precision (e.g. single or double). Fields of the same kind of type but with different
+characteristics are not guaranteed to be compatible (i.e. convertible without loss).
+
+@subsection attributes Type Attributes
+
+Field types and block types may have attributes. Attributes are optional and the list of possible
+attributes depend on the type.
+
+- All fields and blocks may have a <em>description</em> attribute;
+- All fields may have a <em>default value</em> attribute;
+- Numerical fields may have an attribute restricting authorized values (e.g. a <em>range</em>).
+
+All fields and blocks have a <b>name</b>. It can be regarded as an attribute, except it is
+mandatory.
+
+@todo This design does not allow for user-defined attributes. Instead, users have to use metadata
+(see below).
+
+@subsection metadata Type Metadata
+
+Fields and blocks may also have arbitrary key/value pairs. The semantics of those is entirely left
+to the producer of the data - they are meant to be defined as a protocol between the producer and
+the consumer (e.g. the importer or exporter) of the data.
+
+@section values Values
+
+Values are created from <em>the couple of a type and some input</em>. The input can either be
+<em>programmer input or user input</em> (dynamic creation of a value). In both cases, the value is
+checked against type properties. When creating a block value, this is done for all sub-elements of
+the block type.
+
+Once created, a value tree is isomorphic to the type tree with which it was created and each node
+of the value tree is composed of a value and a reference to the corresponding node in that type
+tree. Exception to isomorphism: variable-length blocks.
+
+@section import-export Import/Export
+
+TODO: example of communication between agents or transcoding of data representation.
+
+@subsection export Type and Value Export
+
+Export is realised by visiting the (type or value) tree to be exported. All an exporter has to do
+is to implement the relevant logic at:
+
+- the beginning of a block (before visiting the sub-elements);
+- the end of a block (after visiting the sub-element);
+- each kind of field type it supports.
+
+Binary export can be achieved through this feature.
+
+@subsection value-import Value Import
+
+Importing a value requires a type to be defined beforehand. The type tree is visited and the
+importer is
+- notified on each block entry/exit;
+- polled for each field to be imported.
+
+Builtin importers are provided, such as:
+
+- Stream Importer (from a flat stream of values, e.g. from the standard input);
+- Prompt Importer (prompts the user for each value);
+- Map Importer (gets values from a path->value map).
+
+A <em>default importer</em> also exists and can be combined with the <em>default value</em>
+attribute in order to create the structured value using this attribute as input.
+
+@subsection type-import Type Import
+
+@todo Currently, type trees can't be dynamically defined. This is an implementation limitation, not
+a design limitation.
+
+@section variable-length Variable-Length blocks
+
+Libstructure supports <em>Variable-Length Arrays</em> as a type of block of which values will
+have an dynamically-chosen number of sub-elements (all identical). This constrasts to regular
+blocks which number of sub-elements is set when the block type is defined: here, the number of
+sub-elements is set when creating the value.
+
+Variable-Length blocks have limitations w.r.t. import: since such a block has no determinate
+length, the importer can't be expected to know when it is done importing it. It means that
+importing a VL block is only possible if the value source is, itself, structured. Alternatively, it
+can work with a flat stream of values if the VL block is at the end of the type tree.
+
+Example: importing `{1, 2, 3, 4}` into `{ int a; int b[]; int c}` will never reach `c` because `b`
+will greedily consume all the data starting from 2. However, importing `{1, {2, 3}, 4}` into that
+same type can be done and `b` will have a actual length of 2.
+
+This also allows creating <em>prefixed arrays</em> which are Variable-Length blocks prepended with
+their size.
+*/
+/*
 @section stage2 Stage 2
 
 -	Export -> describe structure export 1st
@@ -18,7 +166,4 @@
 -	Binary format
 -	XML pfw format
 -	Canonical format
-
-
-
 */
