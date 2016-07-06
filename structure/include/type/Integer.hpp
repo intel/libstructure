@@ -31,6 +31,7 @@
 
 #include "structure_export.h"
 
+#include "type/Numerical.hpp"
 #include "type/StockTypes.hpp"
 #include "type/Field.hpp"
 #include "attributes/Range.hpp"
@@ -51,24 +52,6 @@ public:
     virtual bool getSignedness() const = 0;
 };
 
-template <typename Storage>
-class IntegerAttributes : public GenericFieldAttributes
-{
-public:
-    attributes::Range<Storage> mRange;
-
-    template <class T>
-    void set(const attributes::Range<T> &range)
-    {
-        mRange = range;
-    }
-    template <typename C>
-    void set(const C &c)
-    {
-        GenericFieldAttributes::set(c);
-    }
-};
-
 /** Helper class for creating new integer field types
  *
  * @tparam size The size (typically 8, 16, 32 or 64).
@@ -80,7 +63,7 @@ public:
  */
 template <size_t size, bool isSigned, class _Storage>
 class NewInteger : public detail::FieldCrtp<NewInteger<size, isSigned, _Storage>, Integer, _Storage,
-                                            IntegerAttributes<_Storage>>
+                                            NumericalAttributes<_Storage>>
 {
     // We could write a clever class template to deduce the ideal storage type but for now, it's
     // easier to just pass it as argument and statically check it.
@@ -94,7 +77,7 @@ class NewInteger : public detail::FieldCrtp<NewInteger<size, isSigned, _Storage>
 private:
     using This = NewInteger<size, isSigned, _Storage>;
     using ThisValue = FieldValue<This>;
-    using Base = detail::FieldCrtp<This, Integer, _Storage, IntegerAttributes<_Storage>>;
+    using Base = detail::FieldCrtp<This, Integer, _Storage, NumericalAttributes<_Storage>>;
 
     std::unique_ptr<GenericFieldValue> withTyped(long long value) const override
     {

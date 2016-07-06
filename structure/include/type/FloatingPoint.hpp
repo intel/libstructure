@@ -31,6 +31,7 @@
 
 #include "structure_export.h"
 
+#include "type/Numerical.hpp"
 #include "type/StockTypes.hpp"
 #include "type/Field.hpp"
 
@@ -77,8 +78,8 @@ public:
  * @ingroup StockTypes
  */
 template <class _Storage>
-class NewFloatingPoint
-    : public detail::FieldCrtp<NewFloatingPoint<_Storage>, FloatingPoint, _Storage>
+class NewFloatingPoint : public detail::FieldCrtp<NewFloatingPoint<_Storage>, FloatingPoint,
+                                                  _Storage, NumericalAttributes<_Storage>>
 {
     static_assert(std::is_floating_point<_Storage>::value,
                   "The specified storage is not a floating point type.");
@@ -86,7 +87,7 @@ class NewFloatingPoint
 private:
     using This = NewFloatingPoint<_Storage>;
     using ThisValue = FieldValue<This>;
-    using Base = detail::FieldCrtp<This, FloatingPoint, _Storage>;
+    using Base = detail::FieldCrtp<This, FloatingPoint, _Storage, NumericalAttributes<_Storage>>;
 
     /** Creates a value from the given float
      */
@@ -103,6 +104,12 @@ private:
 
 public:
     using Base::Base;
+
+    bool isAllowed(const _Storage &value) const
+    {
+        auto &range = this->getAttributes().mRange;
+        return range.min() <= value and value <= range.max();
+    }
 
     /** @returns the human-readable name of the field type */
     static std::string typeToString() { return detail::FloatingTrait<_Storage>::getName(); }

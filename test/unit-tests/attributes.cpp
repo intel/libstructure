@@ -79,6 +79,10 @@ TEST_CASE("Type attributes", "[structure][attributes]")
     CHECK_NOTHROW(u16.with("3"));
     CHECK_THROWS(u16.with("4"));
 
+    Float f("name", attributes::mkRange(-1.0, 1.0));
+    CHECK_NOTHROW(f.with("1"));
+    CHECK_THROWS(f.with("-1.1"));
+
     // Block with a description
     Block b("name", attributes::Description{"desc"}, UInt8("u8"));
     CHECK(b.getDescription() == "desc");
