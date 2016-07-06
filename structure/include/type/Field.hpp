@@ -72,7 +72,7 @@ public:
     {
         return std::make_unique<ThisValue>(*static_cast<const Derived *>(this), value);
     }
-    virtual bool isAllowed(const _Storage &) const { return true; };
+    bool isAllowed(const _Storage &) const { return true; };
 
     /** @returns A parsed value.
      *
