@@ -80,10 +80,10 @@ TEST_CASE("Checked casts", "[cast]")
         float f;
         double d;
 
-        d = std::numeric_limits<float>::min();
+        d = std::numeric_limits<float>::lowest();
         CHECK(safe_cast<float>(d) == Approx(d));
 
-        d = std::numeric_limits<double>::min();
+        d = std::numeric_limits<double>::lowest();
         CHECK_THROWS_AS(safe_cast<float>(d), CastError);
 
         d = std::numeric_limits<float>::max();
@@ -95,7 +95,7 @@ TEST_CASE("Checked casts", "[cast]")
         f = std::numeric_limits<float>::max();
         CHECK(safe_cast<double>(f) == Approx(f));
 
-        f = std::numeric_limits<float>::min();
+        f = std::numeric_limits<float>::lowest();
         CHECK(safe_cast<double>(f) == Approx(f));
     }
 }

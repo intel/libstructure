@@ -57,7 +57,7 @@ template <typename From, typename To>
 To integer_safe_cast(From from, SameSignedness<From, To> * = 0)
 {
     using limits = std::numeric_limits<To>;
-    if (limits::min() <= from and from <= limits::max()) {
+    if (limits::lowest() <= from and from <= limits::max()) {
         return static_cast<To>(from);
     }
     throw InternalError();
@@ -92,7 +92,7 @@ struct CastError : std::range_error
     template <class To>
     CastError(const std::string &from, const To &)
         : std::range_error::range_error("Can't fit \"" + from + "\" into a type limited to [" +
-                                        std::to_string(std::numeric_limits<To>::min()) + ", " +
+                                        std::to_string(std::numeric_limits<To>::lowest()) + ", " +
                                         std::to_string(std::numeric_limits<To>::max()) + "].")
     {
     }
@@ -119,7 +119,7 @@ To safe_cast(From from, typename std::enable_if<std::is_floating_point<To>::valu
                                                 std::is_floating_point<From>::value>::type * = 0)
 {
     using limits = std::numeric_limits<To>;
-    if (limits::min() <= from and from <= limits::max()) {
+    if (limits::lowest() <= from and from <= limits::max()) {
         return static_cast<To>(from);
     }
     throw CastError(std::to_string(from), To());

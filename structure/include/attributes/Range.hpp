@@ -126,7 +126,7 @@ public:
     Storage max() const { return mMax; }
 
 private:
-    static constexpr Storage minima = std::numeric_limits<Storage>::min();
+    static constexpr Storage minima = std::numeric_limits<Storage>::lowest();
     static constexpr Storage maxima = std::numeric_limits<Storage>::max();
     Storage mMin = minima;
     Storage mMax = maxima;
