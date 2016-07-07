@@ -33,6 +33,9 @@
 
 -Some samples might be outdated-
 
+These are examples of what code using libstructure could look like. They aren't actually
+working. See <a href="examples.html">Examples</a> for actual examples.
+
 @section struct-to-settings-int Structure to settings interactive
 
 @code

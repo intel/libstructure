@@ -52,6 +52,14 @@
 
 namespace binary_export
 {
+/** @example binary-export.cpp
+ * This show how to use the binary export.
+ */
+/** A visitor for binary export.
+ *
+ * Builtin C types are memcopied to the output. std::strings are exported as C strings. Everything
+ * is packed.
+ */
 class Visitor : public structure::StorageVisitor
 {
 public:

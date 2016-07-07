@@ -50,6 +50,9 @@ class FieldValue;
  * @{
  */
 
+/** @example parameter-framework/export.cpp
+ * Shows how StructureVisitor can be derived to write a Parameter Framework structure exporter.
+ */
 /** Visits a Structure
  *
  * Implements the Visitor design pattern.
@@ -72,6 +75,9 @@ public:
     virtual void visit(const String &s);
 };
 
+/** @example parameter-framework/exportValue.cpp
+ * Shows how ValueVisitor can be derived to write a Parameter Framework value exporter.
+ */
 /** Visits a StructureValue
  *
  * Implements the Visitor design pattern.

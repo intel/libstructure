@@ -27,41 +27,25 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#pragma once
+#include "functions.hpp"
+#include "client/stock.hpp"
+#include "export.hpp"
 
-#include "structure_export.h"
+#include <iostream>
 
-#include "ValueImporter.hpp"
-#include "type/GenericField.hpp"
+using namespace structure;
 
-namespace structure
+int main(void)
 {
+    Block root("MyData", Block("Complex", Float("Real"), Float("Imaginary")), UInt32("Counter"),
+               Q32f31("Fixed"));
 
-/** @example default-value.cpp
- * This shows how to use default values attribute and the default importer.
- */
-/** An importer that uses the Default attribute in a field to build it
- *  and throws an exception if the field does have a Default attribute.
- */
-class DefaultImporter : public ValueImporter
-{
-public:
-    std::unique_ptr<GenericFieldValue> import(const GenericField &field,
-                                              const std::string &path) override
-    {
-        if (field.hasDefaultImporter()) {
-            return field.getDefaultImporter().import(field, path);
-        }
-        throw NoDefaultValue(field.getName());
-    }
+    auto r = root.with({{"1.2", "3.4"}, "2", "0.2"});
 
-    void onEnterBlock(const std::string &) override { throw WrongType("Block", "Atom"); }
+    std::cout << "- - - Structure - - -" << std::endl;
+    std::cout << exportStructure(root) << std::endl;
+    std::cout << "- - - Value - - -" << std::endl;
+    std::cout << exportValue(*r) << std::endl;
 
-    void onExitBlock(const std::string &) override { throw WrongType("Block", "Atom"); }
-};
-
-/** Provide a global instance of a DefaultImporter for convenience
- */
-STRUCTURE_EXPORT extern DefaultImporter defaultImporter;
-
-} // namespace structure
+    return 0;
+}
