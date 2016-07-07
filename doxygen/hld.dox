@@ -105,7 +105,7 @@ tree. Exception to isomorphism: variable-length blocks.
 
 @section import-export Import/Export
 
-TODO: example of communication between agents or transcoding of data representation.
+@todo Example of communication between agents or transcoding of data representation.
 
 @subsection export Type and Value Export
 

@@ -131,11 +131,12 @@ public:
      */
     static _Storage fromString(const std::string &input)
     {
-        // TODO: we assume that the user inputs a decimal value... what is he wants to directly
-        // enter the numerator?
-        // TODO: choose the intermediate type according to the storage type
+        /** @todo We assume that the user inputs a decimal value... what is he wants to directly
+         * enter the numerator?
+         */
+        /** @todo choose the intermediate type according to the storage type. */
         double parsed = safe_cast<double>(input);
-        // TODO: range checking
+        /** @todo range checking. */
 
         // For Qn.m number, multiply by 2^n and round to the nearest integer
         // Q numbers are a ratio, of which the denominator is 2^fractional

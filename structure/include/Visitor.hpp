@@ -46,7 +46,7 @@ class FieldValue;
 
 /** @defgroup Visitors Visitors
  *
- * TODO: add detailed description.
+ * @todo add detailed description for Visitors.
  * @{
  */
 

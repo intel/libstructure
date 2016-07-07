@@ -63,8 +63,9 @@ public:
 };
 
 template <class Storage>
-class Range // TODO: derive from a "ValueRestriction" or "AllowedValues" class, with a pure virtual
-            // "isAllowed" method.
+class Range /** @todo derive from a "ValueRestriction" or "AllowedValues" class, with a pure virtual
+             * "isAllowed" method.
+             */
 {
     static_assert(std::is_arithmetic<Storage>::value,
                   "Ranges can only be defined over arithmetic (aka. numerical) types.");

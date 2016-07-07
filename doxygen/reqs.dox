@@ -158,7 +158,9 @@ my_block_array
         bar* : string
 @endcode
 
-@subsection req-dynamic-length-data TODO: Dynamic-length data
+@subsection req-dynamic-length-data
+
+@todo Dynamic-length data requirements
 
 - TLV
 - TV (with length implicitly defined by the type)

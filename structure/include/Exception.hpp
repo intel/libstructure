@@ -77,7 +77,6 @@ public:
 class ParseError : public StructureException
 {
 public:
-    // TODO: make it possible to pass a type name
     ParseError(const std::string &input)
         : StructureException("Incompatible value \"" + input + "\".")
     {

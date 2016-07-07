@@ -113,7 +113,8 @@ TEST_CASE("FloatingPoint basic tests", "[structure][floating]")
 TEST_CASE("FixedQ basic tests", "[structure][fixedq]")
 {
     CHECK(Q16f15::fromString("0.5") == 16384);
-    /* CHECK_THROWS(Q16f15::fromString("100000")); */ // TODO: implement range-checking
+    /** @todo implement range-checking for FixedQ */
+    /* CHECK_THROWS(Q16f15::fromString("100000")); */
 
     NewFixedQ<16, 10, true, int16_t> q16f10("q16f10");
     CHECK(q16f10.getSize() == 16);

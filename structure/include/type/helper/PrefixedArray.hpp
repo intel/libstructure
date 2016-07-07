@@ -51,7 +51,7 @@ namespace structure
 template <typename Prefix>
 class PrefixedArray : public Block
 {
-    // TODO: should this rely on the return type of Prefix::getValue() instead?
+    /** @todo Should this rely on the return type of Prefix::getValue() instead? */
     static_assert(std::is_integral<typename Prefix::Storage>::value,
                   "The type of a PrefixedArray's prefix must be an integer field");
 
