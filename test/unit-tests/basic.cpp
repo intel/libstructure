@@ -58,6 +58,7 @@ TEST_CASE("Structure and Value creation", "[structure][value]")
     CHECK_NOTHROW(VarArray("name", UInt8("item name")));
     CHECK_NOTHROW(VarArray("name", Block("item name", UInt8("subitem name"))));
     CHECK_NOTHROW(PrefixedArray<UInt8>("name", UInt8("subitem name")));
+    CHECK_NOTHROW(Array("name", UInt8("item name"), 2));
 
     CHECK_NOTHROW(Block("name").with({}));
     CHECK_NOTHROW(Float("name").with("42"));
@@ -75,6 +76,7 @@ TEST_CASE("Structure and Value creation", "[structure][value]")
     CHECK_NOTHROW(VarArray("name", UInt8("item name")).with({"42"}));
     CHECK_NOTHROW(VarArray("name", Block("item name", UInt8("subitem name"))).with({{"42"}}));
     CHECK_NOTHROW(PrefixedArray<UInt8>("name", UInt8("subitem name")).with({"2", {"10", "20"}}));
+    CHECK_NOTHROW(Array("name", UInt8("item name"), 2).with({"1", "2"}));
 }
 
 TEST_CASE("GetName", "[structure][value][name]")

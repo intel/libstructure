@@ -41,3 +41,4 @@
 #include "type/String.hpp"
 #include "type/VarArray.hpp"
 #include "type/helper/PrefixedArray.hpp"
+#include "type/Array.hpp"
