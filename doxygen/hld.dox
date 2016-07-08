@@ -157,6 +157,72 @@ same type can be done and `b` will have a actual length of 2.
 
 This also allows creating <em>prefixed arrays</em> which are Variable-Length blocks prepended with
 their size.
+
+@section uml Object Design
+
+The following diagrams are not intended to be a precise description of the implementation details
+but rather a general view of the organisation of the different concepts.
+
+First things first, this diagram describes the composite nature of a structure.
+@startuml
+title Fields and Blocks
+abstract Structure <|-- Block
+Structure "*" --* Block
+Structure <|-- abstract Field
+
+Block <|-- Array
+Block <|-- VarArray
+Block <|-- PrefixedArray
+
+Field <|-- Integer
+Field <|-- FixedQ
+Field <|-- FloatingPoint
+Field <|-- String
+@enduml
+The list of specialized blocks and specialized fields is not definitive.
+
+Field types can have variants:
+@startuml
+title Field types variants
+
+class NewInteger<size, signedness>
+Integer <|-- NewInteger
+
+class NewFixedQ<size, signedness, fractional_part>
+FixedQ <|-- NewFixedQ
+@enduml
+
+Fields and Blocks have companion classes managing their attributes. It means that each field or
+block type is associated to a specific attribute class.
+@startuml
+title Attributes
+package Attributes {
+    class Description
+    class DefaultValue
+    class Range
+}
+package "Attribute companion classes" {
+    class GenericAttributes
+    class NumericalAttributes
+}
+package "Types" {
+    class Integer
+    class FloatingPoint
+    class String
+    class Block
+}
+
+Description --* GenericAttributes
+DefaultValue --* GenericAttributes
+Description --* Block
+
+GenericAttributes <|- NumericalAttributes
+Range --* NumericalAttributes
+
+NumericalAttributes --* Integer
+NumericalAttributes --* FloatingPoint
+GenericAttributes --* String
+@enduml
 */
 /*
 @section stage2 Stage 2
