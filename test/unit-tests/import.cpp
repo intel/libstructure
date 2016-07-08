@@ -35,8 +35,6 @@
 
 #include "functions.hpp"
 #include "client/stock.hpp"
-#include "client/type.hpp"
-#include "client/value.hpp"
 
 #include <sstream>
 #include <map>

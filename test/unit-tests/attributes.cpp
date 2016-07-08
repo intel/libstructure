@@ -31,7 +31,6 @@
 
 #include "attributes/Range.hpp"
 #include "client/stock.hpp"
-#include "client/type.hpp"
 #include "importer/DefaultImporter.hpp"
 
 using namespace structure;

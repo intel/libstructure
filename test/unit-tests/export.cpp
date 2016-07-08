@@ -32,8 +32,6 @@
 #include "functions.hpp"
 #include "client/stock.hpp"
 #include "type/PrefixedArray.hpp"
-#include "client/type.hpp"
-#include "client/value.hpp"
 
 using namespace structure;
 

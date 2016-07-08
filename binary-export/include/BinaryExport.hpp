@@ -30,7 +30,6 @@
 #pragma once
 
 #include "Visitor.hpp"
-#include "client/value.hpp"
 
 #include <vector>
 #include <iterator>

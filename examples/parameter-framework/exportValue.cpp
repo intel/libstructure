@@ -29,7 +29,6 @@
  */
 #include "export.hpp"
 #include "functions.hpp"
-#include "client/type.hpp"
 #include "client/stock.hpp"
 #include <string>
 

@@ -29,8 +29,6 @@
  */
 #include <catch.hpp>
 
-#include "client/type.hpp"
-#include "client/value.hpp"
 #include "client/stock.hpp"
 #include "BinaryExport.hpp"
 

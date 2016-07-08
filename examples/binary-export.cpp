@@ -27,8 +27,6 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "client/type.hpp"
-#include "client/value.hpp"
 #include "client/stock.hpp"
 #include "functions.hpp"
 #include "BinaryExport.hpp"
