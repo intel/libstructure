@@ -29,16 +29,17 @@
  */
 #pragma once
 
-/** @file
- *
- * @defgroup StockTypes Stock-provided type definitions
- */
+/* This file ensures that declarations are aligned everywhere */
 
-#include "type/StockTypes.hpp"
-#include "type/Integer.hpp"
-#include "type/FloatingPoint.hpp"
-#include "type/FixedQ.hpp"
-#include "type/String.hpp"
-#include "type/VarArray.hpp"
-#include "type/PrefixedArray.hpp"
-#include "type/Array.hpp"
+namespace structure
+{
+class Integer;
+class FloatingPoint;
+class FixedQ;
+class String;
+class Block;
+class VarArray;
+template <typename>
+class PrefixedArray;
+class Array;
+}

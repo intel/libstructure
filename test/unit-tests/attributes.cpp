@@ -30,7 +30,7 @@
 #include <catch.hpp>
 
 #include "attributes/Range.hpp"
-#include "client/stock.hpp"
+#include "type/stock.hpp"
 #include "importer/DefaultImporter.hpp"
 
 using namespace structure;

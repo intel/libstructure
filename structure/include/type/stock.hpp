@@ -29,10 +29,17 @@
  */
 #pragma once
 
-namespace structure
-{
-class Integer;
-class FloatingPoint;
-class FixedQ;
-class String;
-}
+/** @file
+ *
+ * @defgroup StockTypes Stock-provided type definitions
+ */
+
+#include "type/detail/stock.fw.hpp"
+#include "type/Integer.hpp"
+#include "type/FloatingPoint.hpp"
+#include "type/FixedQ.hpp"
+#include "type/String.hpp"
+#include "type/Block.hpp"
+#include "type/VarArray.hpp"
+#include "type/PrefixedArray.hpp"
+#include "type/Array.hpp"

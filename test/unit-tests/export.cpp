@@ -30,8 +30,7 @@
 #include <catch.hpp>
 
 #include "functions.hpp"
-#include "client/stock.hpp"
-#include "type/PrefixedArray.hpp"
+#include "type/stock.hpp"
 
 using namespace structure;
 

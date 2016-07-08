@@ -34,7 +34,7 @@
 #include "importer/MapImporter.hpp"
 
 #include "functions.hpp"
-#include "client/stock.hpp"
+#include "type/stock.hpp"
 
 #include <sstream>
 #include <map>

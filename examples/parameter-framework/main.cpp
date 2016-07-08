@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "functions.hpp"
-#include "client/stock.hpp"
+#include "type/stock.hpp"
 #include "export.hpp"
 
 #include <iostream>

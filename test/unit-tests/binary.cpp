@@ -29,7 +29,7 @@
  */
 #include <catch.hpp>
 
-#include "client/stock.hpp"
+#include "type/stock.hpp"
 #include "BinaryExport.hpp"
 
 namespace structure

@@ -30,7 +30,7 @@
 #pragma once
 
 #include "structure_export.h"
-#include "type/StockTypes.hpp"
+#include "type/detail/stock.fw.hpp"
 #include "type/Field.hpp"
 
 #include <safe_cast.hpp>

@@ -29,7 +29,7 @@
  */
 #pragma once
 
-#include "type/StockTypes.hpp"
+#include "type/detail/stock.fw.hpp"
 #include "structure_export.h"
 
 #include <string>

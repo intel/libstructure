@@ -29,8 +29,7 @@
  */
 #include "export.hpp"
 #include "functions.hpp"
-#include "type/Field.hpp"
-#include "client/stock.hpp"
+#include "type/stock.hpp"
 
 #include <sstream>
 #include <string>

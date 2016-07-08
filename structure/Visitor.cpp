@@ -28,9 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "Visitor.hpp"
-#include "type/Field.hpp"
-#include "type/Block.hpp"
-#include "client/stock.hpp"
+#include "type/stock.hpp"
 
 namespace structure
 {

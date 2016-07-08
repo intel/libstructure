@@ -29,7 +29,7 @@
  */
 #include "export.hpp"
 #include "functions.hpp"
-#include "client/stock.hpp"
+#include "type/stock.hpp"
 #include <string>
 
 using namespace structure;
