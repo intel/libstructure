@@ -54,10 +54,6 @@ public:
         }
         throw NoDefaultValue(field.getName());
     }
-
-    void onEnterBlock(const std::string &) override { throw WrongType("Block", "Atom"); }
-
-    void onExitBlock(const std::string &) override { throw WrongType("Block", "Atom"); }
 };
 
 /** Provide a global instance of a DefaultImporter for convenience
