@@ -31,7 +31,7 @@
 #pragma once
 
 #include "type/Block.hpp"
-#include "disjunction.hpp"
+#include "detail/disjunction.hpp"
 
 #include <sstream>
 

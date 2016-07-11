@@ -32,7 +32,7 @@
 #include "structure_export.h"
 
 #include "type/Block.hpp"
-#include "disjunction.hpp"
+#include "detail/disjunction.hpp"
 
 #include <utility>
 

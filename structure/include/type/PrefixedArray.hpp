@@ -32,7 +32,7 @@
 #include "type/Block.hpp"
 #include "Exception.hpp"
 #include "functions.hpp"
-#include "disjunction.hpp"
+#include "detail/disjunction.hpp"
 
 #include <safe_cast.hpp>
 #include <limits>
