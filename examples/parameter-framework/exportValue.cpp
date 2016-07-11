@@ -76,8 +76,8 @@ public:
 
         if (mOpen) {
             mResult << "<FixedPointParameter Name=\"" + q.getName() + "\" Size=\"" << q.getSize()
-                    << " Integral=\"" << q.getIntegral() << "\" Fractional=\"" << q.getFractional()
-                    << "\">";
+                    << "\" Integral=\"" << q.getIntegral() << "\" Fractional=\""
+                    << q.getFractional() << "\">";
         } else {
             mResult << "</FixedPointParameter>";
         }

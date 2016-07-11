@@ -77,7 +77,7 @@ void PfwStructureVisitor::visit(const FixedQ &q)
     }
 
     mCurrent << tab(mLevel) << "<FixedPointParameter Name=\"" + q.getName() + "\" Size=\""
-             << q.getSize() << " Integral=\"" << q.getIntegral() << "\" Fractional=\""
+             << q.getSize() << "\" Integral=\"" << q.getIntegral() << "\" Fractional=\""
              << q.getFractional() << "\"/>\n";
 }
 
