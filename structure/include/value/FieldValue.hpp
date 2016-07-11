@@ -74,7 +74,7 @@ public:
         : mStructure(field), mValue(mStructure.fromString(value))
     {
         if (not field.isAllowed(mValue)) {
-            throw std::runtime_error("Illegal value");
+            throw std::range_error("Illegal value");
         }
     }
     /** Constructs a value from a Field and typed value */
@@ -83,7 +83,7 @@ public:
         : mStructure(field), mValue(safe_cast<typename FieldType::Storage>(value))
     {
         if (not field.isAllowed(mValue)) {
-            throw std::runtime_error("Illegal value");
+            throw std::range_error("Illegal value");
         }
     }
 
