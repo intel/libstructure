@@ -77,6 +77,7 @@ option(DOXYGEN "Enable doxygen generation" ON)
 
 add_subdirectory(doxygen)
 
+add_subdirectory(convert)
 add_subdirectory(safe_cast)
 add_subdirectory(structure)
 add_subdirectory(binary-export)
