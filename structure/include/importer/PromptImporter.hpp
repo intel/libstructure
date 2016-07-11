@@ -61,8 +61,13 @@ class PromptImporter : public ValueImporter
 {
 
 public:
-    PromptImporter(Input &input = std::cin, Output &output = std::cout)
-        : mInput(input), mOutput(output)
+    /**
+     * @param input The input stream from which to read user values.
+     * @param output The output strem on which to prompt the user for values.
+     * @param retry Whether to prompt the user anew when user input couldn't be importer.
+     */
+    PromptImporter(Input &input = std::cin, Output &output = std::cout, bool retry = true)
+        : mInput(input), mOutput(output), mRetry(retry)
     {
     }
 
@@ -70,13 +75,26 @@ public:
                                               const std::string &path) override
     {
         std::string val;
-        mOutput << path << " = ";
-        mInput >> std::quoted(val);
-        return f.with(val);
+        do {
+            mOutput << path << " = ";
+            mInput >> std::quoted(val);
+            try {
+                return f.with(val);
+            } catch (std::range_error &e) {
+                if (mRetry) {
+                    mOutput << std::string("Failed to import (") + e.what() + "). Try again."
+                            << std::endl;
+                } else {
+                    throw e;
+                }
+            }
+        } while (true);
     }
 
 private:
     Input &mInput;
     Output &mOutput;
+
+    bool mRetry;
 };
 } // namespace structure

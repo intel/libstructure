@@ -68,7 +68,7 @@ SCENARIO("Importing values with ValueImporter subclasses", "[value][import]")
         }
 
         GIVEN ("A PromptImporter") {
-            auto importer = PromptImporter<>(ss, null);
+            auto importer = PromptImporter<>(ss, null, false);
             THEN ("Creating a value from correct input should not throw.") {
                 ss << R"(1 2.3 4 "egg and spam" 5)";
                 CHECK_NOTHROW(value = build(root, importer));
