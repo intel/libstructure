@@ -27,26 +27,19 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+#include "structure/structure_export.h"
 
-namespace strc = structure;
+#include "structure/value/StructureValue.hpp"
 
-int main(void)
+namespace structure
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
-
-    auto value = root.with({{"1.2", "3.4"}, "2"});
-
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
-
-    std::cout.write((char *)out.data(), out.size());
-
-    return 0;
+/** The base (interface) class for all atomic values (i.e. all kinds of FieldValue) */
+class STRUCTURE_EXPORT GenericFieldValue : public StructureValue
+{
+public:
+    /** @return the human representation of the value */
+    virtual std::string getValue() const = 0;
+};
 }

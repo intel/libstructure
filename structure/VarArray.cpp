@@ -27,8 +27,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "type/VarArray.hpp"
-#include "Exception.hpp"
+#include "structure/type/VarArray.hpp"
+#include "structure/Exception.hpp"
 
 namespace structure
 {

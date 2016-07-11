@@ -37,6 +37,8 @@
 #include <cmath>
 #include <type_traits>
 
+namespace structure
+{
 /* details namespace is here to hide implementation details to header end user. It
  * is NOT intended to be used outside. */
 namespace details
@@ -321,3 +323,4 @@ inline bool convertTo<bool>(const std::string &str, bool &result)
 
     return false;
 }
+} // namespace structure

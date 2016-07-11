@@ -27,10 +27,10 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "importer/ListImporter.hpp"
-#include "type/GenericField.hpp"
-#include "value/GenericFieldValue.hpp"
-#include "type/Block.hpp"
+#include "structure/importer/ListImporter.hpp"
+#include "structure/type/GenericField.hpp"
+#include "structure/value/GenericFieldValue.hpp"
+#include "structure/type/Block.hpp"
 
 #include <cassert>
 

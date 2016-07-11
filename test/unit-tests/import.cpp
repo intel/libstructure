@@ -29,12 +29,12 @@
  */
 #include <catch.hpp>
 
-#include "importer/StreamImporter.hpp"
-#include "importer/PromptImporter.hpp"
-#include "importer/MapImporter.hpp"
+#include "structure/importer/StreamImporter.hpp"
+#include "structure/importer/PromptImporter.hpp"
+#include "structure/importer/MapImporter.hpp"
 
-#include "functions.hpp"
-#include "type/stock.hpp"
+#include "structure/functions.hpp"
+#include "structure/type/stock.hpp"
 
 #include <sstream>
 #include <map>

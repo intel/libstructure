@@ -27,9 +27,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "type/Block.hpp"
-#include "Visitor.hpp"
-#include "Exception.hpp"
+#include "structure/type/Block.hpp"
+#include "structure/Visitor.hpp"
+#include "structure/Exception.hpp"
 
 #include <algorithm>
 #include <iterator>

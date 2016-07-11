@@ -29,8 +29,8 @@
  */
 #pragma once
 
-#include "type/Structure.hpp"
-#include "Visitor.hpp"
+#include "structure/type/Structure.hpp"
+#include "structure/Visitor.hpp"
 
 #include <sstream>
 #include <list>

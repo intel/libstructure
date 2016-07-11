@@ -27,26 +27,29 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+#include "structure/type/detail/stock.fw.hpp"
+#include "structure/type/Field.hpp"
 
-namespace strc = structure;
+namespace structure
 
-int main(void)
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
+/** A type of field containing an string value. */
+// Theoretically, if this class is not exported and someone tries to derive from it, MSVC will
+// produce a warning. However, exporting it makes MSVC crash... Since this class is completely
+// defined in its header, it is probably ok not to export it.
+class String : public detail::FieldCrtp<String, GenericField, std::string>
+{
+private:
+    using Base = detail::FieldCrtp<String, GenericField, std::string>;
 
-    auto value = root.with({{"1.2", "3.4"}, "2"});
+public:
+    using Base::Base;
 
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
+    void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
 
-    std::cout.write((char *)out.data(), out.size());
-
-    return 0;
-}
+    /** @returns the human-readable name of the field type */
+    static std::string typeToString() { return "String"; }
+};
+} // namespace structure

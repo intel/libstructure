@@ -27,26 +27,37 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+#include "structure/structure_export.h"
 
-namespace strc = structure;
+#include "structure/ValueImporter.hpp"
+#include "structure/type/GenericField.hpp"
 
-int main(void)
+namespace structure
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
 
-    auto value = root.with({{"1.2", "3.4"}, "2"});
+/** @example default-value.cpp
+ * This shows how to use default values attribute and the default importer.
+ */
+/** An importer that uses the Default attribute in a field to build it
+ *  and throws an exception if the field does have a Default attribute.
+ */
+class DefaultImporter : public ValueImporter
+{
+public:
+    std::unique_ptr<GenericFieldValue> import(const GenericField &field,
+                                              const std::string &path) override
+    {
+        if (field.hasDefaultImporter()) {
+            return field.getDefaultImporter().import(field, path);
+        }
+        throw NoDefaultValue(field.getName());
+    }
+};
 
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
+/** Provide a global instance of a DefaultImporter for convenience
+ */
+STRUCTURE_EXPORT extern DefaultImporter defaultImporter;
 
-    std::cout.write((char *)out.data(), out.size());
-
-    return 0;
-}
+} // namespace structure

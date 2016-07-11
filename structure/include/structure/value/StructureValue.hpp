@@ -27,26 +27,39 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+#include "structure/structure_export.h"
 
-namespace strc = structure;
+#include "structure/type/Structure.hpp"
 
-int main(void)
+#include <initializer_list>
+#include <string>
+
+namespace structure
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
 
-    auto value = root.with({{"1.2", "3.4"}, "2"});
+class ValueVisitor;
+class StorageVisitor;
+/** The base class for all values (atomic and aggregates) */
+class STRUCTURE_EXPORT StructureValue
+{
+public:
+    // Needed as StructureValue is the root class of a hierarchy
+    virtual ~StructureValue() = default;
 
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
+    /** Implements the Visitor design pattern */
+    virtual void accept(ValueVisitor &visitor) const = 0;
+    /** Implements the Visitor design pattern
+     *
+     * This overload visits the actual in-memory values wheras the ValueVisitor overload visits
+     * polymorphic values.
+     */
+    virtual void accept(StorageVisitor &visitor) const = 0;
 
-    std::cout.write((char *)out.data(), out.size());
+    std::string getName() const;
 
-    return 0;
+    /** @returns the Structure with which this value was instantiated */
+    virtual const Structure &getStructure() const = 0;
+};
 }

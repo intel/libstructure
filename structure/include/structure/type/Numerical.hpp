@@ -27,26 +27,28 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+#include "structure/type/GenericField.hpp"
+#include "structure/attributes/Range.hpp"
 
-namespace strc = structure;
-
-int main(void)
+namespace structure
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
+template <typename Storage>
+class NumericalAttributes : public GenericFieldAttributes
+{
+public:
+    attributes::Range<Storage> mRange;
 
-    auto value = root.with({{"1.2", "3.4"}, "2"});
-
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
-
-    std::cout.write((char *)out.data(), out.size());
-
-    return 0;
-}
+    template <class T>
+    void set(const attributes::Range<T> &range)
+    {
+        mRange = range;
+    }
+    template <typename C>
+    void set(const C &c)
+    {
+        GenericFieldAttributes::set(c);
+    }
+};
+} // namespace structure

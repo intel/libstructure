@@ -29,7 +29,7 @@
  */
 #pragma once
 
-#include "Visitor.hpp"
+#include "structure/Visitor.hpp"
 
 #include <vector>
 #include <iterator>

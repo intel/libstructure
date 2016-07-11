@@ -27,26 +27,34 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+#include "structure/ValueImporter.hpp"
+#include "structure/value/GenericFieldValue.hpp"
 
-namespace strc = structure;
-
-int main(void)
+namespace structure
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
+/** Wraps an importer for the purpose of ValueInitializer
+ *
+ * A ValueInitializer can contain an importer thanks to this class. If the ValueInitializer directly
+ * contained the unwrapped importer, the latter would be destroyed upon destruction of the
+ * ValueInitializer, which is not intended.
+ */
+class WrapImporter : public ValueImporter
+{
+public:
+    WrapImporter(ValueImporter &importer) : mImporter(importer) {}
 
-    auto value = root.with({{"1.2", "3.4"}, "2"});
+    std::unique_ptr<GenericFieldValue> import(const GenericField &field,
+                                              const std::string &path) override
+    {
+        return mImporter.import(field, path);
+    }
 
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
+    void onEnterBlock(const std::string &block) override { mImporter.onEnterBlock(block); }
+    void onExitBlock(const std::string &block) override { mImporter.onExitBlock(block); }
 
-    std::cout.write((char *)out.data(), out.size());
-
-    return 0;
+private:
+    ValueImporter &mImporter;
+};
 }

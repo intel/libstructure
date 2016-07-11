@@ -27,26 +27,41 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+#include "structure/ValueImporter.hpp"
+#include "structure/type/GenericField.hpp"
 
-namespace strc = structure;
+#include <map>
 
-int main(void)
+namespace structure
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
 
-    auto value = root.with({{"1.2", "3.4"}, "2"});
+/** An implementation of a ValueImporter that gets its values from a map
+ *
+ * @ingroup ValueImporter
+ *
+ */
+class MapImporter : public ValueImporter
+{
 
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
+public:
+    /**
+     * @param[in]   values : A map of <path -> values> must contain an entry for each path in the
+     * Structure
+     */
+    MapImporter(const std::map<std::string, std::string> &values) : mValues(values) {}
 
-    std::cout.write((char *)out.data(), out.size());
+    std::unique_ptr<GenericFieldValue> import(const GenericField &f,
+                                              const std::string &path) override
+    {
+        std::string val = get(path);
+        return f.with(val.c_str());
+    }
 
-    return 0;
-}
+private:
+    std::string get(const std::string &path) const { return mValues.at(path); }
+
+    const std::map<std::string, std::string> mValues;
+};
+} // namespace structure

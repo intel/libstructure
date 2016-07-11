@@ -29,8 +29,8 @@
  */
 #include <catch.hpp>
 
-#include "functions.hpp"
-#include "type/stock.hpp"
+#include "structure/functions.hpp"
+#include "structure/type/stock.hpp"
 
 using namespace structure;
 

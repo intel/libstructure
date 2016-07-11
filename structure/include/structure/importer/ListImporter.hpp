@@ -27,26 +27,42 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+#include "structure/structure_export.h"
+#include "structure/ValueImporter.hpp"
+#include "structure/ValueInitializer.hpp"
 
-namespace strc = structure;
+#include <initializer_list>
+#include <list>
+#include <memory>
 
-int main(void)
+namespace structure
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
+/** Allows ValueInitializer to be created using recursive initializer lists
+ *
+ * Thanks to this class, a ValueInitializer can contain an arbitrary level of nested blocks.
+ */
+class STRUCTURE_EXPORT ListImporter : public ValueImporter
+{
+public:
+    /** @see ValueInitializer(std::initializer_list<ValueInitializer> */
+    ListImporter(std::initializer_list<ValueInitializer> list);
 
-    auto value = root.with({{"1.2", "3.4"}, "2"});
+    std::unique_ptr<GenericFieldValue> import(const GenericField &field,
+                                              const std::string &path) override;
 
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
+    void onEnterBlock(const std::string &block) override;
+    void onExitBlock(const std::string &block) override;
 
-    std::cout.write((char *)out.data(), out.size());
+private:
+    // This class needs to be copiable because importers will be copied from initializer_list to
+    // list when they are part of a ListImporter. (Copied and not moved because items of a
+    // initializer_list can't be moved). That's why we use a shared_ptr.
+    std::list<std::shared_ptr<ValueImporter>> mImporters;
+    using Iterator = decltype(mImporters)::const_iterator;
 
-    return 0;
+    Iterator iterator;
+    size_t mDepth = 0;
+};
 }

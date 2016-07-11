@@ -1,7 +1,4 @@
-add_library(convert INTERFACE)
-target_include_directories(convert
-    INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    INTERFACE $<INSTALL_INTERFACE:include/structure/detail>)
+configure_file(convert.hpp ${CMAKE_BINARY_DIR}/structure/detail/convert.hpp COPYONLY)
 
 install(FILES convert.hpp
         DESTINATION include/structure/detail

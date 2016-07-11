@@ -27,26 +27,61 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
+
+#include "structure/ValueImporter.hpp"
+#include "structure/type/GenericField.hpp"
 
 #include <iostream>
 
-namespace strc = structure;
-
-int main(void)
+namespace structure
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
 
-    auto value = root.with({{"1.2", "3.4"}, "2"});
+/** An implementation of a ValueImporter that gets its values from a stream
+ *
+ * @tparam     Input : A class that must provide an overload of the operator >>(std::string&)
+ *
+ * Example of custom class :
+ * @code
+ * class MyStream
+ * {
+ * public:
+ *     MyStream &operator>>(std::string &s)
+ *     {
+ *         s = "42";
+ *         return *this;
+ *     }
+ * };
+ * @endcode
+ *
+ * By default, the StreamImporter will use std::cin, so
+ * @code
+ * StreamImporter<> importer();
+ * @endcode
+ * is equivalent to
+ * @code
+ * StreamImporter<std::istream> importer(std::cin);
+ * @endcode
+ *
+ * @ingroup ValueImporter
+ *
+ */
+template <class Input = std::istream>
+class StreamImporter : public ValueImporter
+{
 
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
+public:
+    StreamImporter(Input &input = std::cin) : mInput(input) {}
 
-    std::cout.write((char *)out.data(), out.size());
+    std::unique_ptr<GenericFieldValue> import(const GenericField &f,
+                                              const std::string & /*path*/) override
+    {
+        std::string val;
+        mInput >> std::quoted(val);
+        return f.with(val);
+    }
 
-    return 0;
-}
+private:
+    Input &mInput;
+};
+} // namespace structure

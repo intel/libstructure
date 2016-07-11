@@ -10,13 +10,9 @@ add_library(structure SHARED
     DefaultImporter.cpp)
 
 target_include_directories(structure
-    PUBLIC include ${CMAKE_CURRENT_BINARY_DIR})
-
-target_include_directories(structure
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    INTERFACE $<INSTALL_INTERFACE:include/structure>)
-
-target_link_libraries(structure safe_cast)
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+    INTERFACE $<INSTALL_INTERFACE:include>)
 
 include(GenerateExportHeader)
 generate_export_header(structure)
@@ -27,20 +23,12 @@ install(TARGETS structure EXPORT StructureTargets
     ARCHIVE DESTINATION lib COMPONENT dev)
 
 install(FILES
-    include/Exception.hpp
-    include/functions.hpp
-    include/ValueImporter.hpp
-    include/ValueInitializer.hpp
-    include/Visitor.hpp
+    ${CMAKE_CURRENT_BINARY_DIR}/structure_export.h
     DESTINATION "include/structure"
     COMPONENT dev)
 
 install(DIRECTORY
-    include/type
-    include/value
-    include/importer
-    include/attributes
-    include/detail
-    DESTINATION "include/structure"
+    include
+    DESTINATION "."
     COMPONENT dev
     FILES_MATCHING PATTERN "*.hpp")

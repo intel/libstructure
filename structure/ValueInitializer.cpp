@@ -27,10 +27,10 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "ValueInitializer.hpp"
-#include "importer/AtomImporter.hpp"
-#include "importer/ListImporter.hpp"
-#include "importer/WrapImporter.hpp"
+#include "structure/ValueInitializer.hpp"
+#include "structure/importer/AtomImporter.hpp"
+#include "structure/importer/ListImporter.hpp"
+#include "structure/importer/WrapImporter.hpp"
 
 namespace structure
 {

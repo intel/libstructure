@@ -27,26 +27,40 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+#include "structure/structure_export.h"
 
-namespace strc = structure;
+#include "structure/type/Block.hpp"
+#include "structure/detail/disjunction.hpp"
 
-int main(void)
+#include <utility>
+
+namespace structure
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
+/** Represents a Variable-Length Array (aka VLA) */
+class STRUCTURE_EXPORT VarArray : public Block
+{
+public:
+    /** Constructs a Variable-Length Array of any kind of field.
+     *
+     * @param[in] itemType The structure that is repeated in the array.
+     * @param[in] args Attributes of the VarArray
+     */
+    template <class ItemType, typename... Args>
+    VarArray(const std::string &name, ItemType &&itemType, Args &&... args)
+        : Block(name, std::forward<ItemType>(itemType), std::forward<Args>(args)...)
+    {
+        static_assert(is_structure<ItemType>::value,
+                      "The ItemType in a VarArray must be a Structure");
+        static_assert(not disjunction<is_structure<Args>...>::value,
+                      "The arguments after ItemType must not be Structures");
+    }
 
-    auto value = root.with({{"1.2", "3.4"}, "2"});
+    std::string getTypeName() const override;
 
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
-
-    std::cout.write((char *)out.data(), out.size());
-
-    return 0;
-}
+private:
+    std::unique_ptr<StructureValue> doBuild(ValueImporter &importer,
+                                            const std::string &path) const override;
+};
+} // namespace structure

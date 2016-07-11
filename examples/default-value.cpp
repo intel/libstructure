@@ -27,10 +27,10 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "functions.hpp"
-#include "type/stock.hpp"
-#include "importer/DefaultImporter.hpp"
-#include "attributes/Default.hpp"
+#include "structure/functions.hpp"
+#include "structure/type/stock.hpp"
+#include "structure/importer/DefaultImporter.hpp"
+#include "structure/attributes/Default.hpp"
 
 #include <iostream>
 

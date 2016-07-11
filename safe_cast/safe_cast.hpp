@@ -29,12 +29,14 @@
  */
 #pragma once
 
-#include <convert.hpp>
+#include "structure/detail/convert.hpp"
 
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
 
+namespace structure
+{
 namespace safe_cast_details
 {
 struct InternalError
@@ -147,3 +149,4 @@ To safe_cast(const std::string &from)
     }
     return to;
 }
+} // namespace structure

@@ -29,9 +29,9 @@
  */
 #include <catch.hpp>
 
-#include "functions.hpp"
-#include "type/stock.hpp"
-#include <safe_cast.hpp>
+#include "structure/functions.hpp"
+#include "structure/type/stock.hpp"
+#include "structure/detail/safe_cast.hpp"
 
 #include <string>
 

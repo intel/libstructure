@@ -27,12 +27,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "functions.hpp"
-#include "type/Block.hpp"
-#include "type/Field.hpp"
-#include "value/FieldValue.hpp"
-#include "value/BlockValue.hpp"
-#include "Exception.hpp"
+#include "structure/functions.hpp"
+#include "structure/type/Block.hpp"
+#include "structure/type/Field.hpp"
+#include "structure/value/FieldValue.hpp"
+#include "structure/value/BlockValue.hpp"
+#include "structure/Exception.hpp"
 
 #include <iostream>
 

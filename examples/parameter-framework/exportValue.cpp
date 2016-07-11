@@ -28,8 +28,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "export.hpp"
-#include "functions.hpp"
-#include "type/stock.hpp"
+#include "structure/functions.hpp"
+#include "structure/type/stock.hpp"
 #include <string>
 
 using namespace structure;

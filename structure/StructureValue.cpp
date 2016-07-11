@@ -27,8 +27,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "value/StructureValue.hpp"
-#include "type/Structure.hpp"
+#include "structure/value/StructureValue.hpp"
+#include "structure/type/Structure.hpp"
 
 namespace structure
 {

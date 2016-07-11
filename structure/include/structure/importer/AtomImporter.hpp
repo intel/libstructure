@@ -27,26 +27,38 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+#include "structure/ValueImporter.hpp"
+#include "structure/type/GenericField.hpp"
+#include "structure/type/Block.hpp"
+#include "structure/value/GenericFieldValue.hpp"
 
-namespace strc = structure;
+#include <string>
 
-int main(void)
+namespace structure
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
+/** Wraps a value of any type for the purpose of ValueInitializer
+ *
+ * @tparam T : The type of the atom value
+ */
+template <class T>
+class AtomImporter : public ValueImporter
+{
+public:
+    AtomImporter(T value) : mValue(value) {}
 
-    auto value = root.with({{"1.2", "3.4"}, "2"});
+    std::unique_ptr<GenericFieldValue> import(const GenericField &field,
+                                              const std::string &) override
+    {
+        return field.with(mValue);
+    }
 
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
+    void onEnterBlock(const std::string &) override { throw WrongType("Block", "Atom"); }
 
-    std::cout.write((char *)out.data(), out.size());
+    void onExitBlock(const std::string &) override { throw WrongType("Block", "Atom"); }
 
-    return 0;
+private:
+    T mValue;
+};
 }

@@ -27,26 +27,19 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+/** @file
+ *
+ * @defgroup StockTypes Stock-provided type definitions
+ */
 
-namespace strc = structure;
-
-int main(void)
-{
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
-
-    auto value = root.with({{"1.2", "3.4"}, "2"});
-
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
-
-    std::cout.write((char *)out.data(), out.size());
-
-    return 0;
-}
+#include "structure/type/detail/stock.fw.hpp"
+#include "structure/type/Integer.hpp"
+#include "structure/type/FloatingPoint.hpp"
+#include "structure/type/FixedQ.hpp"
+#include "structure/type/String.hpp"
+#include "structure/type/Block.hpp"
+#include "structure/type/VarArray.hpp"
+#include "structure/type/PrefixedArray.hpp"
+#include "structure/type/Array.hpp"

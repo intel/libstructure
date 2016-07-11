@@ -29,9 +29,9 @@
  */
 #include <catch.hpp>
 
-#include "attributes/Range.hpp"
-#include "type/stock.hpp"
-#include "importer/DefaultImporter.hpp"
+#include "structure/attributes/Range.hpp"
+#include "structure/type/stock.hpp"
+#include "structure/importer/DefaultImporter.hpp"
 
 using namespace structure;
 

@@ -27,26 +27,41 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "structure/type/stock.hpp"
-#include "structure/functions.hpp"
-#include "BinaryExport.hpp"
+#pragma once
 
-#include <iostream>
+#include "structure/type/Block.hpp"
+#include "structure/value/StructureValue.hpp"
+#include "structure/Visitor.hpp"
 
-namespace strc = structure;
+#include <initializer_list>
+#include <string>
+#include <list>
 
-int main(void)
+namespace structure
 {
-    auto root =
-        strc::Block("MyData", strc::Block("Complex", strc::Float("Real"), strc::Float("Imaginary")),
-                    strc::UInt32("Counter"));
+/** An instantiated Block */
+class BlockValue : public StructureValue
+{
+public:
+    BlockValue(const Block &block) : mStructure(block) {}
 
-    auto value = root.with({{"1.2", "3.4"}, "2"});
+    /** Add a child value at the end of the block value */
+    void addValue(std::unique_ptr<StructureValue> child) { mValues.push_back(std::move(child)); }
 
-    binary_export::Visitor::Output out;
-    binary_export::write(out, *value);
+    /** @returns the list of children */
+    const std::list<std::unique_ptr<StructureValue>> &getFields() const { return mValues; }
+    /** @returns the Block type corresponding to this value
+     *
+     * Same as getStructure() but with a stronger type.
+     */
+    const Block &getBlock() const { return mStructure; }
+    const Structure &getStructure() const override { return (const Structure &)mStructure; }
 
-    std::cout.write((char *)out.data(), out.size());
+    virtual void accept(ValueVisitor &visitor) const override { visitor.visit(*this); }
+    virtual void accept(StorageVisitor &visitor) const override { visitor.visitStorage(*this); }
 
-    return 0;
+private:
+    const Block &mStructure;
+    std::list<std::unique_ptr<StructureValue>> mValues;
+};
 }
