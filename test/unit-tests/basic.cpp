@@ -52,6 +52,7 @@ TEST_CASE("Structure and Value creation", "[structure][value]")
     CHECK_NOTHROW(Int64("name"));
     CHECK_NOTHROW(Q16f15("name"));
     CHECK_NOTHROW(String("name"));
+    CHECK_NOTHROW(Bool("name"));
     CHECK_NOTHROW(VarArray("name", UInt8("item name")));
     CHECK_NOTHROW(VarArray("name", Block("item name", UInt8("subitem name"))));
     CHECK_NOTHROW(PrefixedArray<UInt8>("name", UInt8("subitem name")));
@@ -124,6 +125,22 @@ TEST_CASE("FixedQ basic tests", "[structure][fixedq]")
     CHECK(uq16f10.getFractional() == 10);
     CHECK(uq16f10.getIntegral() == 6);
     CHECK(uq16f10.getSignedness() == false);
+}
+
+TEST_CASE("Boolean basic tests", "[structure][value][bool]")
+{
+    Bool b("");
+
+    CHECK(with(b, true)->getTypedValue() == true);
+    CHECK(with(b, false)->getTypedValue() == false);
+
+    CHECK(b.with("true")->getValue() == "1");
+    CHECK(b.with("false")->getValue() == "0");
+    CHECK(b.with("TRUE")->getValue() == "1");
+    CHECK(b.with("FALSE")->getValue() == "0");
+
+    CHECK(b.with("1")->getValue() == "1");
+    CHECK(b.with("0")->getValue() == "0");
 }
 
 TEST_CASE("Get Child", "[child]")

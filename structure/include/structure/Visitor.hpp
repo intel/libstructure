@@ -73,6 +73,8 @@ public:
     virtual void visit(const FixedQ &q);
     /** Defaults to visit(const GenericField &) */
     virtual void visit(const String &s);
+    /** Defaults to visit(const GenericField &) */
+    virtual void visit(const Bool &s);
 };
 
 /** @example parameter-framework/exportValue.cpp

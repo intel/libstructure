@@ -87,6 +87,10 @@ public:
         }
     }
 
+    /** @todo Instead of using to_string, we should use a custom function in
+     * order to override some types (e.g. booleans are represented with "0"/"1" but "false"/"true"
+     * may be more user-fridendly; floats are represented with a fixed precision but we may want to
+     * have a control over this). */
     std::string getValue() const override { return std::to_string(mValue); }
     void setValue(const std::string &value) { mValue = mStructure.fromString(value); }
 

@@ -51,6 +51,10 @@ void StructureVisitor::visit(const String &s)
 {
     visit(static_cast<const GenericField &>(s));
 }
+void StructureVisitor::visit(const Bool &s)
+{
+    visit(static_cast<const GenericField &>(s));
+}
 
 void StorageVisitor::visitStorage(const BlockValue &block)
 {

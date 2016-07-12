@@ -37,6 +37,7 @@ class Integer;
 class FloatingPoint;
 class FixedQ;
 class String;
+class Bool;
 class Block;
 class VarArray;
 template <typename>

@@ -29,18 +29,25 @@
  */
 #pragma once
 
-/** @file
- *
- * @defgroup StockTypes Stock-provided type definitions
- */
-
 #include "structure/type/detail/stock.fw.hpp"
-#include "structure/type/Integer.hpp"
-#include "structure/type/FloatingPoint.hpp"
-#include "structure/type/FixedQ.hpp"
-#include "structure/type/String.hpp"
-#include "structure/type/Bool.hpp"
-#include "structure/type/Block.hpp"
-#include "structure/type/VarArray.hpp"
-#include "structure/type/PrefixedArray.hpp"
-#include "structure/type/Array.hpp"
+#include "structure/type/Field.hpp"
+
+namespace structure
+
+{
+/** A type of field containing an boolean value. */
+// Theoretically, if this class is not exported and someone tries to derive from it, MSVC will
+// produce a warning. However, exporting it makes MSVC crash... Since this class is completely
+// defined in its header, it is probably ok not to export it.
+class Bool : public detail::FieldCrtp<Bool, GenericField, bool>
+{
+private:
+    using Base = detail::FieldCrtp<Bool, GenericField, bool>;
+
+public:
+    using Base::Base;
+
+    /** @returns the human-readable name of the field type */
+    static std::string typeToString() { return "Bool"; }
+};
+} // namespace structure
