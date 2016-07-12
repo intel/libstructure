@@ -33,6 +33,7 @@
 #include "structure/value/FieldValue.hpp"
 #include "structure/value/GenericFieldValue.hpp"
 #include "structure/ValueImporter.hpp"
+#include "structure/Visitor.hpp"
 #include "structure/Exception.hpp"
 
 #include "structure/detail/safe_cast.hpp"
@@ -67,6 +68,11 @@ public:
     };
 
     using Storage = _Storage;
+
+    void accept(StructureVisitor &visitor) const override
+    {
+        visitor.visit(*static_cast<const Derived *>(this));
+    }
 
     std::unique_ptr<GenericFieldValue> with(const std::string &value) const override
     {

@@ -47,8 +47,6 @@ private:
 public:
     using Base::Base;
 
-    void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
-
     /** @returns the human-readable name of the field type */
     static std::string typeToString() { return "String"; }
 };

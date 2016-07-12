@@ -67,8 +67,6 @@ class STRUCTURE_EXPORT FloatingPoint : public GenericField
 {
 public:
     using GenericField::GenericField;
-
-    void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
 };
 
 /** Helper class for creating new floating point field types

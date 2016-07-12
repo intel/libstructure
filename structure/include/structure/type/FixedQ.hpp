@@ -45,8 +45,6 @@ class STRUCTURE_EXPORT FixedQ : public GenericField
 public:
     using GenericField::GenericField;
 
-    void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
-
     virtual size_t getSize() const = 0;
     virtual size_t getFractional() const = 0;
     virtual size_t getIntegral() const = 0;

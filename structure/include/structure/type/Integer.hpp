@@ -46,8 +46,6 @@ class STRUCTURE_EXPORT Integer : public GenericField
 public:
     using GenericField::GenericField;
 
-    void accept(StructureVisitor &visitor) const override { visitor.visit(*this); }
-
     virtual size_t getSize() const = 0;
     virtual bool getSignedness() const = 0;
 };
