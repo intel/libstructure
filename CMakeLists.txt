@@ -80,3 +80,5 @@ add_subdirectory(structure)
 add_subdirectory(binary-export)
 add_subdirectory(examples)
 add_subdirectory(test)
+
+add_subdirectory(cmake)
