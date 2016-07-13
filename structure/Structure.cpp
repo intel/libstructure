@@ -43,7 +43,7 @@ void Structure::setMetadata(const std::string &key, const std::string &value)
     mMetadata[key] = value;
 }
 
-const std::map<std::string, std::string> &Structure::getMetadata()
+const std::map<std::string, std::string> &Structure::getMetadata() const
 {
     return mMetadata;
 }

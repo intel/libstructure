@@ -88,7 +88,7 @@ public:
     /** Set an arbitrary metadata. */
     void setMetadata(const std::string &key, const std::string &value = "");
     /** Get the map of metadata. */
-    const std::map<std::string, std::string> &getMetadata();
+    const std::map<std::string, std::string> &getMetadata() const;
 
     /** Create a StructureValue from a value importer
      *
