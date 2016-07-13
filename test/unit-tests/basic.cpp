@@ -293,7 +293,7 @@ TEST_CASE("BlockStructure", "[structure][block]")
 TEST_CASE("Typed With", "[typed][value]")
 {
     Block root("MyData", UInt8("Counter"), Float("Double"), Q32f31("Fixed"), String("String"));
-    CHECK_NOTHROW(auto value = root.with({255, 3.14f, 0.01, "bacon and spam"}));
+    CHECK_NOTHROW(auto value = root.with({255, 3.14f, 0.01, std::string("bacon and spam")}));
     CHECK_NOTHROW(auto value = root.with({255, 3.14f, 0.01, ""}));
     CHECK_THROWS(auto value = root.with({-1, 3.14f, 0.01, "sausages"}));
     CHECK_THROWS(auto value = root.with({255, 3.14f, 12, "eggs"}));

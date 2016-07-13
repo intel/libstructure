@@ -92,6 +92,10 @@ public:
     {
     }
 
+    /** Constructs a ValueInitializer from a string
+     */
+    ValueInitializer(const std::string &atomicValue);
+
     /** Constructs a ValueInitializer from an previously-defined importer
      *
      * This should coincide with a Block.

@@ -39,6 +39,11 @@ ValueInitializer::ValueInitializer(const char *atomicValue)
 {
 }
 
+ValueInitializer::ValueInitializer(const std::string &atomicValue)
+    : mImporter(new AtomImporter<decltype(atomicValue)>(atomicValue))
+{
+}
+
 ValueInitializer::ValueInitializer(long long atomicValue, void *)
     : mImporter(new AtomImporter<decltype(atomicValue)>(atomicValue))
 {
