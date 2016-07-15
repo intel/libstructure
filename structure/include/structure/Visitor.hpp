@@ -33,6 +33,7 @@
 #include "structure/structure_export.h"
 
 #include <string>
+#include <stdexcept>
 
 namespace structure
 {
@@ -122,11 +123,14 @@ public:
     virtual void visitStorage(float v) { visitStorage(ld{v}); }
     virtual void visitStorage(double v) { visitStorage(ld{v}); }
 
-    virtual void visitStorage(ull) = 0;
-    virtual void visitStorage(ll) = 0;
-    virtual void visitStorage(ld) = 0;
+    virtual void visitStorage(ull) { unsupported(); }
+    virtual void visitStorage(ll) { unsupported(); }
+    virtual void visitStorage(ld) { unsupported(); }
 
-    virtual void visitStorage(const std::string &) = 0;
+    virtual void visitStorage(const std::string &) { unsupported(); }
+
+protected:
+    static void unsupported() { throw std::runtime_error("Visiting an unsupported type"); }
 };
 /** @} */
 }
