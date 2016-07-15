@@ -37,7 +37,7 @@ using namespace structure;
 TEST_CASE("Display", "[structure][value][display]")
 {
     Block root("root", Float("a"), Int32("b"), Q16f15("c"), VarArray("varArray", String("d")),
-               PrefixedArray<UInt8>("lv", Block("block", UInt16("x"), UInt16("y"))));
+               PrefixedArray<UInt8>("lv", Block("block", Bool("x"), UInt16("y"))));
 
     SECTION ("Structure") {
         std::stringstream ss;
@@ -51,7 +51,7 @@ TEST_CASE("Display", "[structure][value][display]")
                                "    }\n"
                                "    LV (UInt8) : lv {\n"
                                "        Block : block {\n"
-                               "            UInt16 : x\n"
+                               "            Bool : x\n"
                                "            UInt16 : y\n"
                                "        }\n"
                                "    }\n"
@@ -62,8 +62,8 @@ TEST_CASE("Display", "[structure][value][display]")
     }
 
     SECTION ("Value") {
-        auto value =
-            root.with({"1", "2", "0.5", {"bacon", "egg", "spam"}, {"2", {{"1", "2"}, {"3", "4"}}}});
+        auto value = root.with(
+            {"1", "2", "0.5", {"bacon", "egg", "spam"}, {"2", {{"true", "2"}, {false, "4"}}}});
         std::stringstream ss;
 
         std::string expected = "BlockValue : root {\n"
@@ -79,11 +79,11 @@ TEST_CASE("Display", "[structure][value][display]")
                                "        UInt8 : count = 2\n"
                                "        BlockValue : lv {\n"
                                "            BlockValue : block {\n"
-                               "                UInt16 : x = 1\n"
+                               "                Bool : x = 1\n"
                                "                UInt16 : y = 2\n"
                                "            }\n"
                                "            BlockValue : block {\n"
-                               "                UInt16 : x = 3\n"
+                               "                Bool : x = 0\n"
                                "                UInt16 : y = 4\n"
                                "            }\n"
                                "        }\n"

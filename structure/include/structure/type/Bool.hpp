@@ -44,6 +44,11 @@ class Bool : public detail::FieldCrtp<Bool, GenericField, bool>
 private:
     using Base = detail::FieldCrtp<Bool, GenericField, bool>;
 
+    std::unique_ptr<GenericFieldValue> withTyped(bool value) const override
+    {
+        return this->withTypedTemplate(value);
+    }
+
 public:
     using Base::Base;
 

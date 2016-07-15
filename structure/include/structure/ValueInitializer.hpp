@@ -50,6 +50,10 @@ public:
      */
     ValueInitializer(const char *atomicValue);
 
+    /** Constructs a ValueInitializer from a boolean
+     */
+    ValueInitializer(bool atomicValue);
+
     /** Constructs a ValueInitializer from a long long literal
      */
     ValueInitializer(long long atomicValue, void *);

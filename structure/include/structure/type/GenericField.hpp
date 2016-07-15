@@ -82,6 +82,12 @@ public:
     virtual bool hasDefaultImporter() const = 0;
 
 private:
+    /** Creates a value from the given bool
+     */
+    virtual std::unique_ptr<GenericFieldValue> withTyped(bool) const
+    {
+        throw ParseError(getName());
+    }
     /** Creates a value from the given long long
      */
     virtual std::unique_ptr<GenericFieldValue> withTyped(long long) const

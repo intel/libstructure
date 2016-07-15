@@ -127,6 +127,8 @@ public:
     virtual void visitStorage(ll) { unsupported(); }
     virtual void visitStorage(ld) { unsupported(); }
 
+    virtual void visitStorage(bool) { unsupported(); }
+
     virtual void visitStorage(const std::string &) { unsupported(); }
 
 protected:
