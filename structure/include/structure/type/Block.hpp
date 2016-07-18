@@ -83,6 +83,8 @@ public:
     std::string getTypeName() const override { return "Block"; }
     std::string getDescription() const override { return mDescription; }
 
+    void addChild(std::unique_ptr<Structure> child) { mFields.emplace_back(std::move(child)); }
+
 protected:
     template <typename T, typename... Fields>
     void handleArgs(T &&first, Fields &&... fields)

@@ -288,6 +288,11 @@ TEST_CASE("BlockStructure", "[structure][block]")
 {
     Block root("root", Float("f1"), Float("f2"));
     CHECK(root.getFields().size() == 2);
+
+    Block root2("root");
+    root2.addChild(std::make_unique<Float>("f1"));
+    root2.addChild(std::make_unique<Float>("f2"));
+    CHECK(root2.getFields().size() == 2);
 }
 
 TEST_CASE("Typed With", "[typed][value]")
