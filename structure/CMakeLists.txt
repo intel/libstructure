@@ -11,7 +11,7 @@ add_library(structure SHARED
 
 target_include_directories(structure
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+    PUBLIC $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
     INTERFACE $<INSTALL_INTERFACE:include>)
 if (WIN32)
     # Force include iso646.h to support alternative operator form (and, or, not...).
@@ -20,8 +20,9 @@ if (WIN32)
     target_compile_options(structure INTERFACE /FIiso646.h)
 endif ()
 
+set(libstructure_export_header ${libstructure_generated_includes_dir}/structure_export.h)
 include(GenerateExportHeader)
-generate_export_header(structure)
+generate_export_header(structure EXPORT_FILE_NAME ${libstructure_export_header})
 
 install(TARGETS structure EXPORT LibStructureTargets
     LIBRARY DESTINATION lib COMPONENT runtime
@@ -29,7 +30,7 @@ install(TARGETS structure EXPORT LibStructureTargets
     ARCHIVE DESTINATION lib COMPONENT dev)
 
 install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/structure_export.h
+    ${libstructure_export_header}
     DESTINATION "include/structure"
     COMPONENT dev)
 
@@ -38,3 +39,5 @@ install(DIRECTORY
     DESTINATION "."
     COMPONENT dev
     FILES_MATCHING PATTERN "*.hpp")
+
+unset(libstructure_export_header)

@@ -1,7 +1,7 @@
-configure_file(safe_cast.hpp ${CMAKE_BINARY_DIR}/structure/detail/safe_cast.hpp COPYONLY)
+configure_file(safe_cast.hpp ${libstructure_generated_includes_dir}/detail/safe_cast.hpp COPYONLY)
 
 add_executable(safe_cast_unitTests test.cpp)
-target_include_directories(safe_cast_unitTests PRIVATE ${CMAKE_BINARY_DIR})
+target_include_directories(safe_cast_unitTests PRIVATE ${PROJECT_BINARY_DIR})
 target_link_libraries(safe_cast_unitTests
                       PRIVATE catch)
 add_test(NAME safe_cast_unitTests

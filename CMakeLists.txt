@@ -67,6 +67,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
+set(libstructure_generated_includes_dir ${PROJECT_BINARY_DIR}/structure)
+
 include(ctest/CMakeLists.txt)
 
 include(CMakeDependentOption)
@@ -82,3 +84,5 @@ add_subdirectory(examples)
 add_subdirectory(test)
 
 add_subdirectory(cmake)
+
+unset(libstructure_generated_includes_dir)
