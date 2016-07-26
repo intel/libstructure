@@ -31,6 +31,7 @@ cmake_minimum_required(VERSION 3.2.0)
 project(libstructure)
 
 option(COVERAGE "Build with coverage support" OFF)
+option(DOXYGEN "Enable doxygen generation" OFF)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -70,9 +71,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(libstructure_generated_includes_dir ${PROJECT_BINARY_DIR}/structure)
 
 include(ctest/CMakeLists.txt)
-
-include(CMakeDependentOption)
-option(DOXYGEN "Enable doxygen generation" ON)
 
 add_subdirectory(doxygen)
 
