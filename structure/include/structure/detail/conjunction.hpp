@@ -26,6 +26,8 @@
  */
 #pragma once
 
+#include <type_traits>
+
 /*
  * The following code is licensed under CC-BY-SA which you can find at
  * https://creativecommons.org/licenses/by-sa/3.0/
